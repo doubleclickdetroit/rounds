@@ -8,11 +8,13 @@ describe Round do
   end
 
   it 'should have many Slides' do
-    @round.slides.each do |slide|
-      slide.should be_an_instance_of(Slide)
+    @round.slides.all? do |slide|
+      slide.kind_of?(Slide)
     end.should be_true
   end
 
   it 'should have Slides of class Sentence'
   it 'should have Slides of class Picture'
+
+  it 'should return Slides in order'
 end

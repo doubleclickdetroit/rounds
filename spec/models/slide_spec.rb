@@ -10,4 +10,8 @@ describe Slide do
   it 'should belong to a Round' do
     @slide.round.should == @round
   end
+
+  it 'should have many Comments' do
+    # @slide.comments
+  end
 end
