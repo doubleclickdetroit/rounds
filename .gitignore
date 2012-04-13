@@ -13,3 +13,11 @@
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp
+
+# ignore all of brad's annoying vim swap files
+*.sw?
+# ...and all the annoying mac files :) 
+*.DS_Store
+
+# paperclip images for dev
+/public/system
