@@ -11,7 +11,15 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120413213928) do
+ActiveRecord::Schema.define(:version => 20120413220309) do
+
+  create_table "comments", :force => true do |t|
+    t.integer  "slide_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "comments", ["slide_id"], :name => "index_comments_on_slide_id"
 
   create_table "rounds", :force => true do |t|
     t.datetime "created_at", :null => false
