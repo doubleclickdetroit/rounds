@@ -19,14 +19,4 @@ describe Sentence do
       @sent.content.should == @text
     end
   end
-
-  describe '.to_hash' do
-    let(:hash) { @sent.send :to_hash }
-    keys = %w[id round_id created_at updated_at content]
-    keys.each do |key|
-      it "should return a Hash containing #{key}" do
-        hash.should have_key(key)
-      end
-    end
-  end
 end

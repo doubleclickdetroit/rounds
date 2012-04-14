@@ -21,6 +21,24 @@ describe Slide do
     end.should be_true
   end
 
+  describe '.to_hash' do
+    before(:each) do
+      @slide.stub(:content).and_return('')
+      @hash = @slide.to_hash 
+    end
+
+    keys = %w[type id round_id created_at updated_at content]
+    keys.each do |key|
+      it "should return a Hash containing #{key}" do
+        @hash.should have_key(key)
+      end
+    end
+
+    it 'should have no other keys' do
+      (@hash.keys && keys).should == @hash.keys
+    end
+  end
+
   describe '.to_json' do
     it 'should call Slide.to_hash' do
       @slide.should_receive :to_hash
