@@ -1,8 +1,10 @@
 Draw::Application.routes.draw do
   scope 'api' do
-    # resources :rounds
+    resources :rounds, :except => [:new,:edit] do
+      resources :slides, :except => [:new,:edit]
+    end
 
-    resources :slides do
+    resources :slides, :except => [:new,:edit] do
       resources :comments, :except => [:show,:new,:edit]
     end
 

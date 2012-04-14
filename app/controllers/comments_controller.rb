@@ -3,9 +3,6 @@ class CommentsController < ApplicationController
 
   respond_to :json
 
-  # check for slide_id: index, create
-  # other: update, destroy
-
   def index
     @comments = Slide.find(@slide_id).comments
     respond_with @comments.to_json
