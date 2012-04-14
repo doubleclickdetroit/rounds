@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120413225315) do
+ActiveRecord::Schema.define(:version => 20120414053612) do
 
   create_table "comments", :force => true do |t|
     t.integer  "slide_id"
@@ -29,8 +29,13 @@ ActiveRecord::Schema.define(:version => 20120413225315) do
 
   create_table "slides", :force => true do |t|
     t.integer  "round_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+    t.text     "text"
+    t.string   "file_file_name"
+    t.string   "file_content_type"
+    t.integer  "file_file_size"
+    t.datetime "file_updated_at"
   end
 
   add_index "slides", ["round_id"], :name => "index_slides_on_round_id"

@@ -8,4 +8,15 @@ describe Sentence do
 
   subject { @sent }
   it { should be_a_kind_of(Slide) }
+
+  describe '.content' do
+    before(:each) do
+      @text = "multiline\ntext"
+      @sent.text = @text 
+    end
+
+    it 'should return multiline text' do
+      @sent.content.should == @text
+    end
+  end
 end
