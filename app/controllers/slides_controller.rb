@@ -5,7 +5,7 @@ class SlidesController < ApplicationController
 
   def index
     @slides = Round.find(@round_id).slides
-    respond_with @slides.to_json
+    respond_with @slides.map(&:to_hash).to_json
   end
 
   def create

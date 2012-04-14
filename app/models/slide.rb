@@ -9,13 +9,13 @@ class Slide < ActiveRecord::Base
     to_hash.to_json
   end
 
-
-private
   def to_hash
     attrs = %w[id round_id created_at updated_at content]
     attrs.inject({}) {|h,k| h.merge({k => self.send(k)})}
   end
 
+
+private
   def add_position
     self.position = round.slides.count - 1 if round
     self.save
