@@ -3,8 +3,8 @@ require 'spec_helper'
 describe Round do
   before(:each) do
     @round = Factory(:round)
-    @round.slides << Factory(:slide)
-    @round.slides << Factory(:slide)
+    @round.slides << Factory.build(:sentence)
+    @round.slides << Factory.build(:picture)
   end
 
   it 'should have many Slides' do
@@ -13,8 +13,37 @@ describe Round do
     end.should be_true
   end
 
-  it 'should have Slides of class Sentence'
-  it 'should have Slides of class Picture'
+  it 'should have Slides of class Sentence' do
+    @round.slides.any? do |slide|
+      slide.instance_of?(Sentence)
+    end.should be_true
+  end
 
-  it 'should return Slides in order'
+  it 'should have Slides of class Picture' do
+    @round.slides.any? do |slide|
+      slide.kind_of?(Picture)
+    end.should be_true
+  end
+
+  it 'should return Slides in order' do
+    # the first shall be last...
+    s = @round.slides.first
+    p = @round.slides.last
+    s.position = 1 and s.save
+    p.position = 0 and p.save
+    # forces position opposite
+    # of chronological creation
+
+    # each position should be one
+    # greater than the previous
+    slides_are_ordered_by_position = true
+    positions = @round.slides.map {|s| s.position}
+    last = -2
+    positions.each do |pos|
+      last = last + 1
+      slides_are_ordered_by_position = false unless (last + 1) == pos
+    end
+
+    slides_are_ordered_by_position.should be_true
+  end
 end

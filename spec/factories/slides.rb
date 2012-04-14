@@ -3,5 +3,6 @@
 FactoryGirl.define do
   factory :slide do
     round nil
+    position nil
   end
 end

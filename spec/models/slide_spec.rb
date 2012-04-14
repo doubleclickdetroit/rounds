@@ -33,4 +33,21 @@ describe Slide do
       @slide.to_json
     end
   end
+
+  describe 'after_create' do
+    it 'should assign a position of 0 if it is the first Slide in the Round' do
+      @round.slides = []
+      slide = Factory.build(:slide, :round_id => @round.to_param)
+      slide.position.should be_nil
+      slide.save
+      slide.position.should == 0
+    end
+
+    it 'should assign a position one greater than the last Slide in the Round' do
+      slide = Factory.build(:slide, :round_id => @round.to_param)
+      slide.position.should be_nil
+      slide.save
+      slide.position.should == 1
+    end
+  end
 end
