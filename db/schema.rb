@@ -11,21 +11,26 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120419062541) do
+ActiveRecord::Schema.define(:version => 20120419083041) do
 
   create_table "comments", :force => true do |t|
     t.integer  "slide_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
     t.text     "text"
+    t.integer  "fid"
   end
 
+  add_index "comments", ["fid"], :name => "index_comments_on_fid"
   add_index "comments", ["slide_id"], :name => "index_comments_on_slide_id"
 
   create_table "rounds", :force => true do |t|
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.integer  "fid"
   end
+
+  add_index "rounds", ["fid"], :name => "index_rounds_on_fid"
 
   create_table "slides", :force => true do |t|
     t.integer  "round_id"
@@ -38,8 +43,10 @@ ActiveRecord::Schema.define(:version => 20120419062541) do
     t.datetime "file_updated_at"
     t.string   "type"
     t.integer  "position"
+    t.integer  "fid"
   end
 
+  add_index "slides", ["fid"], :name => "index_slides_on_fid"
   add_index "slides", ["round_id"], :name => "index_slides_on_round_id"
 
   create_table "users", :force => true do |t|
@@ -55,6 +62,7 @@ ActiveRecord::Schema.define(:version => 20120419062541) do
     t.string   "last_sign_in_ip"
     t.datetime "created_at",                             :null => false
     t.datetime "updated_at",                             :null => false
+    t.integer  "fid"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true

@@ -46,4 +46,21 @@ describe Round do
 
     slides_are_ordered_by_position.should be_true
   end
+
+  describe '.created_by' do
+    pending 'do i need to check this more thoroughly here or just in the controller spec?'
+
+    it 'should return a User' do
+      @round.created_by = Factory(:user)
+      @round.created_by.should be_an_instance_of(User)
+    end
+  end
+
+  describe '.creator' do
+    it 'should simply call .created_by' do
+      @round.should_receive :created_by
+      @round.creator
+    end
+  end
+
 end

@@ -5,6 +5,13 @@ class Slide < ActiveRecord::Base
 
   has_many :comments
 
+
+  belongs_to :created_by, :class_name => 'User', :foreign_key => :fid, :primary_key => :fid
+
+  def creator
+    created_by
+  end
+
   def to_json
     to_hash.to_json
   end
