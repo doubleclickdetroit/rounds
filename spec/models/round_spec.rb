@@ -65,12 +65,16 @@ describe Round do
 
   describe '.recent' do
     before(:each) do
-      20.times { Factory(:round) }
+      11.times { Factory(:round) }
     end
 
     pending 'test recent? not just limit 10?'
     it 'should return the 10 most recent Rounds' do
       Round.recent.count.should == 10
+    end
+
+    it 'should not return Rounds by blocked users' do
+      Round.recent
     end
   end
 
@@ -92,7 +96,7 @@ describe Round do
   describe '.friends_recent' do
     before(:each) do
       friend = Factory(:user)
-      20.times { Factory(:round, :fid => friend.fid) }
+      11.times { Factory(:round, :fid => friend.fid) }
       @fids = [friend.fid]
     end
 

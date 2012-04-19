@@ -87,7 +87,7 @@ describe Slide do
 
   describe '.recent' do
     before(:each) do
-      20.times { Factory(:slide) }
+      11.times { Factory(:slide) }
     end
 
     pending 'test recent? not just limit 10?'
@@ -114,7 +114,7 @@ describe Slide do
   describe '.friends_recent' do
     before(:each) do
       friend = Factory(:user)
-      20.times { Factory(:slide, :fid => friend.fid) }
+      11.times { Factory(:slide, :fid => friend.fid) }
       @fids = [friend.fid]
     end
 

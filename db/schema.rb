@@ -11,7 +11,16 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120419083041) do
+ActiveRecord::Schema.define(:version => 20120419232101) do
+
+  create_table "blacklist_entries", :id => false, :force => true do |t|
+    t.integer  "user_fid"
+    t.integer  "blocked_fid"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  add_index "blacklist_entries", ["user_fid"], :name => "index_blacklist_entries_on_user_fid"
 
   create_table "comments", :force => true do |t|
     t.integer  "slide_id"
