@@ -85,4 +85,15 @@ describe Slide do
     end
   end
 
+  describe '.recent' do
+    before(:each) do
+      20.times { Factory(:slide) }
+    end
+
+    pending 'test recent? not just limit 10?'
+    it 'should return the 10 most recent slides' do
+      Slide.recent.count.should == 10
+    end
+  end
+
 end

@@ -5,6 +5,7 @@ class Slide < ActiveRecord::Base
 
   has_many :comments
 
+  scope :recent, :order => 'created_at desc', :limit => 10
 
   belongs_to :created_by, :class_name => 'User', :foreign_key => :fid, :primary_key => :fid
 
