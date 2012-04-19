@@ -7,5 +7,7 @@ FactoryGirl.define do
 
     password "foobarbaz"
     password_confirmation {|u| u.password}
+
+    sequence(:fid) {|n|n}
   end
 end

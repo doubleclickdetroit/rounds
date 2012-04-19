@@ -91,8 +91,35 @@ describe Slide do
     end
 
     pending 'test recent? not just limit 10?'
-    it 'should return the 10 most recent slides' do
+    it 'should return the 10 most recent Slides' do
       Slide.recent.count.should == 10
+    end
+  end
+
+  describe '.friends' do
+    before(:each) do
+      10.times { Factory(:slide) }
+      friend1 = Factory(:user)
+      friend2 = Factory(:user)
+      Factory(:slide, :fid => friend1.fid)
+      Factory(:slide, :fid => friend2.fid)
+      @fids = [friend1.fid, friend2.fid]
+    end
+
+    it 'should only return Slides made by friends' do
+      Slide.friends(@fids).count.should == 2
+    end
+  end
+
+  describe '.friends_recent' do
+    before(:each) do
+      friend = Factory(:user)
+      20.times { Factory(:slide, :fid => friend.fid) }
+      @fids = [friend.fid]
+    end
+
+    it 'should only return 10 Slides at most' do
+      Slide.friends_recent(@fids).count.should == 10
     end
   end
 

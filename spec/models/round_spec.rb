@@ -69,8 +69,35 @@ describe Round do
     end
 
     pending 'test recent? not just limit 10?'
-    it 'should return the 10 most recent rounds' do
+    it 'should return the 10 most recent Rounds' do
       Round.recent.count.should == 10
+    end
+  end
+
+  describe '.friends' do
+    before(:each) do
+      10.times { Factory(:round) }
+      friend1 = Factory(:user)
+      friend2 = Factory(:user)
+      Factory(:round, :fid => friend1.fid)
+      Factory(:round, :fid => friend2.fid)
+      @fids = [friend1.fid, friend2.fid]
+    end
+
+    it 'should only return Rounds made by friends' do
+      Round.friends(@fids).count.should == 2
+    end
+  end
+
+  describe '.friends_recent' do
+    before(:each) do
+      friend = Factory(:user)
+      20.times { Factory(:round, :fid => friend.fid) }
+      @fids = [friend.fid]
+    end
+
+    it 'should only return 10 Rounds at most' do
+      Round.friends_recent(@fids).count.should == 10
     end
   end
 
