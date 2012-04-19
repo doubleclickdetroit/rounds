@@ -1,4 +1,6 @@
 class CommentsController < ApplicationController
+  # before_filter :authenticate_user!
+
   before_filter :check_for_slide_id, :only => [:index,:create]
 
   respond_to :json

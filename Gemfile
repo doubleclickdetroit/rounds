@@ -7,7 +7,7 @@ gem 'thin'
 # gem 'mailman', :require => false
 
 # auth
-# gem 'devise'
+gem 'devise'
 # gem 'cancan'
 
 gem "paperclip", "~> 2.7"

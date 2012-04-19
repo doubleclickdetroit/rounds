@@ -1,6 +1,14 @@
 require 'spec_helper'
 
 describe CommentsController do
+  login_user()
+
+  it 'should authenticate the user' do
+    pending 'devise'
+    CommentsController.any_instance.should_receive :authenticate_user!
+    get :index, {}, {} 
+  end
+
   describe 'GET index' do
     it 'should throw a 406 if there is no slide_id' do
       get :index, {}, {} 
