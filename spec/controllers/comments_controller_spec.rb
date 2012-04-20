@@ -1,17 +1,15 @@
 require 'spec_helper'
 
 describe CommentsController do
+  attr_accessor :valid_attributes, :valid_session
+
   login_user()
 
-  it 'should authenticate the user' do
-    pending 'devise'
-    CommentsController.any_instance.should_receive :authenticate_user!
-    get :index, {}, {} 
-  end
+  it 'should authenticate the user'
 
   describe 'GET index' do
     it 'should throw a 406 if there is no slide_id' do
-      get :index, {}, {} 
+      get :index, {}, valid_session
       response.status.should == 406
     end
 
@@ -21,14 +19,14 @@ describe CommentsController do
       @slide.comments << @comment
       params = { :slide_id => @slide.to_param }
 
-      get :index, params, {}
+      get :index, params, valid_session
       assigns(:comments).should == [@comment]
     end
   end
 
   describe 'POST create' do
     it 'should throw a 406 if there is no slide_id' do
-      post :create, {}, {} 
+      post :create, {}, valid_session
       response.status.should == 406
     end
 
@@ -37,7 +35,7 @@ describe CommentsController do
       params = { :slide_id => @slide.to_param, :comment => {} }
 
       expect {
-        post :create, params, {}
+        post :create, params, valid_session
       }.to change(Comment, :count).by(1)
     end
   end
@@ -45,7 +43,7 @@ describe CommentsController do
   describe 'PUT update' do
     it 'should not throw a 406 if there is no slide_id' do
       pending 'no idea, try after you have more implemented'
-      put :update, { :comment => Factory.build(:comment) }, {} 
+      put :update, { :comment => Factory.build(:comment) }, valid_session
       response.status.should_not == 406
     end
 
@@ -61,7 +59,7 @@ describe CommentsController do
         :comment  => {:text => text} 
       }
 
-      put :update, params, {}
+      put :update, params, valid_session
       Comment.find(id).text.should == text 
     end
   end
@@ -69,7 +67,7 @@ describe CommentsController do
   describe 'DELETE destroy' do
     it 'should not throw a 406 if there is no slide_id' do
       pending 'no idea, try after you have more implemented'
-      delete :destroy, {}, {} 
+      delete :destroy, {}, valid_session
       response.status.should_not == 406
     end
 
@@ -78,7 +76,7 @@ describe CommentsController do
       params = { :id => @comment.to_param }
 
       expect {
-        delete :destroy, params, {}
+        delete :destroy, params, valid_session
       }.to change(Comment, :count).by(-1)
     end
   end
