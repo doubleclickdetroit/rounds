@@ -1,3 +1,5 @@
+require 'set'
+
 class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
@@ -27,12 +29,16 @@ class User < ActiveRecord::Base
   end
 
   def friends_feed
-    items = Round.friends_recent(friends_fids)
-    # reject_blocked(items)
-    items
+    filtered_friends_fids = remove_blocked_fids_from(friends_fids)
+    Round.friends_recent(filtered_friends_fids)
   end
 
+
 private
+  def remove_blocked_fids_from(fids_arr)
+    (Set.new(fids_arr) ^ blocked_fids).to_a
+  end
+
   # todo maybe not the most effecient
   def reject_blocked(items)
     fids = blocked_fids

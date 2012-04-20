@@ -97,10 +97,11 @@ describe User do
       Factory(:blacklist_entry, :user_fid => @user.fid, :blocked_fid => blocked_user.fid)
       6.times { Factory(:round, :fid => blocked_user.fid) }
       5.times { Factory(:round, :fid => friend_user.fid) }
-      5.times { Factory(:round, :fid => friend_user.fid+1) }
+      4.times { Factory(:round, :fid => friend_user.fid+1) }
 
-      @user.stub(:friends_fids).and_return([friend_user.fid])
-      @user.friends_feed.count.should == 5
+      @user.stub(:friends_fids).and_return([friend_user.fid, blocked_user.fid])
+      feed = @user.friends_feed
+      feed.count.should == 5
     end
   end
 
