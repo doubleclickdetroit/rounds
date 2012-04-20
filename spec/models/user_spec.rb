@@ -57,4 +57,27 @@ describe User do
     end
   end
 
+  describe '.new_feed' do
+    it 'should simply call Round.recent' do
+      Round.should_receive :recent
+      @user.new_feed
+    end
+
+    it 'should also aggregate Slides (maybe Comments too)'
+  end
+
+  describe '.friends_fids' do
+    pending 'auth needs fleshed out first'
+  end
+
+  describe '.friends_feed' do
+    it 'should simply call Round.friends_recent' do
+      @user.stub(:friends_fids).and_return([1])
+      Round.should_receive(:friends_recent).with(@user.friends_fids)
+      @user.friends_feed
+    end
+
+    it 'should also aggregate Slides (maybe Comments too)'
+  end
+
 end

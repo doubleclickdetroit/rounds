@@ -16,4 +16,18 @@ class User < ActiveRecord::Base
   def blocked_fids
     blacklist_entries.map {|ble| ble.blocked_fid}
   end
+
+  def new_feed
+    Round.recent
+  end
+
+  def friends_fids
+    # todo
+    []
+  end
+
+  def friends_feed
+    Round.friends_recent(friends_fids)
+  end
+
 end

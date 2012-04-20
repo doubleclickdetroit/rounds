@@ -72,10 +72,6 @@ describe Round do
     it 'should return the 10 most recent Rounds' do
       Round.recent.count.should == 10
     end
-
-    it 'should not return Rounds by blocked users' do
-      Round.recent
-    end
   end
 
   describe '.friends' do
