@@ -8,20 +8,11 @@ describe RoundsController do
   it 'should authenticate the user'
 
   describe 'GET index' do
-    it 'should throw a 406 if there is no group_id' do
-      pending 'creation of groups'
-      get :index, {}, valid_session 
-      response.status.should == 406
-    end
-
-    it 'should show Rounds for a Group' do
-      pending 'creation of groups'
-      @group = Factory(:group)
+    it 'should show Rounds for ...' do
+      pending 'for user? do we even need this?'
       @round = Factory(:round)
-      @group.rounds << @round
-      params = { :group_id => @group.to_param }
 
-      get :index, params, valid_session
+      get :index, {}, valid_session
       assigns(:rounds).should == [@round]
     end
   end
@@ -37,16 +28,8 @@ describe RoundsController do
   end
 
   describe 'POST create' do
-    it 'should throw a 406 if there is no group_id' do
-      pending 'creation of groups'
-      post :create, {}, valid_session 
-      response.status.should == 406
-    end
-
     it 'should create a new Round' do
-      pending 'creation of groups'
-      @group = Factory(:group)
-      params = { :group_id => @group.to_param, :round => {} }
+      params = { :round => {} }
 
       expect {
         post :create, params, valid_session
@@ -55,35 +38,22 @@ describe RoundsController do
   end
 
   describe 'PUT update' do
-    it 'should not throw a 406 if there is no slide_id' do
-      pending 'no idea, try after you have more implemented'
-      put :update, { :round => Factory.build(:round) }, valid_session 
-      response.status.should_not == 406
-    end
-
     it 'should update the Round whose id was passed in' do
-      pending 'creation of groups'
-      @round = Factory(:round)
+      @round = Factory(:round, :fid => 1)
 
-      id = @round.to_param
-      group_id = 1 
+      id  = @round.to_param
+      fid = 2
       params = { 
         :id => id,
-        :round  => {:group_id => group_id} 
+        :round  => {:fid => fid} 
       }
 
       put :update, params, valid_session
-      Round.find(id).group_id.should == group_id 
+      Round.find(id).fid.should == fid 
     end
   end
 
   describe 'DELETE destroy' do
-    it 'should not throw a 406 if there is no slide_id' do
-      pending 'no idea, try after you have more implemented'
-      delete :destroy, {}, valid_session 
-      response.status.should_not == 406
-    end
-
     it 'should destroy the Round whose id was passed in' do
       @round = Factory(:round)
       params = { :id => @round.to_param }
