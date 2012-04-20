@@ -18,7 +18,7 @@ class User < ActiveRecord::Base
   end
 
   def new_feed
-    Round.recent
+    reject_blocked Round.recent
   end
 
   def friends_fids
@@ -27,7 +27,18 @@ class User < ActiveRecord::Base
   end
 
   def friends_feed
-    Round.friends_recent(friends_fids)
+    items = Round.friends_recent(friends_fids)
+    # reject_blocked(items)
+    items
+  end
+
+private
+  # todo maybe not the most effecient
+  def reject_blocked(items)
+    fids = blocked_fids
+    items.reject do |item|
+      fids.include? item.fid
+    end
   end
 
 end

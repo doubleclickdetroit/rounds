@@ -59,11 +59,22 @@ describe User do
 
   describe '.new_feed' do
     it 'should simply call Round.recent' do
+      @user.stub(:reject_blocked).and_return([])
       Round.should_receive :recent
       @user.new_feed
     end
 
     it 'should also aggregate Slides (maybe Comments too)'
+
+    pending 'ensure this tests Slides/Comments as well eventually'
+    it 'should not return anything by a blocked User' do
+      blocked_user = Factory(:user)
+      Factory(:blacklist_entry, :user_fid => @user.fid, :blocked_fid => blocked_user.fid)
+      6.times { Factory(:round, :fid => blocked_user.fid) }
+      5.times { Factory(:round, :fid => blocked_user.fid+1) }
+
+      @user.new_feed.count.should == 5
+    end
   end
 
   describe '.friends_fids' do
@@ -78,6 +89,19 @@ describe User do
     end
 
     it 'should also aggregate Slides (maybe Comments too)'
+
+    pending 'ensure this tests Slides/Comments as well eventually'
+    it 'should not return anything by a blocked User' do
+      blocked_user = Factory(:user)
+      friend_user  = Factory(:user)
+      Factory(:blacklist_entry, :user_fid => @user.fid, :blocked_fid => blocked_user.fid)
+      6.times { Factory(:round, :fid => blocked_user.fid) }
+      5.times { Factory(:round, :fid => friend_user.fid) }
+      5.times { Factory(:round, :fid => friend_user.fid+1) }
+
+      @user.stub(:friends_fids).and_return([friend_user.fid])
+      @user.friends_feed.count.should == 5
+    end
   end
 
 end
