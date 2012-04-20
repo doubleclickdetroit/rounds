@@ -10,6 +10,10 @@ class RoundsController < ApplicationController
     respond_with @rounds.to_json
   end
 
+  def show
+    respond_with Round.find(params[:id]).to_json
+  end
+
   def create
     respond_with Round.create(params[:round]).to_json
   end

@@ -10,6 +10,10 @@ class SlidesController < ApplicationController
     respond_with @slides.map(&:to_hash).to_json
   end
 
+  def show
+    respond_with Slide.find(params[:id]).to_json
+  end
+
   def create
     respond_with Slide.create(params[:slide]).to_json
   end

@@ -26,6 +26,16 @@ describe RoundsController do
     end
   end
 
+  describe 'GET show' do
+    it 'should return a given Round' do
+      @round = Factory(:round)
+      params = { :id => @round.to_param }
+
+      Round.should_receive(:find).with(@round.to_param)
+      get :show, params, valid_session
+    end
+  end
+
   describe 'POST create' do
     it 'should throw a 406 if there is no group_id' do
       pending 'creation of groups'

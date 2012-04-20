@@ -27,6 +27,16 @@ describe SlidesController do
   end
 
   describe 'GET show' do
+    it 'should return a given Slide' do
+      @slide = Factory(:slide)
+      params = { :id => @slide.to_param }
+
+      Slide.should_receive(:find).with(@slide.to_param)
+      get :show, params, valid_session
+    end
+  end
+
+  describe 'GET show' do
     it 'should not throw a 406 if there is no slide_id' do
       pending 'no idea, try after you have more implemented'
       put :update, { :slide => Factory.build(:slide) }, valid_session 
