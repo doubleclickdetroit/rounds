@@ -1,6 +1,8 @@
 class RoundsController < ApplicationController
   before_filter :check_for_group_id, :only => [:index,:create]
 
+  before_filter :authenticate_user!
+
   respond_to :json
 
   def index

@@ -1,10 +1,16 @@
 require 'spec_helper'
 
 describe RoundsController do
+  attr_accessor :valid_attributes, :valid_session
+
+  login_user()
+
+  it 'should authenticate the user'
+
   describe 'GET index' do
     it 'should throw a 406 if there is no group_id' do
       pending 'creation of groups'
-      get :index, {}, {} 
+      get :index, {}, valid_session 
       response.status.should == 406
     end
 
@@ -15,7 +21,7 @@ describe RoundsController do
       @group.rounds << @round
       params = { :group_id => @group.to_param }
 
-      get :index, params, {}
+      get :index, params, valid_session
       assigns(:rounds).should == [@round]
     end
   end
@@ -23,7 +29,7 @@ describe RoundsController do
   describe 'POST create' do
     it 'should throw a 406 if there is no group_id' do
       pending 'creation of groups'
-      post :create, {}, {} 
+      post :create, {}, valid_session 
       response.status.should == 406
     end
 
@@ -33,7 +39,7 @@ describe RoundsController do
       params = { :group_id => @group.to_param, :round => {} }
 
       expect {
-        post :create, params, {}
+        post :create, params, valid_session
       }.to change(Round, :count).by(1)
     end
   end
@@ -41,7 +47,7 @@ describe RoundsController do
   describe 'PUT update' do
     it 'should not throw a 406 if there is no slide_id' do
       pending 'no idea, try after you have more implemented'
-      put :update, { :round => Factory.build(:round) }, {} 
+      put :update, { :round => Factory.build(:round) }, valid_session 
       response.status.should_not == 406
     end
 
@@ -56,7 +62,7 @@ describe RoundsController do
         :round  => {:group_id => group_id} 
       }
 
-      put :update, params, {}
+      put :update, params, valid_session
       Round.find(id).group_id.should == group_id 
     end
   end
@@ -64,7 +70,7 @@ describe RoundsController do
   describe 'DELETE destroy' do
     it 'should not throw a 406 if there is no slide_id' do
       pending 'no idea, try after you have more implemented'
-      delete :destroy, {}, {} 
+      delete :destroy, {}, valid_session 
       response.status.should_not == 406
     end
 
@@ -73,7 +79,7 @@ describe RoundsController do
       params = { :id => @round.to_param }
 
       expect {
-        delete :destroy, params, {}
+        delete :destroy, params, valid_session
       }.to change(Round, :count).by(-1)
     end
   end

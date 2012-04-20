@@ -1,11 +1,17 @@
 require 'spec_helper'
 
 describe SlidesController do
+  attr_accessor :valid_attributes, :valid_session
+
+  login_user()
+
   before(:each) { Slide.any_instance.stub(:content).and_return('') }
+
+  it 'should authenticate the user'
 
   describe 'GET index' do
     it 'should throw a 406 if there is no round_id' do
-      get :index, {}, {} 
+      get :index, {}, valid_session 
       response.status.should == 406
     end
 
@@ -15,7 +21,7 @@ describe SlidesController do
       @round.slides << @slide
       params = { :round_id => @round.to_param }
 
-      get :index, params, {}
+      get :index, params, valid_session
       assigns(:slides).should == [@slide]
     end
   end
@@ -23,7 +29,7 @@ describe SlidesController do
   describe 'GET show' do
     it 'should not throw a 406 if there is no slide_id' do
       pending 'no idea, try after you have more implemented'
-      put :update, { :slide => Factory.build(:slide) }, {} 
+      put :update, { :slide => Factory.build(:slide) }, valid_session 
       response.status.should_not == 406
     end
 
@@ -34,14 +40,14 @@ describe SlidesController do
       @round.slides << @slide
       params = { :round_id => @round.to_param }
 
-      get :show, params, {}
+      get :show, params, valid_session
       assigns(:slides).should == [@slide]
     end
   end
 
   describe 'POST create' do
     it 'should throw a 406 if there is no round_id' do
-      post :create, {}, {} 
+      post :create, {}, valid_session 
       response.status.should == 406
     end
 
@@ -50,7 +56,7 @@ describe SlidesController do
       params = { :round_id => @round.to_param, :slide => {} }
 
       expect {
-        post :create, params, {}
+        post :create, params, valid_session
       }.to change(Slide, :count).by(1)
     end
   end
@@ -58,7 +64,7 @@ describe SlidesController do
   describe 'PUT update' do
     it 'should not throw a 406 if there is no slide_id' do
       pending 'no idea, try after you have more implemented'
-      put :update, { :slide => Factory.build(:slide) }, {} 
+      put :update, { :slide => Factory.build(:slide) }, valid_session 
       response.status.should_not == 406
     end
 
@@ -72,7 +78,7 @@ describe SlidesController do
         :slide  => {:round_id => round_id} 
       }
 
-      put :update, params, {}
+      put :update, params, valid_session
       Slide.find(id).round_id.should == round_id 
     end
   end
@@ -80,7 +86,7 @@ describe SlidesController do
   describe 'DELETE destroy' do
     it 'should not throw a 406 if there is no slide_id' do
       pending 'no idea, try after you have more implemented'
-      delete :destroy, {}, {} 
+      delete :destroy, {}, valid_session 
       response.status.should_not == 406
     end
 
@@ -89,7 +95,7 @@ describe SlidesController do
       params = { :id => @slide.to_param }
 
       expect {
-        delete :destroy, params, {}
+        delete :destroy, params, valid_session
       }.to change(Slide, :count).by(-1)
     end
   end

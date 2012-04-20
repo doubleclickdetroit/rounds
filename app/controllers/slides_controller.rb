@@ -1,5 +1,7 @@
 class SlidesController < ApplicationController
   before_filter :check_for_round_id, :only => [:index,:create]
+  
+  before_filter :authenticate_user!
 
   respond_to :json
 
