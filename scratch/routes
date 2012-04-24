@@ -1,0 +1,54 @@
+Routes for API, comments (#) indicate that the HTTP verb is not used
+
+
+IMPLEMENTED
+
+  Rounds 
+    C POST    /api/rounds/
+    R GET     /api/rounds/:id
+    U PUT     /api/rounds/:id
+    D DELETE  /api/rounds/:id
+  # I GET     /api/rounds/
+
+    Slides, round_id required for create and index
+      C POST    /api/rounds/:round_id/slides/
+      R GET     /api/rounds/:round_id/slides/:id
+      U PUT     /api/rounds/:round_id/slides/:id
+      D DELETE  /api/rounds/:round_id/slides/:id
+      I GET     /api/rounds/:round_id/slides/
+
+      C POST    /api/slides/?round_id=:round_id
+      R GET     /api/slides/:id
+      U PUT     /api/slides/:id
+      D DELETE  /api/slides/:id
+      I GET     /api/slides/?round_id=:round_id
+
+      Comments, slide_id required for create and index
+        C POST    /api/slides/:slide_id/comments/
+      # R GET     /api/slides/:slide_id/comments/:id
+        U PUT     /api/slides/:slide_id/comments/:id
+        D DELETE  /api/slides/:slide_id/comments/:id
+        I GET     /api/slides/:slide_id/comments/
+
+        C POST    /api/comments/?slide_id=:slide_id
+      # R GET     /api/comments/:id
+        U PUT     /api/comments/:id
+        D DELETE  /api/comments/:id
+        I GET     /api/comments/?slide_id=:slide_id
+
+  BlacklistEntry
+    C POST    /api/blacklist_entry/?user_fid=:user_fid&blocked_fid=:blocked_fid
+  # R GET     /api/blacklist_entry/
+  # U PUT     /api/blacklist_entry/
+    D DELETE  /api/blacklist_entry/?user_fid=:user_fid&blocked_fid=:blocked_fid
+  # I GET     /api/blacklist_entry/
+
+
+
+UNIMPLEMENTED
+
+  feeds:
+    recent_activity
+    recent
+    friends_recent
+    whats_hot
