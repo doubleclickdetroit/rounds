@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120419232101) do
+ActiveRecord::Schema.define(:version => 20120424062332) do
 
   create_table "blacklist_entries", :id => false, :force => true do |t|
     t.integer  "user_fid"
@@ -24,10 +24,11 @@ ActiveRecord::Schema.define(:version => 20120419232101) do
 
   create_table "comments", :force => true do |t|
     t.integer  "slide_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
     t.text     "text"
     t.integer  "fid"
+    t.boolean  "inappropriate"
   end
 
   add_index "comments", ["fid"], :name => "index_comments_on_fid"
