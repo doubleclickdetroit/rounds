@@ -1,5 +1,10 @@
 Routes for API, comments (#) indicate that the HTTP verb is not used
 
+A couple caveats:
+  1 - not sure how images (SVG files) are uploaded (multi-part POST to SlidesController?)
+  2 - Comments are marked inappropriate by comments#update {:inappropriate => true} 
+  3 - BlacklistEntriesController may end up under /api/users/
+
 
 IMPLEMENTED
 
@@ -36,16 +41,18 @@ IMPLEMENTED
         D DELETE  /api/comments/:id
         I GET     /api/comments/?slide_id=:slide_id
 
-  BlacklistEntry
-    C POST    /api/blacklist_entry/?user_fid=:user_fid&blocked_fid=:blocked_fid
-  # R GET     /api/blacklist_entry/
-  # U PUT     /api/blacklist_entry/
-    D DELETE  /api/blacklist_entry/?user_fid=:user_fid&blocked_fid=:blocked_fid
-  # I GET     /api/blacklist_entry/
+  BlacklistEntries
+    C POST    /api/blacklist_entries/?user_fid=:user_fid&blocked_fid=:blocked_fid
+  # R GET     /api/blacklist_entries/
+  # U PUT     /api/blacklist_entries/
+    D DELETE  /api/blacklist_entries/?user_fid=:user_fid&blocked_fid=:blocked_fid
+  # I GET     /api/blacklist_entries/
 
 
 
 UNIMPLEMENTED
+
+  users...
 
   feeds:
     recent_activity
