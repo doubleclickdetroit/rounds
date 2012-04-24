@@ -1,7 +1,10 @@
 Draw::Application.routes.draw do
-  devise_for :users
+  # match "/api/users/:fid/blocks/:blocked_user_fid" => 'blacklist_entries#create'
+  # match "/api/users/:fid/unblocks/:blocked_user_fid" => 'blacklist_entries#create'
 
   scope 'api' do
+    devise_for :users 
+
     resources :rounds, :except => [:new,:edit] do
       resources :slides, :except => [:new,:edit]
     end
@@ -11,6 +14,8 @@ Draw::Application.routes.draw do
     end
 
     resources :comments, :except => [:show,:new,:edit]
+
+    resources :blacklist_entries, :only => [:create,:destroy]
   end
 
   # todo remove if devise doesnt _need_ this

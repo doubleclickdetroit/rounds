@@ -1,0 +1,2 @@
+module BlacklistEntryHelper
+end
