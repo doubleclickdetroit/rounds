@@ -12,7 +12,8 @@ module Common
 
         module_name = self.to_s
         base.class_eval do
-          raise "#{self.to_s} must have an attribute 'fid' to include #{module_name}" unless self.new.respond_to?(:fid)
+          # todo breaking heroku...
+          # raise "#{self.to_s} must have an attribute 'fid' to include #{module_name}" unless self.new.respond_to?(:fid)
 
           scope :recent, :order => 'created_at desc', :limit => 10
 
@@ -35,7 +36,8 @@ module Common
       def self.included(base)
         module_name = self.to_s
         base.class_eval do
-          raise "#{self.to_s} must have an attribute 'fid' to include #{module_name}" unless self.new.respond_to?(:fid)
+          # todo breaking heroku...
+          # raise "#{self.to_s} must have an attribute 'fid' to include #{module_name}" unless self.new.respond_to?(:fid)
 
           belongs_to :created_by, :class_name => 'User', :foreign_key => :fid, :primary_key => :fid
         end
