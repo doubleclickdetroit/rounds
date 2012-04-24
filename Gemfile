@@ -10,6 +10,8 @@ gem 'thin'
 gem 'devise'
 # gem 'cancan'
 
+gem 'json_builder'
+
 gem "paperclip", "~> 2.7"
 
 gem 'jquery-rails'

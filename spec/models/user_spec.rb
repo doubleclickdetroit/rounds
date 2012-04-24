@@ -105,4 +105,24 @@ describe User do
     end
   end
 
+  describe '.recent_activity' do
+    it "should return the User's 30 most recent Rounds, Slides, and Comments (10/10/10 split)" do
+      pending 'move this to a controller'
+      15.times { Factory(:round,   :fid => @user.fid) }
+      15.times { Factory(:slide,   :fid => @user.fid) }
+      15.times { Factory(:comment, :fid => @user.fid) }
+
+      puts "#############{@user.inspect}"
+      json = ActiveSupport::JSON.decode @user.recent_activity
+      puts "###############{json.inspect}"
+
+      json[:rounds].size.should   == 10
+      json[:slides].size.should   == 10
+      json[:comments].size.should == 10
+    end
+
+    it 'should sort results properly'
+    it 'should return json'
+  end
+
 end
