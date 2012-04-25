@@ -66,15 +66,17 @@ IMPLEMENTED
 
 
 
-
 UNIMPLEMENTED
 
-  users...
+  Users
+    Feeds - optional param 'time' (otherwise returns most recent)
+      GET   /api/users/:id/activity
+      GET   /api/users/:id/friends_activity
+      GET   /api/users/recent
+      GET   /api/users/whats_hot
 
-  invitations
+    Blocking (BlacklistEntries)
+      POST    /api/users/:user_fid/block/:blocked_fid
+      DELETE  /api/users/:user_fid/block/:blocked_fid
 
-  feeds:
-    recent_activity
-    recent
-    friends_recent
-    whats_hot
+  Invitations
