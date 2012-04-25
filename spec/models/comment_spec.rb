@@ -28,4 +28,42 @@ describe Comment do
     end
   end
 
+  describe '.recent' do
+    before(:each) do
+      11.times { Factory(:comment) }
+    end
+
+    pending 'test recent? not just limit 10?'
+    it 'should return the 10 most recent Comments' do
+      Comment.recent.count.should == 10
+    end
+  end
+
+  describe '.friends' do
+    before(:each) do
+      10.times { Factory(:comment) }
+      friend1 = Factory(:user)
+      friend2 = Factory(:user)
+      Factory(:comment, :fid => friend1.fid)
+      Factory(:comment, :fid => friend2.fid)
+      @fids = [friend1.fid, friend2.fid]
+    end
+
+    it 'should only return Comments made by friends' do
+      Comment.friends(@fids).count.should == 2
+    end
+  end
+
+  describe '.friends_recent' do
+    before(:each) do
+      friend = Factory(:user)
+      11.times { Factory(:comment, :fid => friend.fid) }
+      @fids = [friend.fid]
+    end
+
+    it 'should only return 10 Comments at most' do
+      Comment.friends_recent(@fids).count.should == 10
+    end
+  end
+
 end
