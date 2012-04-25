@@ -17,7 +17,8 @@ describe Feed do
       Feed.recent.count.should == 10
     end
 
-    it 'sorts the results properly'
+    it 'should sort the results properly'
+    it 'should take time parameter'
   end
 
   describe '#whats_hot' do
