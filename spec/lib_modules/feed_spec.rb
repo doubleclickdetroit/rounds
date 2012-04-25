@@ -5,15 +5,19 @@ describe Feed do
 
   describe '#recent' do
     before(:each) do
-      20.times { Factory(:round) }
-      20.times { Factory(:slide) }
-      20.times { Factory(:comment) }
+      3.times { Factory(:round) }
+      3.times { Factory(:slide) }
+      3.times { Factory(:comment) }
+      3.times { Factory(:round) }
+      3.times { Factory(:slide) }
+      3.times { Factory(:comment) }
     end
 
     it 'should return 10 results' do
-      pending
       Feed.recent.count.should == 10
     end
+
+    it 'sorts the results properly'
   end
 
   describe '#whats_hot' do

@@ -96,6 +96,10 @@ describe Slide do
     end
   end
 
+  describe '.before' do
+    pending
+  end
+
   describe '.friends' do
     before(:each) do
       10.times { Factory(:slide) }
