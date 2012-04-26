@@ -1,0 +1,35 @@
+problem: two users simultaneously try to add a slide to a round. the first users slide is accepted, the second user writes a sentence/draws a picture only to be unable to create it in the app
+
+
+suggested solutions:
+
+  1 - lock next slide by means of an empty Slide
+  2 - implement rounds as a singly linked list
+    a - conflicts are resolved by vote
+    b - conficlts do not exist because arbitrary branching is allowed
+
+
+
+  details:
+
+    1 - lock next slide by means of an empty Slide:
+      happy path, Slide is not locked:
+        a - POST to create new Slide including round_id and preceding slide_id. none exists, so Slide is created empty
+        b - user writes Sentence/draws Picture and submits it
+        c - PUT to the Slide, adds text/uploads image
+      unhappy path, Slide is locked:
+        a - POST to create new Slide including round_id and preceding slide_id. one already exists so...
+        b - user is informed that someone is already creating the slide and is given the option to bid for it  
+        c - user clicks the bid option, which sends a request to the server to create a SlideBid (details below)
+        d - the user's device waits a predetermined amount of time then makes another request to the service
+        e - the service determines if the SlideBid has in fact existed for the predetermined amount of time and that the locking user has not responded, decides both are true and...
+        f - the service destroys the locking Slide and creates a new one belonging to the user
+
+      there will have to be a series of push notifications for the unhappy path to both the bidding and blocking user
+
+      SlideBid bidding_fid:integer owner_fid:integer round_id:integer preceding_slide_id:integer owner_responded:boolean created_at:datetime
+
+
+    2 - implement rounds as a singly linked list
+      a - conflicts are resolved by vote
+      b - conficlts do not exist because arbitrary branching is allowed
