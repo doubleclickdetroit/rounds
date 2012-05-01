@@ -1,7 +1,7 @@
 require Rails.root.join('lib','modules','common.rb')
 
 class Slide < ActiveRecord::Base
-  TYPES = [Sentence, Picture]
+  # TYPES = [Sentence, Picture] 
 
   include Common::Scopes::FriendsAndRecent
   include Common::Associations::HasCreator
@@ -33,3 +33,8 @@ private
     self.save
   end
 end
+
+# todo hack
+class Sentence < Slide; end
+class Picture < Slide; end
+

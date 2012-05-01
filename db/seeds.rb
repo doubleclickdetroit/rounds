@@ -12,6 +12,20 @@ def random_text
   text
 end
 
+def make_sentence
+  fid = random_user().fid
+  params = { :round_id => @round.to_param, :fid => fid }
+  FactoryGirl.create(:sentence, params) 
+end
+
+def make_picture
+  fid = random_user().fid
+  pic = FactoryGirl.build(:picture, :with_file) 
+  pic.round_id = @round.to_param
+  pic.fid = fid
+  pic.save
+end
+
 def add_arbitrary_comments_to(slide)
   # comments
   (rand(5)+1).times do
@@ -45,7 +59,12 @@ puts '  ** Users'
 
 puts '  ** Round'
 
-@round = FactoryGirl.create(:round, :fid => random_user().fid)
+@rounds = []
+
+20.times do 
+  round = FactoryGirl.create(:round, :fid => random_user().fid)
+  @rounds << round
+end
 
 
 
@@ -55,22 +74,11 @@ puts '  ** Round'
 
 puts '    ** Slides'
 
-def make_sentence
-  fid = random_user().fid
-  params = { :round_id => @round.to_param, :fid => fid }
-  FactoryGirl.create(:sentence, params) 
-end
-
-def make_picture
-  fid = random_user().fid
-  pic = FactoryGirl.build(:picture, :with_file) 
-  pic.round_id = @round.to_param
-  pic.fid = fid
-  pic.save
-end
-
-6.times do |i|
-  klass = i.odd? ? make_sentence : make_picture 
+@rounds.each do |round|
+  @round = round
+  (rand(10)+1).times do |i|
+    klass = i.odd? ? make_sentence : make_picture 
+  end
 end
 
 
@@ -81,8 +89,10 @@ end
 
 puts '      ** Comments'
 
-@round.slides.each do |slide|
-  add_arbitrary_comments_to(slide)
+@rounds.each do |round|
+  round.slides.each do |slide|
+    add_arbitrary_comments_to(slide)
+  end
 end
 
 

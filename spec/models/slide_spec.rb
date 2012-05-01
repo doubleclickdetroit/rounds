@@ -173,7 +173,7 @@ describe Slide do
       4.times { Factory(:picture, :created_at => @time) }
     end
 
-    Slide::TYPES.each do |klass|
+    [Sentence,Picture].each do |klass|
       it "should return the 8 most recent slides of the proper type (#{klass.to_s}) with no time arg" do
         slides = Slide.of_type_and_before(klass.to_s)
         slides.count.should == 8 # todo spec most recent instead
@@ -214,7 +214,7 @@ describe Slide do
     #   4.times { Factory(:picture, params) }
     # end
 
-    # Slide::TYPES.each do |klass|
+    # [Sentence,Picture].each do |klass|
     #   it "should return the 8 most recent slides by friends of the proper type (#{klass.to_s}) with no time arg" do
     #     slides = Slide.from_friends_of_type_and_before(klass.to_s)
     #     slides.count.should == 8 # todo spec most recent instead
