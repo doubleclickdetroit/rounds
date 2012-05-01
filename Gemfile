@@ -46,6 +46,7 @@ group :development, :test do
   # Pretty printed test output
   gem 'turn', '0.8.2', :require => false
 
+  gem 'factory_girl'
   gem 'rspec-rails'
   gem 'cucumber-rails'
   # gem 'cucumber_factory'
