@@ -1,7 +1,3 @@
-Round.new
-Slide.new
-Comment.new
-
 def random_user
   @users[rand(@users.size)]
 end
