@@ -1,4 +1,4 @@
-puts "** Begin seeding"
+factory_class = Rails.env.production? ? Factory : FactoryGirl
 
 def random_user
   @users[rand(@users.size)]
@@ -32,6 +32,10 @@ def add_arbitrary_comments_to(slide)
     slide.comments << FactoryGirl.create(:comment, {:fid => random_user().fid, :text => random_text()})
   end
 end
+
+
+
+puts "** Begin seeding"
 
 
 
