@@ -30,12 +30,12 @@ describe Comment do
 
   describe '.recent' do
     before(:each) do
-      11.times { Factory(:comment) }
+      9.times { Factory(:comment) }
     end
 
-    pending 'test recent? not just limit 10?'
-    it 'should return the 10 most recent Comments' do
-      Comment.recent.count.should == 10
+    pending 'test recent? not just limit 8?'
+    it 'should return the 8 most recent Comments' do
+      Comment.recent.count.should == 8
     end
   end
 
@@ -45,7 +45,7 @@ describe Comment do
 
   describe '.friends' do
     before(:each) do
-      10.times { Factory(:comment) }
+      8.times { Factory(:comment) }
       friend1 = Factory(:user)
       friend2 = Factory(:user)
       Factory(:comment, :fid => friend1.fid)
@@ -61,12 +61,12 @@ describe Comment do
   describe '.friends_recent' do
     before(:each) do
       friend = Factory(:user)
-      11.times { Factory(:comment, :fid => friend.fid) }
+      9.times { Factory(:comment, :fid => friend.fid) }
       @fids = [friend.fid]
     end
 
-    it 'should only return 10 Comments at most' do
-      Comment.friends_recent(@fids).count.should == 10
+    it 'should only return 8 Comments at most' do
+      Comment.friends_recent(@fids).count.should == 8
     end
   end
 

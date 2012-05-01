@@ -110,4 +110,17 @@ describe SlidesController do
     end
   end
 
+  describe 'GET recent' do
+    pending 'unhappy path'
+
+    context 'Sentence' do
+    end
+
+  end
+
+  describe 'GET friends' do
+    pending 'recent'
+    pending 'unhappy path'
+  end
+
 end

@@ -26,7 +26,6 @@ describe SlidesController do
 
   end
 
-
   describe "nested routing within Rounds" do
   
     it "routes to #index" do
@@ -47,6 +46,34 @@ describe SlidesController do
 
     it "routes to #destroy" do
       delete("/api/rounds/1/slides/2").should route_to("slides#destroy", :id => "2", :round_id => "1")
+    end
+
+  end
+
+  describe "subclassed routing" do
+
+    context "Sentence" do
+
+      it "routes to #recent" do
+        get("/api/sentences/recent").should route_to("slides#recent", :type => 'Sentence')
+      end
+
+      it "routes to #friends" do
+        get("/api/sentences/friends").should route_to("slides#friends", :type => 'Sentence')
+      end
+
+    end
+
+    context "Picture" do
+
+      it "routes to #recent" do
+        get("/api/pictures/recent").should route_to("slides#recent", :type => 'Picture')
+      end
+
+      it "routes to #friends" do
+        get("/api/pictures/friends").should route_to("slides#friends", :type => 'Picture')
+      end
+
     end
 
   end

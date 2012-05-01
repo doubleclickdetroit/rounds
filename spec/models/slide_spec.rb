@@ -85,24 +85,58 @@ describe Slide do
     end
   end
 
-  describe '.recent' do
+  describe '.of_type' do
     before(:each) do
-      11.times { Factory(:slide) }
+      # todo wasteful, 43 created before
+      Slide.destroy_all
+
+      Factory(:sentence) 
+      Factory(:picture) 
     end
 
-    pending 'test recent? not just limit 10?'
-    it 'should return the 10 most recent Slides' do
-      Slide.recent.count.should == 10
+    it 'should only return Sentences when passed that type' do
+      Slide.count.should == 2
+      Slide.of_type('Sentence').count.should == 1
+    end
+
+    it 'should only return Pictures when passed that type' do
+      Slide.count.should == 2
+      Slide.of_type('Picture').count.should == 1
+    end
+  end
+
+  describe '.recent' do
+    before(:each) do
+      9.times { Factory(:slide) }
+    end
+
+    pending 'test recent (by date)? not just limit 8?'
+    it 'should return the 8 most recent Slides' do
+      Slide.recent.count.should == 8
     end
   end
 
   describe '.before' do
-    pending
+    it 'should only return Slides created before a specific Time' do
+      time = Time.now
+
+      # todo wasteful
+      Slide.destroy_all
+
+      slide1 = Factory(:slide, :created_at => time-1)
+      slide2 = Factory(:slide, :created_at => time+1)
+
+      Slide.count.should == 2
+      Slide.before(time).count.should == 1
+      Slide.before(time).first.should == slide1
+    end
+    pending 'actual test of time'
   end
 
   describe '.friends' do
+    pending 'converting this over'
     before(:each) do
-      10.times { Factory(:slide) }
+      8.times { Factory(:slide) }
       friend1 = Factory(:user)
       friend2 = Factory(:user)
       Factory(:slide, :fid => friend1.fid)
@@ -116,14 +150,15 @@ describe Slide do
   end
 
   describe '.friends_recent' do
+    pending 'converting this over'
     before(:each) do
       friend = Factory(:user)
-      11.times { Factory(:slide, :fid => friend.fid) }
+      9.times { Factory(:slide, :fid => friend.fid) }
       @fids = [friend.fid]
     end
 
-    it 'should only return 10 Slides at most' do
-      Slide.friends_recent(@fids).count.should == 10
+    it 'should only return 8 Slides at most' do
+      Slide.friends_recent(@fids).count.should == 8
     end
   end
 

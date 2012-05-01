@@ -15,11 +15,14 @@ module Common
           # todo breaking heroku...
           # raise "#{self.to_s} must have an attribute 'fid' to include #{module_name}" unless self.new.respond_to?(:fid)
 
-          scope :before, lambda {|time|
-            where(["created_at >= ?", time]).order('created_at desc').limit(10)
-          }
+          scope :of_type, lambda {|type| where :type => type}
 
-          scope :recent, :order => 'created_at desc', :limit => 10
+          scope :before, lambda {|time| where(["created_at < ?", time])}
+          # scope :before, lambda {|time|
+          #   where(["created_at < ?", time]).order('created_at desc').limit(8)
+          # }
+
+          scope :recent, :order => 'created_at desc', :limit => 8
 
           scope :friends, lambda {|fid_arr|
             cond_str = fid_arr.inject('') do |str,fid|
