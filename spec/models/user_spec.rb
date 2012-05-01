@@ -112,9 +112,7 @@ describe User do
       15.times { Factory(:slide,   :fid => @user.fid) }
       15.times { Factory(:comment, :fid => @user.fid) }
 
-      puts "#############{@user.inspect}"
       json = ActiveSupport::JSON.decode @user.recent_activity
-      puts "###############{json.inspect}"
 
       json[:rounds].size.should   == 10
       json[:slides].size.should   == 10

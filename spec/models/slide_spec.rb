@@ -162,7 +162,7 @@ describe Slide do
     end
   end
 
-  describe ".of_type_before" do
+  describe ".of_type_and_before" do
     pending 'just chains two scopes...'
     before(:each) do
       @time = Time.now
@@ -175,18 +175,58 @@ describe Slide do
 
     Slide::TYPES.each do |klass|
       it "should return the 8 most recent slides of the proper type (#{klass.to_s}) with no time arg" do
-        slides = Slide.of_type_before(klass.to_s)
+        slides = Slide.of_type_and_before(klass.to_s)
         slides.count.should == 8 # todo spec most recent instead
         slides.all?{|s|s.instance_of?(klass)}.should be_true
       end
 
       it "should return the slides before the proper time and of the proper type (#{klass.to_s})" do
-        slides = Slide.of_type_before(klass.to_s, @time)
+        slides = Slide.of_type_and_before(klass.to_s, @time)
         slides.count.should == 5 
         slides.all?{|s|s.instance_of?(klass)}.should be_true
       end
     end
+  end
 
+  describe ".from_friends_of_type_and_before" do
+    pending 'opting for friends.of_type_and_before chain right now'
+
+    # before(:each) do
+    #   other_fid  = 1
+    #   friend_fid = 2
+
+    #   @user.stub(:friends_fids).and_return([friend_fid])
+
+    #   params = {}
+    #   params[:created_at] = Time.now
+    #   params[:fid]        = other_fid
+
+    #   # other slides
+    #   4.times { Factory(:sentence, params) }
+    #   4.times { Factory(:picture, params) }
+
+    #   # friends slides
+    #   params[:fid] = friend_fid
+    #   5.times { Factory(:sentence, params) }
+    #   5.times { Factory(:picture, params) }
+    #   params[:created_at] += 30 # arbitrary
+    #   4.times { Factory(:sentence, params) }
+    #   4.times { Factory(:picture, params) }
+    # end
+
+    # Slide::TYPES.each do |klass|
+    #   it "should return the 8 most recent slides by friends of the proper type (#{klass.to_s}) with no time arg" do
+    #     slides = Slide.from_friends_of_type_and_before(klass.to_s)
+    #     slides.count.should == 8 # todo spec most recent instead
+    #     slides.all?{|s|s.instance_of?(klass)}.should be_true
+    #   end
+
+    #   it "should return the slides by friends before the proper time and of the proper type (#{klass.to_s})" do
+    #     slides = Slide.of_type_and_before(klass.to_s, @time)
+    #     slides.count.should == 5 
+    #     slides.all?{|s|s.instance_of?(klass)}.should be_true
+    #   end
+    # end
   end
 
 end

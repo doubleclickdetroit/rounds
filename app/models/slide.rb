@@ -6,7 +6,7 @@ class Slide < ActiveRecord::Base
   include Common::Scopes::FriendsAndRecent
   include Common::Associations::HasCreator
 
-  def self.of_type_before(type, time=nil)
+  def self.of_type_and_before(type, time=nil)
     slides = self.of_type(type)
     slides = slides.before(time) if time
     slides.recent
