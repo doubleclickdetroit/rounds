@@ -1,7 +1,3 @@
-require 'rubygems'
-require 'factory_girl'
-
-
 puts "** Begin seeding"
 
 def random_user
