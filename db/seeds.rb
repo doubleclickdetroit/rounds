@@ -1,5 +1,3 @@
-factory_class = Rails.env.production? ? Factory : FactoryGirl
-
 def random_user
   @users[rand(@users.size)]
 end
@@ -15,12 +13,12 @@ end
 def make_sentence
   fid = random_user().fid
   params = { :round_id => @round.to_param, :fid => fid }
-  factory_class.create(:sentence, params) 
+  FactoryGirl.create(:sentence, params) 
 end
 
 def make_picture
   fid = random_user().fid
-  pic = factory_class.build(:picture, :with_file) 
+  pic = FactoryGirl.build(:picture, :with_file) 
   pic.round_id = @round.to_param
   pic.fid = fid
   pic.save
@@ -29,7 +27,7 @@ end
 def add_arbitrary_comments_to(slide)
   # comments
   (rand(5)+1).times do
-    slide.comments << factory_class.create(:comment, {:fid => random_user().fid, :text => random_text()})
+    slide.comments << FactoryGirl.create(:comment, {:fid => random_user().fid, :text => random_text()})
   end
 end
 
@@ -47,9 +45,9 @@ puts '  ** Users'
 
 @users = []
 
-@ammar = factory_class.create(:user, :email => 'ammar@almakzumi.com', :password => 'ammaralmakzumi')
-@ben   = factory_class.create(:user, :email => 'ben@babics.com', :password => 'benbabics')
-@brad  = factory_class.create(:user, :email => 'brad@chase.com', :password => 'bradchase')
+@ammar = FactoryGirl.create(:user, :email => 'ammar@almakzumi.com', :password => 'ammaralmakzumi')
+@ben   = FactoryGirl.create(:user, :email => 'ben@babics.com', :password => 'benbabics')
+@brad  = FactoryGirl.create(:user, :email => 'brad@chase.com', :password => 'bradchase')
 
 @users << @ammar
 @users << @ben
@@ -66,7 +64,7 @@ puts '  ** Round'
 @rounds = []
 
 20.times do 
-  round = factory_class.create(:round, :fid => random_user().fid)
+  round = FactoryGirl.create(:round, :fid => random_user().fid)
   @rounds << round
 end
 
