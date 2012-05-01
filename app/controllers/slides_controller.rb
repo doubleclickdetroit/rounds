@@ -30,16 +30,8 @@ class SlidesController < ApplicationController
 
   # RESTless
   def recent
-    # todo refactor ffs
-    # type, time = @type, params[:time]
-
-    # if time
-    #   @slides = Slide.of_type(type).recent
-    # else
-    #   @slides = Slide.of_type(type).before(params[:time])
-    # end
-
-    # respond_with @slides.to_json
+    @slides = Slide.of_type_before(@type, params[:time])
+    respond_with @slides.to_json
   end
 
   def friends

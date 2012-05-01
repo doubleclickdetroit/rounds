@@ -128,7 +128,7 @@ describe Slide do
 
       Slide.count.should == 2
       Slide.before(time).count.should == 1
-      Slide.before(time).first.should == slide1
+ 
     end
     pending 'actual test of time'
   end
@@ -160,6 +160,33 @@ describe Slide do
     it 'should only return 8 Slides at most' do
       Slide.friends_recent(@fids).count.should == 8
     end
+  end
+
+  describe ".of_type_before" do
+    pending 'just chains two scopes...'
+    before(:each) do
+      @time = Time.now
+      5.times { Factory(:sentence, :created_at => @time) }
+      5.times { Factory(:picture, :created_at => @time) }
+      @time += 30 # arbitrary
+      4.times { Factory(:sentence, :created_at => @time) }
+      4.times { Factory(:picture, :created_at => @time) }
+    end
+
+    Slide::TYPES.each do |klass|
+      it "should return the 8 most recent slides of the proper type (#{klass.to_s}) with no time arg" do
+        slides = Slide.of_type_before(klass.to_s)
+        slides.count.should == 8 # todo spec most recent instead
+        slides.all?{|s|s.instance_of?(klass)}.should be_true
+      end
+
+      it "should return the slides before the proper time and of the proper type (#{klass.to_s})" do
+        slides = Slide.of_type_before(klass.to_s, @time)
+        slides.count.should == 5 
+        slides.all?{|s|s.instance_of?(klass)}.should be_true
+      end
+    end
+
   end
 
 end

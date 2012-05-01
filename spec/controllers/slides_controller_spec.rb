@@ -113,9 +113,22 @@ describe SlidesController do
   describe 'GET recent' do
     pending 'unhappy path'
 
-    context 'Sentence' do
+    before(:each) do 
+      3.times { Factory(:sentence) }
+      3.times { Factory(:picture) }
     end
 
+    Slide::TYPES.each do |klass|
+      context klass.to_s do
+        it "should assign only #{klass.to_s.pluralize} to @slides" do
+          get :recent, {:type => klass.to_s}, valid_session
+
+          puts assigns(:slides).inspect
+          assigns(:slides).should_not be_empty
+          assigns(:slides).all?{|s|s.instance_of?(klass)}.should be_true
+        end
+      end
+    end
   end
 
   describe 'GET friends' do

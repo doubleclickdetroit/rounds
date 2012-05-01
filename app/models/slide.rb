@@ -1,8 +1,16 @@
 require Rails.root.join('lib','modules','common.rb')
 
 class Slide < ActiveRecord::Base
+  TYPES = [Sentence, Picture]
+
   include Common::Scopes::FriendsAndRecent
   include Common::Associations::HasCreator
+
+  def self.of_type_before(type, time=nil)
+    slides = self.of_type(type)
+    slides = slides.before(time) if time
+    slides.recent
+  end
 
   after_create :add_position
 
