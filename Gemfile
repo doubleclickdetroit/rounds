@@ -20,6 +20,8 @@ gem 'jquery-rails'
 
 # gem 'requirejs-rails'
  
+gem 'factory_girl_rails'
+
 group :development, :test do
   gem 'sqlite3'
 end
@@ -46,7 +48,6 @@ group :development, :test do
   # Pretty printed test output
   gem 'turn', '0.8.2', :require => false
 
-  gem 'factory_girl'
   gem 'rspec-rails'
   gem 'cucumber-rails'
   # gem 'cucumber_factory'
@@ -60,5 +61,4 @@ group :development, :test do
   gem 'spork'
   gem 'guard-spork'
   # gem 'guard-rails-assets'
-	gem 'factory_girl_rails'
 end
