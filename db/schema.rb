@@ -36,7 +36,7 @@ ActiveRecord::Schema.define(:version => 20120502055339) do
 
   create_table "round_locks", :force => true do |t|
     t.integer  "round_id"
-    t.integer  "user_id"
+    t.integer  "user_fid"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
