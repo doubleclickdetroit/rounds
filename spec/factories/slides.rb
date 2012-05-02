@@ -2,7 +2,7 @@ include ActionDispatch::TestProcess
 
 FactoryGirl.define do
   factory :slide do
-    round { @round ? @round : Factory(:round) }
+    round { @round ? @round : FactoryGirl.build(:round) }
     position nil
 
     factory :sentence, :class => ::Sentence do
