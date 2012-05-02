@@ -178,6 +178,16 @@ describe SlidesController do
       4.times { Factory(:picture, params) }
     end
 
+    [Sentence,Picture].each do |klass|
+      it "should return [] for #{klass.to_s.downcase}#friends if the User has no friends" do # BURN!
+        User.any_instance.stub(:friends_fids).and_return([])
+
+        get :friends, {:type => klass.to_s}, valid_session
+
+        assigns(:slides).should == []
+      end
+    end
+
     context 'without time arg' do
       [Sentence,Picture].each do |klass|
         it "should return the most recent slides by friends of the proper type (#{klass.to_s}) with no time arg" do
@@ -187,8 +197,6 @@ describe SlidesController do
 
           slides.count.should == 8 # todo spec most recent instead
           slides.all?{|s|s.instance_of?(klass)}.should be_true
-
-          false # friends_fids not set up on User
         end
       end
     end
@@ -203,8 +211,6 @@ describe SlidesController do
 
           slides.count.should == 5 
           slides.all?{|s|s.instance_of?(klass)}.should be_true
-
-          false # friends_fids not set up on User
         end
       end
     end

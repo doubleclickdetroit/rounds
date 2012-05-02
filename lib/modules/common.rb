@@ -19,14 +19,11 @@ module Common
           scope :of_type, lambda {|type| where :type => type}
 
           scope :before, lambda {|time| where(["created_at < ?", time])}
-          # scope :before, lambda {|time|
-          #   where(["created_at < ?", time]).order('created_at desc').limit(8)
-          # }
 
           scope :recent, :order => 'created_at desc', :limit => 8
 
           scope :friends, lambda {|fid_arr|
-            return limit(0) if fid_arr.empty?
+            return where('1 = 0') if fid_arr.empty?
 
             cond_str = fid_arr.inject('') do |str,fid|
               str << " OR " unless str.empty?
