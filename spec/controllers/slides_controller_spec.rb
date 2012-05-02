@@ -113,24 +113,43 @@ describe SlidesController do
     pending 'unhappy path'
 
     before(:each) do 
-      3.times { Factory(:sentence) }
-      3.times { Factory(:picture) }
+      @time = Time.now
+      3.times { Factory(:sentence, :created_at => @time) }
+      3.times { Factory(:picture, :created_at => @time) }
     end
 
-    [Sentence,Picture].each do |klass|
-      context klass.to_s do
-        it "should assign only proper number of #{klass.to_s.pluralize} to @slides" do 
-          get :recent, {:type => klass.to_s}, valid_session
+    context 'with no time arg' do
+      [Sentence,Picture].each do |klass|
+        context klass.to_s do
+          it "should assign only proper number of #{klass.to_s.pluralize} to @slides" do 
+            get :recent, {:type => klass.to_s}, valid_session
 
-          puts "#############{klass} #{klass.count}"
+            assigns(:slides).count.should == 3
+            assigns(:slides).all?{|s|s.instance_of?(klass)}.should be_true
+          end
+        end
+      end
+    end
+    
+    context 'with time arg' do
+      before(:each) do 
+        @time += 30 # arbitrary
+        2.times { Factory(:sentence, :created_at => @time) }
+        2.times { Factory(:picture, :created_at => @time) }
+      end
 
-          assigns(:slides).count.should == 3
-          assigns(:slides).all?{|s|s.instance_of?(klass)}.should be_true
+      [Sentence,Picture].each do |klass|
+        context klass.to_s do
+          it "should assign only proper number of #{klass.to_s.pluralize} to @slides" do 
+            get :recent, {:type => klass.to_s, :time => @time}, valid_session
+
+            assigns(:slides).count.should == 3
+            assigns(:slides).all?{|s|s.instance_of?(klass)}.should be_true
+          end
         end
       end
     end
 
-    pending 'with time arg'
   end
 
   describe 'GET friends' do
@@ -156,10 +175,13 @@ describe SlidesController do
       params[:fid] = friend_fid
       5.times { Factory(:sentence, params) }
       5.times { Factory(:picture, params) }
-      params[:created_at] += 30 # arbitrary
+      @time += 30 # arbitrary
+      params[:created_at] = @time
       4.times { Factory(:sentence, params) }
       4.times { Factory(:picture, params) }
     end
+
+    pending 'no time arg'
 
     [Sentence,Picture].each do |klass|
       it "should return the most recent slides by friends of the proper type (#{klass.to_s}) with no time arg" do

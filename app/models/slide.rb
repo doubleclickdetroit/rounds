@@ -13,6 +13,7 @@ class Slide < ActiveRecord::Base
   has_many :comments
 
   def self.of_type_and_before(type, time=nil)
+    time   = Time.parse time rescue nil
     slides = self.of_type(type)
     slides = slides.before(time) if time
     slides.recent
