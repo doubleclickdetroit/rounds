@@ -23,7 +23,7 @@ class Slide < ActiveRecord::Base
   end
 
   def to_hash
-    attrs = %w[type id round_id created_at updated_at content]
+    attrs = %w[type id round_id fid created_at updated_at content]
     attrs.inject({}) {|h,k| h.merge({k => self.send(k)})}
   end
 

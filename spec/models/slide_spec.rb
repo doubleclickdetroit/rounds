@@ -27,15 +27,9 @@ describe Slide do
       @hash = @slide.to_hash 
     end
 
-    keys = %w[type id round_id created_at updated_at content]
-    keys.each do |key|
-      it "should return a Hash containing #{key}" do
-        @hash.should have_key(key)
-      end
-    end
-
-    it 'should have no other keys' do
-      (@hash.keys && keys).should == @hash.keys
+    keys = %w[type id round_id fid created_at updated_at content]
+    it "should have no other keys than these #{keys.inspect}" do
+      (@hash.keys && keys).sort.should == @hash.keys.sort
     end
   end
 
