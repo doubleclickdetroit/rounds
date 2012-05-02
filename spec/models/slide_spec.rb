@@ -183,5 +183,17 @@ describe Slide do
     end
   end
 
+  describe '.before_create' do
+    it 'should not save if a RoundLock exists for .round' do
+      round = Factory(:round)
+      Factory(:round_lock, :round_id => round.id)
+
+      slide = Factory.build(:slide, :round_id => round.id)
+
+      expect {
+        slide.save
+      }.to change(Slide, :count).by(0)
+    end
+  end
 
 end
