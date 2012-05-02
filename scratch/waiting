@@ -1,0 +1,38 @@
+happiest path
+  user sees a slide in his feed, clicks to create the next one
+    - the server creates a SlideLock which points to the preceeding slide by slide_id
+  the user creates the slide and submits it
+    - the SlideLock is destroyed
+    - rejoicing
+
+next happiest path
+  user sees a slide in his feed, clicks to create the next one
+    - the server creates a SlideLock which points to the preceeding slide by slide_id
+  another user comes along and (having seen that the slide is locked or not) chooses to jump in line in case it doesnt get finished
+    - the server creates a SlideWatcher which points to the SlideLock and the user that is waiting
+  the original user creates the slide and submits it
+    - the SlideLock is destroyed
+      - all associated SlideWatchers are destroyed, firing callbacks
+      - perhaps a notification is sent to the waiting user to let them know the slide was added?
+    - rejoicing
+
+unhappily happy path
+  user sees a slide in his feed, clicks to create the next one
+    - the server creates a SlideLock which points to the preceeding slide by slide_id
+  another user comes along and having seen that the slide is locked, wants to jump in line in case it doesnt get finished
+    - the server creates a SlideWatcher which points to the SlideLock and the user that is waiting
+  ...
+  the original user derps to the max, wasting the time allotted for slide completion
+    - the server has a rolling check resembling cron and observes this
+    - the SlideLock is destroyed
+      - all associated SlideWatchers are destroyed, firing callbacks
+      - push notifications are sent to all users who were watching the SlideLock
+  the first user to responds to the notification
+    - a new SlideLock is created for that user
+  GOTO 10
+
+
+other considerations around slides and slide locks that are not yet implemented:
+- slides need to be added to rounds, so round_id should be validated for presence
+- actually, the round is locked more than the slide is, as the slide doesnt yet exist
+- slides need to be forced to alternate Sentence/Picture
