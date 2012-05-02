@@ -116,6 +116,9 @@ describe SlidesController do
       @time = Time.now
       3.times { Factory(:sentence, :created_at => @time) }
       3.times { Factory(:picture, :created_at => @time) }
+      @time += 30 # arbitrary
+      2.times { Factory(:sentence, :created_at => @time) }
+      2.times { Factory(:picture, :created_at => @time) }
     end
 
     context 'with no time arg' do
@@ -124,7 +127,7 @@ describe SlidesController do
           it "should assign only proper number of #{klass.to_s.pluralize} to @slides" do 
             get :recent, {:type => klass.to_s}, valid_session
 
-            assigns(:slides).count.should == 3
+            assigns(:slides).count.should == 5
             assigns(:slides).all?{|s|s.instance_of?(klass)}.should be_true
           end
         end
@@ -132,12 +135,6 @@ describe SlidesController do
     end
     
     context 'with time arg' do
-      before(:each) do 
-        @time += 30 # arbitrary
-        2.times { Factory(:sentence, :created_at => @time) }
-        2.times { Factory(:picture, :created_at => @time) }
-      end
-
       [Sentence,Picture].each do |klass|
         context klass.to_s do
           it "should assign only proper number of #{klass.to_s.pluralize} to @slides" do 
@@ -181,27 +178,34 @@ describe SlidesController do
       4.times { Factory(:picture, params) }
     end
 
-    pending 'no time arg'
+    context 'without time arg' do
+      [Sentence,Picture].each do |klass|
+        it "should return the most recent slides by friends of the proper type (#{klass.to_s}) with no time arg" do
+          get :friends, {:type => klass.to_s}, valid_session
 
-    [Sentence,Picture].each do |klass|
-      it "should return the most recent slides by friends of the proper type (#{klass.to_s}) with no time arg" do
-        get :friends, {:type => klass.to_s}, valid_session
+          slides = assigns(:slides)
 
-        slides = assigns(:slides)
-        # slides.each {|slide| puts "############{slide.inspect}"}
+          slides.count.should == 8 # todo spec most recent instead
+          slides.all?{|s|s.instance_of?(klass)}.should be_true
 
-        slides.count.should == 5 # todo spec most recent instead
-        slides.all?{|s|s.instance_of?(klass)}.should be_true
+          false # friends_fids not set up on User
+        end
       end
+    end
 
-      it "should return the slides by friends before the proper time and of the proper type (#{klass.to_s})" do
-        pending 'failing on @time'
-        get :friends, {:type => klass.to_s, :time => @time}, valid_session
+    context 'with time arg' do
+      [Sentence,Picture].each do |klass|
+        it "should return the slides by friends before the proper time and of the proper type (#{klass.to_s})" do
+          pending 'failing on @time'
+          get :friends, {:type => klass.to_s, :time => @time}, valid_session
 
-        slides = assigns(:slides)
+          slides = assigns(:slides)
 
-        slides.count.should == 5 
-        slides.all?{|s|s.instance_of?(klass)}.should be_true
+          slides.count.should == 5 
+          slides.all?{|s|s.instance_of?(klass)}.should be_true
+
+          false # friends_fids not set up on User
+        end
       end
     end
 
