@@ -44,6 +44,7 @@ Spork.prefork do
 
     config.include Devise::TestHelpers, :type => :controller
     config.extend ControllerMacros, :type => :controller
+    config.extend ModelMacros # , :type => :controller
   end
 
   # RSpec.configure do |config|
@@ -59,7 +60,6 @@ Spork.prefork do
   #     FileUtils.rm File.join(SPEC_ROOT, 'mailman-log.log') rescue nil
   #   end
   # end
-
 end
 
 Spork.each_run do

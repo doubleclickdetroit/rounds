@@ -2,9 +2,9 @@ require 'spec_helper'
 
 describe Slide do
   before(:each) do
-    @slide = Factory(:slide) 
-
     @round = Factory(:round)
+
+    @slide = Factory(:slide) 
     @round.slides << @slide 
 
     @slide.comments << Factory(:comment)
@@ -12,7 +12,7 @@ describe Slide do
   end
 
   it 'should belong to a Round' do
-    @slide.round.should == @round
+    @slide.round.should be_an_instance_of Round
   end
 
   it 'should have many Comments' do
@@ -55,16 +55,17 @@ describe Slide do
   describe 'after_create' do
     it 'should assign a position of 0 if it is the first Slide in the Round' do
       @round.slides = []
-      slide = Factory.build(:slide, :round_id => @round.to_param)
-      slide.position.should be_nil
-      slide.save
+      slide = Factory(:slide, :round_id => @round.to_param)
+      @round.slides << slide
       slide.position.should == 0
     end
 
     it 'should assign a position one greater than the last Slide in the Round' do
-      slide = Factory.build(:slide, :round_id => @round.to_param)
-      slide.position.should be_nil
-      slide.save
+      @round.slides = []
+      slide = Factory(:slide, :round_id => @round.to_param)
+      @round.slides << slide
+      slide = Factory(:slide, :round_id => @round.to_param)
+      @round.slides << slide
       slide.position.should == 1
     end
   end
@@ -90,8 +91,8 @@ describe Slide do
       # todo wasteful, 43 created before
       Slide.destroy_all
 
-      Factory(:sentence) 
-      Factory(:picture) 
+      Factory(:slide, :type => 'Sentence') 
+      Factory(:slide, :type => 'Picture') 
     end
 
     it 'should only return Sentences when passed that type' do
@@ -188,45 +189,5 @@ describe Slide do
     end
   end
 
-  describe ".from_friends_of_type_and_before" do
-    pending 'opting for friends.of_type_and_before chain right now'
-
-    # before(:each) do
-    #   other_fid  = 1
-    #   friend_fid = 2
-
-    #   @user.stub(:friends_fids).and_return([friend_fid])
-
-    #   params = {}
-    #   params[:created_at] = Time.now
-    #   params[:fid]        = other_fid
-
-    #   # other slides
-    #   4.times { Factory(:sentence, params) }
-    #   4.times { Factory(:picture, params) }
-
-    #   # friends slides
-    #   params[:fid] = friend_fid
-    #   5.times { Factory(:sentence, params) }
-    #   5.times { Factory(:picture, params) }
-    #   params[:created_at] += 30 # arbitrary
-    #   4.times { Factory(:sentence, params) }
-    #   4.times { Factory(:picture, params) }
-    # end
-
-    # [Sentence,Picture].each do |klass|
-    #   it "should return the 8 most recent slides by friends of the proper type (#{klass.to_s}) with no time arg" do
-    #     slides = Slide.from_friends_of_type_and_before(klass.to_s)
-    #     slides.count.should == 8 # todo spec most recent instead
-    #     slides.all?{|s|s.instance_of?(klass)}.should be_true
-    #   end
-
-    #   it "should return the slides by friends before the proper time and of the proper type (#{klass.to_s})" do
-    #     slides = Slide.of_type_and_before(klass.to_s, @time)
-    #     slides.count.should == 5 
-    #     slides.all?{|s|s.instance_of?(klass)}.should be_true
-    #   end
-    # end
-  end
 
 end

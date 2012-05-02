@@ -17,8 +17,7 @@ describe SlidesController do
 
     it 'should show Slides for a Round' do
       @round = Factory(:round)
-      @slide = Factory(:slide)
-      @round.slides << @slide
+      @slide = Factory(:slide, :round_id => @round.id)
       params = { :round_id => @round.to_param }
 
       get :index, params, valid_session
@@ -122,6 +121,8 @@ describe SlidesController do
       context klass.to_s do
         it "should assign only proper number of #{klass.to_s.pluralize} to @slides" do 
           get :recent, {:type => klass.to_s}, valid_session
+
+          puts "#############{klass} #{klass.count}"
 
           assigns(:slides).count.should == 3
           assigns(:slides).all?{|s|s.instance_of?(klass)}.should be_true

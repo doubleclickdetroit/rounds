@@ -2,8 +2,7 @@ require 'spec_helper'
 
 describe Sentence do
   before(:each) do
-    @sent  = Factory(:sentence)
-    @round = @round
+    @sent = Factory(:sentence)
   end
 
   subject { @sent }

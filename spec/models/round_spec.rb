@@ -27,10 +27,14 @@ describe Round do
 
   it 'should return Slides in order' do
     # the first shall be last...
-    s = @round.slides.first
-    p = @round.slides.last
-    s.position = 1 and s.save
-    p.position = 0 and p.save
+    puts @round.slides.inspect
+    @round.slides << Factory(:sentence)
+    @round.slides << Factory(:picture)
+    @round.save
+    @round.slides.first.position = 1 
+    @round.slides.last.position = 0 
+    @round.save
+    @round.reload
     # forces position opposite
     # of chronological creation
 
@@ -103,6 +107,16 @@ describe Round do
     it 'should only return 8 Rounds at most' do
       Round.friends_recent(@fids).count.should == 8
     end
+  end
+
+  describe '.round_lock' do
+    it 'should return the associated RoundLock' do
+      @round.round_lock.should be_nil
+      lock = Factory(:round_lock, :round_id => @round.id)
+      @round.reload.round_lock.should == lock
+    end
+
+    it 'should have no more than one RoundLock'
   end
 
 end

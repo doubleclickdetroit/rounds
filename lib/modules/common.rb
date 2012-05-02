@@ -15,6 +15,7 @@ module Common
           # todo breaking heroku...
           # raise "#{self.to_s} must have an attribute 'fid' to include #{module_name}" unless self.new.respond_to?(:fid)
 
+          # todo not really FriendsAndRecent...
           scope :of_type, lambda {|type| where :type => type}
 
           scope :before, lambda {|time| where(["created_at < ?", time])}

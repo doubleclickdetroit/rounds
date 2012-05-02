@@ -1,22 +1,22 @@
 require Rails.root.join('lib','modules','common.rb')
 
 class Slide < ActiveRecord::Base
-  # TYPES = [Sentence, Picture] 
-
   include Common::Scopes::FriendsAndRecent
   include Common::Associations::HasCreator
+
+  after_create  :add_position
+
+  before_create :check_for_round_lock
+
+  belongs_to :round
+
+  has_many :comments
 
   def self.of_type_and_before(type, time=nil)
     slides = self.of_type(type)
     slides = slides.before(time) if time
     slides.recent
   end
-
-  after_create :add_position
-
-  belongs_to :round
-
-  has_many :comments
 
   def to_json
     to_hash.to_json
@@ -32,9 +32,8 @@ private
     self.position = round.slides.count - 1 if round
     self.save
   end
+
+  def check_for_round_lock
+    !round.round_lock
+  end
 end
-
-# todo hack
-class Sentence < Slide; end
-class Picture < Slide; end
-

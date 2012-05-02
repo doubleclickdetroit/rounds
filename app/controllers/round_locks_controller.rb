@@ -1,0 +1,2 @@
+class RoundLocksController < ApplicationController
+end

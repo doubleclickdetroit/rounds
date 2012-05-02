@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120424062332) do
+ActiveRecord::Schema.define(:version => 20120502055339) do
 
   create_table "blacklist_entries", :id => false, :force => true do |t|
     t.integer  "user_fid"
@@ -33,6 +33,15 @@ ActiveRecord::Schema.define(:version => 20120424062332) do
 
   add_index "comments", ["fid"], :name => "index_comments_on_fid"
   add_index "comments", ["slide_id"], :name => "index_comments_on_slide_id"
+
+  create_table "round_locks", :force => true do |t|
+    t.integer  "round_id"
+    t.integer  "user_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "round_locks", ["round_id"], :name => "index_round_locks_on_round_id"
 
   create_table "rounds", :force => true do |t|
     t.datetime "created_at", :null => false

@@ -1,4 +1,6 @@
 Draw::Application.routes.draw do
+  resources :round_locks
+
   # match "/api/users/:fid/blocks/:blocked_user_fid" => 'blacklist_entries#create'
   # match "/api/users/:fid/unblocks/:blocked_user_fid" => 'blacklist_entries#destroy'
 
