@@ -7,7 +7,7 @@ describe BlacklistEntriesController do
 
   it 'should authenticate the user'
 
-  describe "GET 'create'" do
+  describe "POST 'create'" do
     it 'should throw a 406 if there is no round_id' do
       post :create, {}, valid_session 
       response.status.should == 406
@@ -20,7 +20,7 @@ describe BlacklistEntriesController do
     end
   end
 
-  describe "GET 'destroy'" do
+  describe "DELETE 'destroy'" do
     it 'should throw a 406 if there is no round_id' do
       delete :destroy, {}, valid_session 
       response.status.should == 406

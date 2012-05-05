@@ -4,12 +4,11 @@ describe BlacklistEntriesController do
   describe "routing" do
   
     it "routes to #create" do
-      post("/api/blacklist_entries/").should route_to("blacklist_entries#create")
+      post("/api/users/block/1/").should route_to("blacklist_entries#create", :fid => '1')
     end
 
     it "routes to #destroy" do
-      pending 'failing'
-      delete("/api/blacklist_entries/").should route_to("blacklist_entries#destroy")
+      delete("/api/users/unblock/1/").should route_to("blacklist_entries#destroy", :fid => '1')
     end
 
   end

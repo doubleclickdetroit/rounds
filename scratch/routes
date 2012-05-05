@@ -1,9 +1,9 @@
 Routes for API, comments (#) indicate that the HTTP verb is not used
 
 A couple caveats:
-  1 - not sure how images (SVG files) are uploaded (multi-part POST to SlidesController?)
-  2 - Comments are marked inappropriate by comments#update {:inappropriate => true} 
-  3 - BlacklistEntriesController may end up under /api/users/
+  1 - feeds only pull in slides... i imagine this may need to change in the future
+  2 - Comments are marked inappropriate by comments#update {:inappropriate => true} ?
+  3 - not sure how images (SVG files) are uploaded (multi-part POST to SlidesController?)
 
 
 IMPLEMENTED
@@ -41,13 +41,9 @@ IMPLEMENTED
         D DELETE  /api/comments/:id
         I GET     /api/comments/?slide_id=:slide_id
 
-  BlacklistEntries
-    C POST    /api/blacklist_entries/?user_fid=:user_fid&blocked_fid=:blocked_fid
-  # R GET     /api/blacklist_entries/
-  # U PUT     /api/blacklist_entries/
-    D DELETE  /api/blacklist_entries/?user_fid=:user_fid&blocked_fid=:blocked_fid
-  # I GET     /api/blacklist_entries/
-
+  BlacklistEntries, :fid is being blocked by current_user
+    C POST    /api/users/block/:fid
+    D DELETE  /api/users/unblock/:fid
 
   Users - dump from `rake routes`, extra detail can be added as needed
     GET     /api/users/sign_in(.:format)        devise/sessions#new
@@ -65,18 +61,13 @@ IMPLEMENTED
     DELETE  /api/users(.:format)                devise/registrations#destroy
 
 
-
 UNIMPLEMENTED
 
   Users
     Feeds - optional param 'time' (otherwise returns most recent)
-      GET   /api/users/:id/activity
-      GET   /api/users/:id/friends_activity
-      GET   /api/users/recent
+      GET   /api/users/activity # only the activity for current_user
       GET   /api/users/whats_hot
 
-    Blocking (BlacklistEntries)
-      POST    /api/users/:user_fid/block/:blocked_fid
-      DELETE  /api/users/:user_fid/block/:blocked_fid
-
   Invitations
+
+  Watchers
