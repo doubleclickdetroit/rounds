@@ -1,4 +1,12 @@
-happiest path
+happiest path ALTERNATIVE
+  user sees a slide (that is unlocked) in his feed, clicks to create the next one
+    - POST /api/rounds/:round_id/slides {} # creates RoundLock
+  the user creates the slide and submits it
+    - POST /api/rounds/:round_id/slides {:slide => {...}} # checks for RoundLock (which permits user to create Slide) destroys it and creates the slide
+    - rejoicing
+  *** USER MUST FIRST HAVE A ROUNDLOCK TO CREATE A SLIDE ***
+
+happiest path CURRENTLY BEING IMPLEMENTED
   user sees a slide in his feed, clicks to create the next one
     - the server creates a SlideLock which points to the preceeding slide by slide_id
   the user creates the slide and submits it
