@@ -1,0 +1,68 @@
+LOGIN
+the user starts up the app and sees a loading screen
+  - ***** FACEBOOK MAGIC *****
+  - ***** APP LOGIN (DEVISE) *****
+
+FEED
+(the user is now logged in) 
+the user lands on an random feed tab (either write or draw), in the following case, write
+shown in the feed are invitations, friends recent pictures, and recent community pictures
+  - GET /api/pictures # unimplemented
+    # aggregation equivalent to the following
+    - GET /api/pictures/invitations # relative to logged in user
+    - GET /api/pictures/friends     # relative to logged in user
+    - GET /api/pictures/recent
+
+FEED UPDATE
+the user sees 8 recent contributions by his friends and swipes through all of them, at which point 8 more are loaded
+  - GET /api/pictures/friends?time=time_of_last_slide_in_first_eight
+
+CREATE A SLIDE
+user sees a picture he likes and clicks to create the next sentence
+  - POST /api/rounds/:round_id/sentences {} # creates RoundLock
+the user creates the slide and submits it
+  - POST /api/rounds/:round_id/sentences {:sentence => {...}} # checks for RoundLock (which permits user to create Slide) destroys it and creates the slide
+
+CREATE A ROUND
+the user then clicks '+' to create a new round, chooses to draw a picture, draws, and submits it
+  #create round
+  - POST /api/rounds/
+  #create picture
+  - POST /api/rounds/:round_id/pictures {:picture => {...}} # needs to ignore the need for RoundLock for an empty round...
+
+CREATE A COMMENT
+the user finds himself back on the feed, sees a slide he likes, clicks to view it, then clicks comment, enters text, and submits
+  - POST /api/slides/:slide_id/comments {:comment => {...}} 
+
+BLOCK A USER
+the user finds himself back on his feed and sees something he doesnt care for from a user. he clicks to user, block, and confirms
+  - POST /api/users/block/:facebook_id # unimplemented
+
+WATCH A SLIDE
+# todo watch a slide timeout
+# todo watch a slide spoiler
+the user sees a slide he wants to add to, but when he goes to add the next slide, its locked. he's asked if he wants to watch the round to see if the user takes to long to finish and confirms
+  - POST /api/slides/:slide_id/watchers {:facebook_id => 1} # unimplemented
+
+SEND AN INVITATION
+????????????????????????????????????????????
+????????????????????????????????????????????
+
+
+
+
+assumptions: user must first have a roundlock to create a slide for the round
+
+question: what about comments in feeds? completed rounds?
+
+missing in wires: 
+  completed round view
+  watch round confirm dialog
+
+Models:
+  round
+  slide
+  comment
+  watch
+  invitation
+  blacklist
