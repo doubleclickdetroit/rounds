@@ -6,6 +6,22 @@ A couple caveats:
   3 - not sure how images (SVG files) are uploaded (multi-part POST to SlidesController?)
 
 
+Adding a Slide to a Round (first requires RoundLock)
+  POST /api/round_locks/1
+    RoundLock.find_or_create(:round_id => 1, :fid => 123)
+  POST /api/rounds/1/slides {:sentence => {...}}
+    lock = RoundLock.find(:round_id => 1, :fid => 123)
+    Slide.create params[:sentence]
+    lock.destroy
+
+Watching a Round that is locked
+  POST /api/round_locks/1
+    lock = RoundLock.find_or_create(:round_id => 1, :fid => 123)
+    respond_with lock.to_json
+  POST /api/rounds/1/watching
+    Watching.create(:round_id => 1, :fid => 123)
+
+
 IMPLEMENTED
 
   Rounds 
