@@ -1,4 +1,6 @@
 Draw::Application.routes.draw do
+  # todo use :via for all matches
+  
   resources :round_locks
 
   scope 'api' do
@@ -15,6 +17,8 @@ Draw::Application.routes.draw do
 
     resources :slides, :except => [:new,:edit] do
       resources :comments, :except => [:show,:new,:edit]
+      resources :watchings, :only => :create
+      match     'watchings' => 'watchings#destroy', :via => :delete
     end
 
     # todo cleaner

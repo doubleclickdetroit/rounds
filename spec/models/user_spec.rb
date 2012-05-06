@@ -35,6 +35,16 @@ describe User do
     it 'should be able to limit the number of Comments returned'
   end
 
+  describe '.watchings' do
+    it 'should return an array of Watchings' do
+      @watching = Factory(:watching)
+      @user.watchings << @watching
+      @user.watchings.should == [@watching]
+    end
+
+    it 'should be able to limit the number of Watchings returned'
+  end
+
   describe 'blocking functionality' do
     before(:each) do
       @user         = Factory(:user)

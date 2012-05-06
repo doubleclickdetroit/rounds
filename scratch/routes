@@ -41,6 +41,10 @@ IMPLEMENTED
         D DELETE  /api/comments/:id
         I GET     /api/comments/?slide_id=:slide_id
 
+      Watchings, slide_id and fid required, fid inferred from current_user
+        C POST    /api/slides/:slide_id/watchings
+        D DELETE  /api/slides/:slide_id/watchings
+
   BlacklistEntries, :fid is being blocked by current_user
     C POST    /api/users/block/:fid
     D DELETE  /api/users/unblock/:fid
@@ -69,5 +73,3 @@ UNIMPLEMENTED
       GET   /api/users/whats_hot
 
   Invitations
-
-  Watchers

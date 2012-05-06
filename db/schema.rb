@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120502055339) do
+ActiveRecord::Schema.define(:version => 20120505231533) do
 
   create_table "blacklist_entries", :id => false, :force => true do |t|
     t.integer  "user_fid"
@@ -86,5 +86,15 @@ ActiveRecord::Schema.define(:version => 20120502055339) do
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
+
+  create_table "watchings", :force => true do |t|
+    t.integer  "slide_id"
+    t.integer  "fid"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "watchings", ["fid"], :name => "index_watchings_on_fid"
+  add_index "watchings", ["slide_id"], :name => "index_watchings_on_slide_id"
 
 end

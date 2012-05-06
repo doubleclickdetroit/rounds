@@ -9,10 +9,12 @@ class User < ActiveRecord::Base
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me
 
-  # todo DRY this out
+  # todo do this better 
+  # or DRY it out 
   has_many :rounds, :class_name => 'Round', :foreign_key => :fid, :primary_key => :fid
   has_many :slides, :class_name => 'Slide', :foreign_key => :fid, :primary_key => :fid
   has_many :comments, :class_name => 'Comment', :foreign_key => :fid, :primary_key => :fid
+  has_many :watchings, :class_name => 'Watching', :foreign_key => :fid, :primary_key => :fid
 
   has_many :blacklist_entries, :foreign_key => :user_fid, :primary_key => :fid
 
@@ -35,6 +37,8 @@ class User < ActiveRecord::Base
   end
 
   def recent_activity
+    # THIS LOOKS AWFUL REFACTOR BEFORE ANYTHING ELSE
+    
     # todo move this to controller/view
     
     # todo scopes for models below
