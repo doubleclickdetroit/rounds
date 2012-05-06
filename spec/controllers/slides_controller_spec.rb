@@ -68,6 +68,9 @@ describe SlidesController do
         post :create, params, valid_session
       }.to change(Slide, :count).by(1)
     end
+
+    it 'should create a new Sentence'
+    it 'should create a new Picture'
   end
 
   describe 'PUT update' do

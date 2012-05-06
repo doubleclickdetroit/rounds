@@ -23,10 +23,40 @@ describe Slide do
     end.should be_true
   end
 
-  it 'should have many Watching' do
+  it 'should have many Watchings' do
     @slide.watchings.all? do |watching|
       watching.instance_of?(Watching)
     end.should be_true
+  end
+
+  describe '.create' do
+    it 'should not save if a RoundLock exists for .round' do
+      round = Factory(:round)
+      Factory(:round_lock, :round_id => round.id)
+
+      slide = Factory.build(:slide, :round_id => round.id)
+
+      expect {
+        slide.save
+      }.to change(Slide, :count).by(0)
+    end
+
+    it 'should allow a Sentence added after a Picture' do
+      pending 'callbacks...'
+      round = Factory(:round)
+      Factory(:picture, :round_id => round.id)
+      lock  = Factory(:round_lock, :round_id => round.id)
+      sentence = Factory.build(:sentence).attributes
+
+      expect {
+        # Slide.create_next(sentence, :for => round, :with_lock => lock)
+        Slide.create(sentence)
+      }.to change(Sentence, :count).by(1)
+    end
+
+    it 'should allow a Picture added after a Sentence'
+    it 'should raise for a Sentence after a Sentence' 
+    it 'should raise for a Picture after a Picture' 
   end
 
   describe '.to_hash' do
@@ -188,19 +218,6 @@ describe Slide do
         slides.count.should == 5 
         slides.all?{|s|s.instance_of?(klass)}.should be_true
       end
-    end
-  end
-
-  describe '.before_create' do
-    it 'should not save if a RoundLock exists for .round' do
-      round = Factory(:round)
-      Factory(:round_lock, :round_id => round.id)
-
-      slide = Factory.build(:slide, :round_id => round.id)
-
-      expect {
-        slide.save
-      }.to change(Slide, :count).by(0)
     end
   end
 

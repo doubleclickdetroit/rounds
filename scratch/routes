@@ -15,10 +15,10 @@ Adding a Slide to a Round (first requires RoundLock)
     lock.destroy
 
 Watching a Round that is locked
-  POST /api/round_locks/1
+  POST /api/round_locks/1 # where 1 is the round_id
     lock = RoundLock.find_or_create(:round_id => 1, :fid => 123)
     respond_with lock.to_json
-  POST /api/rounds/1/watching
+  POST /api/round_locks/1/watching
     Watching.create(:round_id => 1, :fid => 123)
 
 
