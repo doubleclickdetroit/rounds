@@ -6,7 +6,7 @@ class Slide < ActiveRecord::Base
 
   after_create  :add_position
 
-  before_create :before_create_processing
+  # before_create :before_create_processing
 
   belongs_to :round
 
@@ -20,22 +20,32 @@ class Slide < ActiveRecord::Base
     slides.recent
   end
 
-  # todo move this to .create + callbacks
   # Slide.create_next(slide, :for => round, :with_lock => round_lock)
-  def self.create_next(*args)
-    slide = args.first
-    slide_type = slide.delete('type')
-
-    args  = args.extract_options!
-    round = args.fetch :for
-    last_type  = round.slides.last.type
-
-    # raise "Cannot create a #{last_type} after a #{last_type}" if last_type == slide_type
-
-    lock  = args.fetch :with_lock
+  def self.create_next(slide_hash)
+    # REFACTOR THIS FFS
+    # todo move this to .create + callbacks somehow
+    
+    # todo ||?
+    slide_type = slide_hash.delete('type') || slide_hash.delete(:type)
+    raise "#{slide_type.inspect} is not a valid slide type" unless [Sentence,Picture].map(&:to_s).include?(slide_type)
 
     klass = slide_type.constantize
-    klass.create(slide) 
+    slide = klass.new(slide_hash)
+
+    # todo?
+    lock = slide.round.try(:round_lock)
+    raise "Cannot create slide without round lock" unless lock.is_a? RoundLock
+
+    # lock_belongs_to_user = lock.creator.fid == slide.fid 
+    # raise "User does not have the round locked" unless lock_belongs_to_user
+
+    last_type  = slide.round.slides.last.type
+    raise "Cannot create a #{slide_type.downcase} after a #{slide_type.downcase}" if slide_type == last_type
+
+    # todo
+    saved = slide.save
+    lock.destroy if saved
+    saved
   end
 
   def to_json
@@ -60,6 +70,6 @@ private
 
   def before_create_processing
     check_for_round_lock
-
   end
+
 end

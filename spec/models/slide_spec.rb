@@ -29,34 +29,88 @@ describe Slide do
     end.should be_true
   end
 
-  describe '.create' do
-    it 'should not save if a RoundLock exists for .round' do
-      round = Factory(:round)
-      Factory(:round_lock, :round_id => round.id)
-
-      slide = Factory.build(:slide, :round_id => round.id)
-
-      expect {
-        slide.save
-      }.to change(Slide, :count).by(0)
+  describe '.create_next' do
+    before(:each) do
+      @round = Factory(:round)
+      @lock  = Factory(:round_lock, :round_id => @round.id)
     end
 
-    it 'should allow a Sentence added after a Picture' do
-      pending 'callbacks...'
-      round = Factory(:round)
-      Factory(:picture, :round_id => round.id)
-      lock  = Factory(:round_lock, :round_id => round.id)
-      sentence = Factory.build(:sentence).attributes
+    it 'should not save if a RoundLock exists by another user for .round' 
 
-      expect {
-        # Slide.create_next(sentence, :for => round, :with_lock => lock)
-        Slide.create(sentence)
-      }.to change(Sentence, :count).by(1)
+    context 'sentence' do
+      before(:each) do
+        Factory(:picture, :round_id => @round.id)
+        @sentence = Factory.build(:sentence, :round_id => @round.id).attributes
+        @picture  = Factory.build(:picture, :round_id => @round.id).attributes
+      end
+
+      it 'should allow a Sentence added after a Picture' do
+        expect {
+          Slide.create_next(@sentence)
+        }.to change(Sentence, :count).by(1)
+      end
+
+      it 'should raise for a Sentence after a Sentence' do
+        expect {
+          Slide.create_next(@picture)
+        }.to raise_error('Cannot create a picture after a picture')
+      end
     end
 
-    it 'should allow a Picture added after a Sentence'
-    it 'should raise for a Sentence after a Sentence' 
-    it 'should raise for a Picture after a Picture' 
+    context 'picture' do
+      before(:each) do
+        Factory(:sentence, :round_id => @round.id)
+        @picture  = Factory.build(:picture, :round_id => @round.id).attributes
+        @sentence = Factory.build(:sentence, :round_id => @round.id).attributes
+      end
+
+      it 'should allow a Picture added after a Sentence' do
+        expect {
+          Slide.create_next(@picture)
+        }.to change(Picture, :count).by(1)
+      end
+
+      it 'should raise for a Picture after a Picture' do
+        expect {
+          Slide.create_next(@sentence)
+        }.to raise_error('Cannot create a sentence after a sentence')
+      end
+    end
+
+    it 'should raise without a proper slide[:type]' do
+      slide = Factory.build(:sentence, :round_id => @round.id, :type => 'Foobar').attributes
+
+      expect {
+        Slide.create_next(slide)
+      }.to raise_error('"Foobar" is not a valid slide type')
+    end
+
+    it 'should raise without a lock' do
+      pending
+
+      Factory(:sentence, :round_id => @round.id)
+      slide = Factory.build(:sentence, :round_id => @round.id).attributes
+
+      expect {
+        Slide.create_next(slide)
+      }.to raise_error('Cannot create slide without round lock')
+    end
+
+    # todo instead, create lock upon round creation
+    it "shouldn't require a lock for the first slide..." 
+
+    # todo cancan?
+    it 'should raise if the RoundLock doesnt belong to the User'
+
+    it 'should destroy the lock upon successful slide creation' do
+      Factory(:sentence, :round_id => @round.id)
+      slide = Factory.build(:picture, :round_id => @round.id).attributes
+
+      RoundLock.count.should == 1
+      expect {
+        Slide.create_next(slide)
+      }.to change(RoundLock, :count).by(-1)
+    end
   end
 
   describe '.to_hash' do

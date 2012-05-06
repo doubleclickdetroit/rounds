@@ -60,17 +60,29 @@ describe SlidesController do
       response.status.should == 406
     end
 
-    it 'should create a new Slide' do
+    it 'should create a new Sentence', :focus => true do
       @round = Factory(:round)
-      params = { :round_id => @round.to_param, :slide => {} }
+      Factory(:picture, :round_id => @round.id)
+      Factory(:round_lock, :round_id => @round.id)
+      slide  = Factory.build(:sentence).attributes
+      params = { :round_id => @round.to_param, :slide => slide }
 
       expect {
         post :create, params, valid_session
       }.to change(Slide, :count).by(1)
     end
 
-    it 'should create a new Sentence'
-    it 'should create a new Picture'
+    it 'should create a new Picture' do
+      @round = Factory(:round)
+      Factory(:sentence, :round_id => @round.id)
+      Factory(:round_lock, :round_id => @round.id)
+      slide  = Factory.build(:picture).attributes
+      params = { :round_id => @round.to_param, :slide => slide }
+
+      expect {
+        post :create, params, valid_session
+      }.to change(Slide, :count).by(1)
+    end
   end
 
   describe 'PUT update' do

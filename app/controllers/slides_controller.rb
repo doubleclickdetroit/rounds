@@ -16,7 +16,7 @@ class SlidesController < ApplicationController
   end
 
   def create
-    respond_with Slide.create(params[:slide]).to_json
+    respond_with Slide.create_next(params[:slide]).to_json
   end
 
   def update
