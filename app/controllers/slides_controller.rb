@@ -1,10 +1,11 @@
 class SlidesController < ApplicationController
   before_filter :check_for_round_id, :only => [:index,:create]
-  before_filter :check_for_type, :only => [:recent,:friends]
+  before_filter :check_for_type, :only => [:create,:recent,:friends]
   
   before_filter :authenticate_user!
 
   respond_to :json
+
 
   def index
     @slides = Round.find(@round_id).slides
@@ -39,16 +40,23 @@ class SlidesController < ApplicationController
     respond_with @slides.map(&:to_hash).to_json
   end
 
+
 private
   def check_for_round_id
-    if not @round_id = params[:round_id]
+    # todo ?
+    if not @round_id = params[:round_id] || params[:slide].try(:[], :round_id)
       respond_with :bad_request
     else
-      params[:slide][:round_id] = @round_id if params[:slide]
+      params[:slide][:round_id] ||= @round_id if params[:slide]
     end
   end
 
   def check_for_type
-    respond_with :bad_request unless @type = params[:type]
+    # todo ?
+    if not @type = params[:type] || params[:slide].try(:[], :type)
+      respond_with :bad_request
+    else
+      params[:slide][:type] ||= @type if params[:slide]
+    end
   end
 end

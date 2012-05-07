@@ -56,11 +56,16 @@ describe SlidesController do
 
   describe 'POST create' do
     it 'should throw a 406 if there is no round_id' do
-      post :create, {}, valid_session 
+      post :create, {:type => 'Sentence'}, valid_session 
       response.status.should == 406
     end
 
-    it 'should create a new Sentence', :focus => true do
+    it 'should throw a 406 if there is no type' do
+      post :create, {:round_id => '1'}, valid_session 
+      response.status.should == 406
+    end
+
+    it 'should create a new Sentence' do
       @round = Factory(:round)
       Factory(:picture, :round_id => @round.id)
       Factory(:round_lock, :round_id => @round.id)

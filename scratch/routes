@@ -7,7 +7,7 @@ A couple caveats:
 
 
 Adding a Slide to a Round (first requires RoundLock)
-  POST /api/round_locks/1
+  POST /api/round_locks/1 {}
     RoundLock.find_or_create(:round_id => 1, :fid => 123)
   POST /api/rounds/1/slides {:sentence => {...}}
     lock = RoundLock.find(:round_id => 1, :fid => 123)
@@ -31,18 +31,23 @@ IMPLEMENTED
     D DELETE  /api/rounds/:id
   # I GET     /api/rounds/
 
-    Slides, round_id required for create and index
-      C POST    /api/rounds/:round_id/slides/
+    Slides, round_id and type ('Sentence' or 'Picture') required for create and index
+      Sentences
+        C POST    /api/rounds/:round_id/sentences/
+      Pictures
+        C POST    /api/rounds/:round_id/pictures/
+
+      C POST    /api/rounds/:round_id/slides/?type=:type
       R GET     /api/rounds/:round_id/slides/:id
       U PUT     /api/rounds/:round_id/slides/:id
       D DELETE  /api/rounds/:round_id/slides/:id
-      I GET     /api/rounds/:round_id/slides/
+      I GET     /api/rounds/:round_id/slides/?type=:type
 
-      C POST    /api/slides/?round_id=:round_id
+      C POST    /api/slides/?round_id=:round_id&type=:type
       R GET     /api/slides/:id
       U PUT     /api/slides/:id
       D DELETE  /api/slides/:id
-      I GET     /api/slides/?round_id=:round_id
+      I GET     /api/slides/?round_id=:round_id&type=:type
 
       Comments, slide_id required for create and index
         C POST    /api/slides/:slide_id/comments/

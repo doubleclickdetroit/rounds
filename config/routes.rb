@@ -1,9 +1,10 @@
 Draw::Application.routes.draw do
   # todo use :via for all matches
   
-  resources :round_locks
+  # resources :round_locks
 
   scope 'api' do
+    # resources :blacklist_entries, :only => [:create,:destroy]
     scope 'users' do
       match '/block/:fid'   => "blacklist_entries#create"
       match '/unblock/:fid' => "blacklist_entries#destroy"
@@ -12,6 +13,10 @@ Draw::Application.routes.draw do
     devise_for :users 
 
     resources :rounds, :except => [:new,:edit] do
+      # todo DRY?
+      match     'sentences' => 'slides#create', :type => 'Sentence', :via => :post
+      match     'pictures'  => 'slides#create', :type => 'Picture',  :via => :post
+
       resources :slides, :except => [:new,:edit]
     end
 
@@ -35,15 +40,12 @@ Draw::Application.routes.draw do
 
     resources :comments, :except => [:show,:new,:edit]
 
-    # resources :blacklist_entries, :only => [:create,:destroy]
-
     # scope 'users' do
     #   match "/:fid/activity"         => "feeds#activity"
     #   match "/:fid/friends_activity" => "feeds#friends_activity"
     #   match "/recent"                => "feeds#recent"
     #   match "/whats_hot"             => "feeds#whats_hot"
     # end
-
   end
 
   # todo remove if devise doesnt _need_ this
