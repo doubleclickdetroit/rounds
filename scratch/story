@@ -7,7 +7,7 @@
   (the user is now logged in) 
   the user lands on an random feed tab (either write or draw), in the following case, write
   shown in the feed are invitations, friends recent pictures, and recent community pictures
-_   - GET /api/pictures # unimplemented
+X   - GET /api/pictures # unimplemented
       # aggregation equivalent to the following
 _     - GET /api/pictures/invitations # relative to logged in user
 X     - GET /api/pictures/friends     # relative to logged in user

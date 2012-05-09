@@ -32,7 +32,9 @@ describe Slide do
   describe '.create_next' do
     before(:each) do
       @round = Factory(:round)
-      @lock  = Factory(:round_lock, :round_id => @round.id)
+      fid = 1
+      Factory(:user, :fid => fid)
+      @lock  = Factory(:round_lock, :round_id => @round.id, :fid => fid)
     end
 
     it 'should not save if a RoundLock exists by another user for .round' 
@@ -86,21 +88,30 @@ describe Slide do
     end
 
     it 'should raise without a lock' do
-      pending
-
       Factory(:sentence, :round_id => @round.id)
-      slide = Factory.build(:sentence, :round_id => @round.id).attributes
+      slide = Factory.build(:picture, :round_id => @round.id).attributes
+      @lock.destroy 
 
       expect {
         Slide.create_next(slide)
       }.to raise_error('Cannot create slide without round lock')
     end
 
+    it 'should raise if the RoundLock doesnt belong to the User' do
+      fid = 525
+      Factory(:user, :fid => fid)
+      @lock.fid = fid
+      @lock.save
+
+      Factory(:sentence, :round_id => @round.id)
+      slide = Factory.build(:picture, :round_id => @round.id).attributes
+      expect {
+        Slide.create_next(slide)
+      }.to raise_error('User does not have the round locked')
+    end
+
     # todo instead, create lock upon round creation
     it "shouldn't require a lock for the first slide..." 
-
-    # todo cancan?
-    it 'should raise if the RoundLock doesnt belong to the User'
 
     it 'should destroy the lock upon successful slide creation' do
       Factory(:sentence, :round_id => @round.id)

@@ -55,38 +55,74 @@ describe SlidesController do
   end
 
   describe 'POST create' do
-    it 'should throw a 406 if there is no round_id' do
-      post :create, {:type => 'Sentence'}, valid_session 
-      response.status.should == 406
+    describe 'with incorrect params' do
+      it 'should throw a 406 if there is no round_id' do
+        post :create, {:type => 'Sentence'}, valid_session 
+        response.status.should == 406
+      end
+
+      it 'should throw a 406 if there is no type' do
+        post :create, {:round_id => '1'}, valid_session 
+        response.status.should == 406
+      end
+
+      it "should make sure the user's fid is in params[:slide]"
     end
 
-    it 'should throw a 406 if there is no type' do
-      post :create, {:round_id => '1'}, valid_session 
-      response.status.should == 406
+    describe 'without RoundLock' do
+      it 'should create a new Sentence' do
+        pending 'rescue errors to :bad_request or something?'
+        @round = Factory(:round)
+        Factory(:picture, :round_id => @round.id)
+        Factory(:round_lock, :round_id => @round.id)
+        slide  = Factory.build(:sentence).attributes
+        params = { :round_id => @round.to_param, :slide => slide }
+
+        expect {
+          post :create, params, valid_session
+        }.to change(Slide, :count).by(1)
+      end
+
+      it 'should create a new Picture' do
+        pending 'rescue errors to :bad_request or something?'
+        @round = Factory(:round)
+        Factory(:sentence, :round_id => @round.id)
+        Factory(:round_lock, :round_id => @round.id)
+        slide  = Factory.build(:picture).attributes
+        params = { :round_id => @round.to_param, :slide => slide }
+
+        expect {
+          post :create, params, valid_session
+        }.to change(Slide, :count).by(0)
+      end
     end
 
-    it 'should create a new Sentence' do
-      @round = Factory(:round)
-      Factory(:picture, :round_id => @round.id)
-      Factory(:round_lock, :round_id => @round.id)
-      slide  = Factory.build(:sentence).attributes
-      params = { :round_id => @round.to_param, :slide => slide }
+    describe 'with RoundLock' do
+      it 'should create a new Sentence' do
+        @round = Factory(:round)
+        @lock  = Factory(:round_lock, :round_id => @round.id, :fid => @user.fid)
+        Factory(:picture, :round_id => @round.id)
+        Factory(:round_lock, :round_id => @round.id)
+        slide  = Factory.build(:sentence).attributes
+        params = { :round_id => @round.to_param, :slide => slide }
 
-      expect {
-        post :create, params, valid_session
-      }.to change(Slide, :count).by(1)
-    end
+        expect {
+          post :create, params, valid_session
+        }.to change(Slide, :count).by(1)
+      end
 
-    it 'should create a new Picture' do
-      @round = Factory(:round)
-      Factory(:sentence, :round_id => @round.id)
-      Factory(:round_lock, :round_id => @round.id)
-      slide  = Factory.build(:picture).attributes
-      params = { :round_id => @round.to_param, :slide => slide }
+      it 'should create a new Picture' do
+        @round = Factory(:round)
+        @lock  = Factory(:round_lock, :round_id => @round.id, :fid => @user.fid)
+        Factory(:sentence, :round_id => @round.id)
+        Factory(:round_lock, :round_id => @round.id)
+        slide  = Factory.build(:picture).attributes
+        params = { :round_id => @round.to_param, :slide => slide }
 
-      expect {
-        post :create, params, valid_session
-      }.to change(Slide, :count).by(1)
+        expect {
+          post :create, params, valid_session
+        }.to change(Slide, :count).by(1)
+      end
     end
   end
 

@@ -1,6 +1,7 @@
 class SlidesController < ApplicationController
   before_filter :check_for_round_id, :only => [:index,:create]
   before_filter :check_for_type, :only => [:create,:feed,:recent,:friends]
+  before_filter :force_current_user_fid, :only => :create
   
   before_filter :authenticate_user!
 
@@ -63,5 +64,9 @@ private
     else
       params[:slide][:type] ||= @type if params[:slide]
     end
+  end
+
+  def force_current_user_fid
+    params[:slide][:fid] = current_user.fid
   end
 end

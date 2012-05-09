@@ -55,8 +55,10 @@ class Slide < ActiveRecord::Base
     lock = slide.round.try(:round_lock)
     raise "Cannot create slide without round lock" unless lock.is_a? RoundLock
 
-    # lock_belongs_to_user = lock.creator.fid == slide.fid 
-    # raise "User does not have the round locked" unless lock_belongs_to_user
+    lock_fid = lock.creator.fid
+    slide_fid = slide.fid
+    lock_belongs_to_user = lock_fid == slide_fid 
+    raise "User does not have the round locked" unless lock_belongs_to_user
 
     last_type  = slide.round.slides.last.type
     raise "Cannot create a #{slide_type.downcase} after a #{slide_type.downcase}" if slide_type == last_type

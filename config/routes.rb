@@ -24,6 +24,8 @@ Draw::Application.routes.draw do
       match     'pictures'  => 'slides#create', :type => 'Picture',  :via => :post
 
       resources :slides, :except => [:new,:edit]
+
+      resource  :round_lock, :only => [:show,:create,:destroy]
     end
 
     resources :slides, :except => [:new,:edit] do
