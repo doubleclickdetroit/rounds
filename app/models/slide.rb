@@ -68,13 +68,17 @@ class Slide < ActiveRecord::Base
     saved
   end
 
-  def to_json
-    to_hash.to_json
+  def comment_count
+    comments.count
   end
 
   def to_hash
-    attrs = %w[type id round_id fid created_at updated_at content]
+    attrs = %w[type id round_id fid created_at updated_at comment_count content]
     attrs.inject({}) {|h,k| h.merge({k => self.send(k)})}
+  end
+
+  def to_json
+    to_hash.to_json
   end
 
 private

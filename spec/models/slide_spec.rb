@@ -21,6 +21,12 @@ describe Slide do
     end.should be_true
   end
 
+  describe '.comment_count' do
+    it 'should return the number of comments' do
+      @slide.comment_count.should == @slide.comments.count
+    end
+  end
+
   describe '.create_next' do
     before(:each) do
       @round = Factory(:round)
@@ -122,7 +128,7 @@ describe Slide do
       @hash = @slide.to_hash 
     end
 
-    keys = %w[type id round_id fid created_at updated_at content]
+    keys = %w[type id round_id fid created_at updated_at comment_count content]
     it "should have no other keys than these #{keys.inspect}" do
       (@hash.keys && keys).sort.should == @hash.keys.sort
     end
