@@ -25,7 +25,9 @@ Draw::Application.routes.draw do
 
       resources :slides, :except => [:new,:edit]
 
-      resource  :round_lock, :only => [:show,:create,:destroy]
+      resource  :round_lock, :only => [:show,:create,:destroy] do
+        resources :watchings, :only => :create
+      end
     end
 
     resources :slides, :except => [:new,:edit] do
