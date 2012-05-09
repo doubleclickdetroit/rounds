@@ -1,6 +1,6 @@
 class SlidesController < ApplicationController
   before_filter :check_for_round_id, :only => [:index,:create]
-  before_filter :check_for_type, :only => [:create,:recent,:friends]
+  before_filter :check_for_type, :only => [:create,:feed,:recent,:friends]
   
   before_filter :authenticate_user!
 
@@ -30,9 +30,10 @@ class SlidesController < ApplicationController
 
 
   # RESTless
-  # def feed
-  #   respond_with Slide.feed(@type).map(&:to_hash).to_json 
-  # end
+  def feed
+    # todo dangerous?
+    respond_with @type.constantize.feed(current_user.friends_fids)
+  end
 
   def recent
     @slides = Slide.of_type_and_before(@type,params[:time])
@@ -56,7 +57,7 @@ private
   end
 
   def check_for_type
-    # todo ?
+    # todo this with .constantize? 
     if not @type = params[:type] || params[:slide].try(:[], :type)
       respond_with :bad_request
     else

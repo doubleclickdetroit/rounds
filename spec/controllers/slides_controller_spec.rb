@@ -237,4 +237,18 @@ describe SlidesController do
 
   end
 
+  describe 'GET feed' do
+    pending '... how do i spec this?'
+
+    [Sentence, Picture].each do |klass|
+      describe "for #{klass}" do
+        it 'should bomb without type?'
+
+        it 'shouldnt bomb' do
+          get :feed, {:type => klass.to_s}, valid_session
+        end
+      end
+    end
+  end
+
 end

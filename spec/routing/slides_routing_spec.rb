@@ -57,6 +57,10 @@ describe SlidesController do
         post("/api/rounds/1/sentences").should route_to("slides#create", :type => 'Sentence', :round_id => '1')
       end
 
+      it "routes to #feed" do
+        get("/api/sentences").should route_to("slides#feed", :type => 'Sentence')
+      end
+
       it "routes to #recent" do
         get("/api/sentences/recent").should route_to("slides#recent", :type => 'Sentence')
       end
@@ -71,6 +75,10 @@ describe SlidesController do
 
       it "routes to #create" do
         post("/api/rounds/1/pictures").should route_to("slides#create", :type => 'Picture', :round_id => '1')
+      end
+
+      it "routes to #feed" do
+        get("/api/pictures").should route_to("slides#feed", :type => 'Picture')
       end
 
       it "routes to #recent" do
