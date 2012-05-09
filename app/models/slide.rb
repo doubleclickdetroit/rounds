@@ -9,8 +9,8 @@ class Slide < ActiveRecord::Base
     hash = {}
 
     # todo
-    invitations = {}
-    private_feed = {}
+    invitations = []
+    private_feed = []
 
     friends   = friends_recent(friends_fids).map(&:to_hash)
     community = recent.all.map(&:to_hash)
