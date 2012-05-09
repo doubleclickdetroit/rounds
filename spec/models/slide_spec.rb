@@ -9,8 +9,6 @@ describe Slide do
 
     @slide.comments << Factory(:comment)
     @slide.comments << Factory(:comment)
-
-    @slide.watchings << Factory(:watching)
   end
 
   it 'should belong to a Round' do
@@ -20,12 +18,6 @@ describe Slide do
   it 'should have many Comments' do
     @slide.comments.all? do |comment|
       comment.instance_of?(Comment)
-    end.should be_true
-  end
-
-  it 'should have many Watchings' do
-    @slide.watchings.all? do |watching|
-      watching.instance_of?(Watching)
     end.should be_true
   end
 

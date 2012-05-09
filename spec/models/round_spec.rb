@@ -109,14 +109,4 @@ describe Round do
     end
   end
 
-  describe '.round_lock' do
-    it 'should return the associated RoundLock' do
-      @round.round_lock.should be_nil
-      lock = Factory(:round_lock, :round_id => @round.id)
-      @round.reload.round_lock.should == lock
-    end
-
-    it 'should have no more than one RoundLock'
-  end
-
 end

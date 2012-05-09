@@ -1,4 +1,4 @@
-Routes for API, comments (#) indicate that the HTTP verb is not used
+Routes for API, comments (#) indicate that the HTTP verb is not used, (*) indicates something is unimplemented
 
 A couple caveats:
   1 - feeds only pull in slides... i imagine this may need to change in the future
@@ -7,19 +7,13 @@ A couple caveats:
 
 
 Adding a Slide to a Round (first requires RoundLock)
-  POST /api/round_locks/1 {}
-    RoundLock.find_or_create(:round_id => 1, :fid => 123)
+  POST /api/rounds/1/round_lock
   POST /api/rounds/1/slides {:sentence => {...}}
-    lock = RoundLock.find(:round_id => 1, :fid => 123)
-    Slide.create params[:sentence]
-    lock.destroy
 
 Watching a Round that is locked
-  POST /api/round_locks/1 # where 1 is the round_id
-    lock = RoundLock.find_or_create(:round_id => 1, :fid => 123)
-    respond_with lock.to_json
-  POST /api/round_locks/1/watching
-    Watching.create(:round_id => 1, :fid => 123)
+  GET  /api/rounds/1/round_lock # check for lock
+* POST /api/rounds/1/round_lock/watching
+    Watching.create(:round_lock => 1, :fid => 123)
 
 
 IMPLEMENTED
@@ -42,6 +36,18 @@ IMPLEMENTED
     U PUT     /api/rounds/:id
     D DELETE  /api/rounds/:id
   # I GET     /api/rounds/
+
+    RoundLocks
+      C POST    /api/rounds/:round_id/round_lock/
+      R GET     /api/rounds/:round_id/round_lock/
+    # U PUT     /api/rounds/:round_id/round_lock/
+      D DELETE  /api/rounds/:round_id/round_lock/
+
+      RoundLocks, not sure all these actions are needed
+      * C POST    /api/rounds/:round_id/round_lock/watching
+      * R GET     /api/rounds/:round_id/round_lock/watching
+      # U PUT     /api/rounds/:round_id/round_lock/watching
+      * D DELETE  /api/rounds/:round_id/round_lock/watching
 
     Slides, round_id and type ('Sentence' or 'Picture') required for create and index
       Sentences
@@ -73,10 +79,6 @@ IMPLEMENTED
         U PUT     /api/comments/:id
         D DELETE  /api/comments/:id
         I GET     /api/comments/?slide_id=:slide_id
-
-      Watchings, slide_id and fid required, fid inferred from current_user
-        C POST    /api/slides/:slide_id/watchings
-        D DELETE  /api/slides/:slide_id/watchings
 
   BlacklistEntries, :fid is being blocked by current_user
     C POST    /api/users/block/:fid

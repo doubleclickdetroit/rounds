@@ -5,6 +5,7 @@ class Round < ActiveRecord::Base
   include Common::Associations::HasCreator
 
   has_many :slides, :order => 'position'
+  has_many :watchings
   has_one  :round_lock
 
 end
