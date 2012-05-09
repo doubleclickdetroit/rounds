@@ -2,15 +2,13 @@ source 'http://rubygems.org'
 
 gem 'rails', '3.2.0'
 
-gem 'thin'
-
-# gem 'mailman', :require => false
-
 # auth
 gem 'devise'
 # gem 'cancan'
 
 gem 'json_builder'
+
+gem 'factory_girl_rails'
 
 gem "paperclip", "~> 2.7"
 
@@ -19,15 +17,17 @@ gem 'jquery-rails'
 # gem 'html5-rails', :git => 'git://github.com/sporkd/html5-rails.git'
 
 # gem 'requirejs-rails'
- 
-gem 'factory_girl_rails'
 
+# gem 'mailman', :require => false
+ 
 group :development, :test do
+  gem 'webrick'
   gem 'sqlite3'
 end
 
 # heroku postgre
 group :production do
+  gem 'thin'
   gem 'pg'
 end
 

@@ -7,7 +7,7 @@
   (the user is now logged in) 
   the user lands on an random feed tab (either write or draw), in the following case, write
   shown in the feed are invitations, friends recent pictures, and recent community pictures
-X   - GET /api/pictures # unimplemented
+\   - GET /api/pictures # unimplemented
       # aggregation equivalent to the following
 _     - GET /api/pictures/invitations # relative to logged in user
 X     - GET /api/pictures/friends     # relative to logged in user
@@ -15,14 +15,14 @@ X     - GET /api/pictures/recent
 
   FEED UPDATE
   the user sees 8 recent contributions by his friends and swipes through all of them, at which point 8 more are loaded
-_   - GET /api/pictures/friends?time=time_of_last_slide_in_first_eight
+X   - GET /api/pictures/friends?time=time_of_last_slide_in_first_eight
 
   CREATE A SLIDE
   user sees a picture he likes and clicks to create the next sentence
     - not ironed out yet, but probably something like this:
-_     - POST /api/rounds/:round_id/ {} # creates RoundLock
+X     - POST /api/rounds/:round_id/round_lock # creates RoundLock, fid derived from current_user
   the user creates the slide and submits it
-_   - POST /api/rounds/:round_id/sentences {:sentence => {...}} # checks for RoundLock (which permits user to create Slide) destroys it and creates the slide
+X   - POST /api/rounds/:round_id/sentences {:sentence => {...}} # checks for RoundLock (which permits user to create Slide) destroys it and creates the slide
     # destroys round lock
       # destroys waiting list
 
@@ -49,7 +49,7 @@ X   - POST /api/users/block/:facebook_id # unimplemented
   # todo watch a slide spoiler
   the user sees a slide he wants to add to, but when he goes to add the next slide, its locked. 
   he's asked if he wants to watch the round to see if the user takes to long to finish and confirms
-_   - POST /api/slides/:slide_id/watchers # facebook id derived from current_user # unimplemented
+X   - POST /api/rounds/:round_id/round_lock/watchings # facebook id derived from current_user
 
   SEND AN INVITATION
 _ ????????????????????????????????????????????
