@@ -275,4 +275,39 @@ describe Slide do
     end
   end
 
+  describe '.feed' do
+    [Sentence, Picture].each do |klass|
+      describe "for #{klass}" do
+        before(:each) do
+          Slide.destroy_all
+
+          fid   = 525 
+          @fids = [fid]
+
+          4.times { Factory(klass.to_s.downcase.intern) }
+          4.times { Factory(klass.to_s.downcase.intern, :fid => fid) }
+        end
+
+        pending 'unhappy path? nils?'
+
+        it 'should put .invitations hashed as the value for the key invitations'
+        it 'should put .private_feed as the value for the key private'
+        it 'should put .friends_recent hashed as the value for the key friends' do
+          friends_hash = klass.friends_recent(@fids).map(&:to_hash)
+          klass.feed(@fids)['friends'].should == friends_hash
+        end
+        it 'should put .recent hashed as the value for the key community' do
+          recent_hash = klass.recent.map(&:to_hash)
+          klass.feed(@fids)['community'].should == recent_hash
+        end
+
+        it "should have an Array of Hashes as the value for all keys"
+
+        it 'should return a Hash' do
+          Slide.feed(@fids).should be_a_kind_of Hash
+        end
+      end
+    end
+  end
+
 end

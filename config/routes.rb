@@ -9,6 +9,12 @@ Draw::Application.routes.draw do
       match '/block/:fid'   => "blacklist_entries#create"
       match '/unblock/:fid' => "blacklist_entries#destroy"
     end
+    # scope 'users' do
+    #   match "/:fid/activity"         => "feeds#activity"
+    #   match "/:fid/friends_activity" => "feeds#friends_activity"
+    #   match "/recent"                => "feeds#recent"
+    #   match "/whats_hot"             => "feeds#whats_hot"
+    # end
 
     devise_for :users 
 
@@ -26,6 +32,11 @@ Draw::Application.routes.draw do
       match     'watchings' => 'watchings#destroy', :via => :delete
     end
 
+    ##### BEGIN MESS
+    # todo cleaner
+    match 'sentences' => 'slides#feed', :type => 'Sentence' 
+    match 'pictures'  => 'slides#feed', :type => 'Picture' 
+
     # todo cleaner
     scope 'sentences' do
       match '/recent' => 'slides#recent', :type => 'Sentence'
@@ -37,15 +48,9 @@ Draw::Application.routes.draw do
       match '/recent' => 'slides#recent', :type => 'Picture'
       match '/friends' => 'slides#friends', :type => 'Picture'
     end
+    ##### END MESS
 
     resources :comments, :except => [:show,:new,:edit]
-
-    # scope 'users' do
-    #   match "/:fid/activity"         => "feeds#activity"
-    #   match "/:fid/friends_activity" => "feeds#friends_activity"
-    #   match "/recent"                => "feeds#recent"
-    #   match "/whats_hot"             => "feeds#whats_hot"
-    # end
   end
 
   # todo remove if devise doesnt _need_ this

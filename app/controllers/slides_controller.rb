@@ -30,6 +30,10 @@ class SlidesController < ApplicationController
 
 
   # RESTless
+  # def feed
+  #   respond_with Slide.feed(@type).map(&:to_hash).to_json 
+  # end
+
   def recent
     @slides = Slide.of_type_and_before(@type,params[:time])
     respond_with @slides.map(&:to_hash).to_json

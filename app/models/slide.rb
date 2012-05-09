@@ -4,6 +4,25 @@ class Slide < ActiveRecord::Base
   include Common::Scopes::FriendsAndRecent
   include Common::Associations::HasCreator
 
+  # todo refactor to common.rb?
+  def self.feed(friends_fids)
+    hash = {}
+
+    # todo
+    invitations = {}
+    private_feed = {}
+
+    friends   = friends_recent(friends_fids).map(&:to_hash)
+    community = recent.all.map(&:to_hash)
+
+    hash['invitations'] = invitations
+    hash['private']     = private_feed
+    hash['friends']     = friends
+    hash['community']   = community
+    
+    hash
+  end
+
   after_create  :add_position
 
   # before_create :before_create_processing

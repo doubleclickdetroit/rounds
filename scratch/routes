@@ -24,6 +24,18 @@ Watching a Round that is locked
 
 IMPLEMENTED
 
+  (Slide) Feeds
+    GET /api/sentences
+    * GET /api/sentences/invitations
+    * GET /api/sentences/private
+      GET /api/sentences/friends
+      GET /api/sentences/recent
+    GET /api/pictures
+    * GET /api/pictures/invitations
+    * GET /api/pictures/private
+      GET /api/pictures/friends
+      GET /api/pictures/recent
+
   Rounds 
     C POST    /api/rounds/
     R GET     /api/rounds/:id
