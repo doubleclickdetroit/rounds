@@ -11,7 +11,18 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120509083811) do
+ActiveRecord::Schema.define(:version => 20120511064058) do
+
+  create_table "ballots", :force => true do |t|
+    t.integer  "slide_id"
+    t.integer  "fid"
+    t.integer  "vote"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "ballots", ["fid"], :name => "index_ballots_on_fid"
+  add_index "ballots", ["slide_id"], :name => "index_ballots_on_slide_id"
 
   create_table "blacklist_entries", :id => false, :force => true do |t|
     t.integer  "user_fid"
@@ -53,8 +64,8 @@ ActiveRecord::Schema.define(:version => 20120509083811) do
 
   create_table "slides", :force => true do |t|
     t.integer  "round_id"
-    t.datetime "created_at",        :null => false
-    t.datetime "updated_at",        :null => false
+    t.datetime "created_at",                       :null => false
+    t.datetime "updated_at",                       :null => false
     t.text     "text"
     t.string   "file_file_name"
     t.string   "file_content_type"
@@ -63,6 +74,7 @@ ActiveRecord::Schema.define(:version => 20120509083811) do
     t.string   "type"
     t.integer  "position"
     t.integer  "fid"
+    t.integer  "votes",             :default => 0
   end
 
   add_index "slides", ["fid"], :name => "index_slides_on_fid"

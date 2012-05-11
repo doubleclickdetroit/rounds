@@ -80,6 +80,9 @@ IMPLEMENTED
         D DELETE  /api/comments/:id
         I GET     /api/comments/?slide_id=:slide_id
 
+      Votes, :vote must be an integer between 1 and 5
+        C POST    /api/slides/:slide_id/votes/:vote
+
   BlacklistEntries, :fid is being blocked by current_user
     C POST    /api/users/block/:fid
     D DELETE  /api/users/unblock/:fid

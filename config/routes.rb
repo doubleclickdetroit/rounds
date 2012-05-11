@@ -1,4 +1,6 @@
 Draw::Application.routes.draw do
+  resources :ballots
+
   # todo use :via for all matches
   
   # resources :round_locks
