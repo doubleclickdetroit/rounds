@@ -32,7 +32,7 @@ describe Ballot do
     end
   end
 
-  describe '.before_validation' do
+  describe 'validation' do
     let(:slide) { Factory(:slide) }
 
     (1..5).each do |num|
@@ -49,6 +49,15 @@ describe Ballot do
           Factory(:ballot, :slide_id => slide.id, :vote => num)
         }.to raise_error(ActiveRecord::RecordInvalid)
       end
+    end
+
+    it 'should not allow a second Ballot to be created by the same fid' do
+      fid = 1
+      Factory(:ballot, :fid => fid)
+
+      expect {
+        Factory(:ballot, :fid => fid)
+      }.to raise_error(ActiveRecord::RecordInvalid)
     end
   end
 
