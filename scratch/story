@@ -41,7 +41,7 @@ _   - POST /api/rounds/:round_id/pictures {:picture => {...}} # needs to ignore 
 X   - GET /api/slides/:slide_id 
   VOTE FOR A SLIDE
   the user enjoys the current slide and gives it three votes (or whatever)
-_   - POST /api/slides/:slide_id/votes/3
+X   - POST /api/slides/:slide_id/votes/3
   CREATE A COMMENT
   then clicks comment, enters text, and submits
 X   - POST /api/slides/:slide_id/comments {:comment => {...}} 

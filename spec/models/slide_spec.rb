@@ -128,7 +128,7 @@ describe Slide do
       @hash = @slide.to_hash 
     end
 
-    keys = %w[type id round_id fid created_at updated_at comment_count content]
+    keys = %w[type id round_id fid created_at updated_at comment_count votes content]
     it "should have no other keys than these #{keys.inspect}" do
       (@hash.keys && keys).sort.should == @hash.keys.sort
     end
