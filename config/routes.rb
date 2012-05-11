@@ -1,10 +1,6 @@
 Draw::Application.routes.draw do
-  resources :ballots
-
   # todo use :via for all matches
   
-  # resources :round_locks
-
   scope 'api' do
     # resources :blacklist_entries, :only => [:create,:destroy]
     scope 'users' do
@@ -34,6 +30,9 @@ Draw::Application.routes.draw do
 
     resources :slides, :except => [:new,:edit] do
       resources :comments, :except => [:show,:new,:edit]
+
+      match     'vote/:vote' => 'ballots#create'
+
       resources :watchings, :only => :create
       match     'watchings' => 'watchings#destroy', :via => :delete
     end

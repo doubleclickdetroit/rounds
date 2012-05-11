@@ -5,7 +5,8 @@ class Ballot < ActiveRecord::Base
   belongs_to :slide
 
   validates :vote, :inclusion => { :in => 1..5, :message => '%{value} is not a valid vote'}
-  validates_uniqueness_of :fid, :message => 'A user cannot vote twice on the same slide'
+  validates_presence_of :fid
+  validates :fid, :presence => true, :uniqueness => true
 
   after_create :increment_slide_votes
 

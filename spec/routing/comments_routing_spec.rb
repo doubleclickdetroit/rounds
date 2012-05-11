@@ -6,8 +6,8 @@ describe CommentsController do
     it "routes to #index" do
       get("/api/comments").should route_to("comments#index")
     end
-    it "routes to #create" do
 
+    it "routes to #create" do
       post("/api/comments").should route_to("comments#create")
     end
 
@@ -27,8 +27,8 @@ describe CommentsController do
     it "routes to #index" do
       get("/api/slides/1/comments").should route_to("comments#index", :slide_id => "1")
     end
-    it "routes to #create" do
 
+    it "routes to #create" do
       post("/api/slides/1/comments").should route_to("comments#create", :slide_id => "1")
     end
 

@@ -35,6 +35,14 @@ describe Ballot do
   describe 'validation' do
     let(:slide) { Factory(:slide) }
 
+    [:vote, :fid].each do |att|
+      it "should validate the presence of #{att}" do
+        expect {
+          Factory(:ballot, att => nil)
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+    end
+
     (1..5).each do |num|
       it "should pass with a vote val of #{num}" do
         expect {
