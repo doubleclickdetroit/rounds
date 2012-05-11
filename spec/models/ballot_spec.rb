@@ -36,7 +36,7 @@ describe Ballot do
     let(:slide) { Factory(:slide) }
 
     (1..5).each do |num|
-      it "should pass with a vote val of #{num}", :focus do
+      it "should pass with a vote val of #{num}" do
         expect {
           Factory(:ballot, :slide_id => slide.id, :vote => num)
         }.to change(Ballot, :count).by(1)
@@ -47,7 +47,7 @@ describe Ballot do
       it "should fail with a vote val of #{num}" do
         expect {
           Factory(:ballot, :slide_id => slide.id, :vote => num)
-        }.to change(Ballot, :count).by(0)
+        }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
   end
