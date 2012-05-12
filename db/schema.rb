@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120511064058) do
+ActiveRecord::Schema.define(:version => 20120512073440) do
 
   create_table "ballots", :force => true do |t|
     t.integer  "slide_id"
@@ -44,6 +44,19 @@ ActiveRecord::Schema.define(:version => 20120511064058) do
 
   add_index "comments", ["fid"], :name => "index_comments_on_fid"
   add_index "comments", ["slide_id"], :name => "index_comments_on_slide_id"
+
+  create_table "invitations", :force => true do |t|
+    t.integer  "fid"
+    t.integer  "invited_fid"
+    t.integer  "round_id"
+    t.boolean  "accepted",    :default => false
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
+  end
+
+  add_index "invitations", ["fid"], :name => "index_invitations_on_fid"
+  add_index "invitations", ["invited_fid"], :name => "index_invitations_on_invited_fid"
+  add_index "invitations", ["round_id"], :name => "index_invitations_on_round_id"
 
   create_table "round_locks", :force => true do |t|
     t.integer  "round_id"

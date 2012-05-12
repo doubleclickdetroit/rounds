@@ -23,6 +23,9 @@ Draw::Application.routes.draw do
 
       resources :slides, :except => [:new,:edit]
 
+      match     'invite/:invited_fid' => 'invitations#create'
+      resources :invitations, :only => [:index,:destroy]
+
       resource  :round_lock, :only => [:show,:create,:destroy] do
         resources :watchings, :only => :create
       end
@@ -34,6 +37,7 @@ Draw::Application.routes.draw do
       match     'vote/:vote' => 'ballots#create'
 
       resources :watchings, :only => :create
+      # todo why do i need this? ... should it take an id?
       match     'watchings' => 'watchings#destroy', :via => :delete
     end
 

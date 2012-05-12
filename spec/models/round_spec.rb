@@ -13,6 +13,12 @@ describe Round do
     end.should be_true
   end
 
+  it 'should have many Invitations', :focus do
+    @round.invitations.all? do |invitation|
+      invitation.kind_of?(Invitation)
+    end.should be_true
+  end
+
   it 'should have Slides of class Sentence' do
     @round.slides.any? do |slide|
       slide.instance_of?(Sentence)

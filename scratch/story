@@ -10,8 +10,10 @@
 \   - GET /api/pictures # unimplemented
       # aggregation equivalent to the following
 _     - GET /api/pictures/invitations # relative to logged in user
+_     - GET /api/pictures/private     # relative to logged in user
 X     - GET /api/pictures/friends     # relative to logged in user
 X     - GET /api/pictures/recent
+  NOTE: upon completion of a private round, all invitations are destroyed
 
   FEED UPDATE
   the user sees 8 recent contributions by his friends and swipes through all of them, at which point 8 more are loaded
@@ -80,6 +82,7 @@ Models:
   round
   slide
   comment
-  watch
+  ballot
+  watching
   invitation
   blacklist

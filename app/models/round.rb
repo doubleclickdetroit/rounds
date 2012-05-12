@@ -6,6 +6,7 @@ class Round < ActiveRecord::Base
 
   has_many :slides, :order => 'position'
   has_many :watchings
+  has_many :invitations
   has_one  :round_lock
 
 end
