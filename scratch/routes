@@ -43,11 +43,19 @@ IMPLEMENTED
     # U PUT     /api/rounds/:round_id/round_lock/
       D DELETE  /api/rounds/:round_id/round_lock/
 
-      RoundLocks
+      Watchings
         C POST    /api/rounds/:round_id/round_lock/watching
       # R GET     /api/rounds/:round_id/round_lock/watching
       # U PUT     /api/rounds/:round_id/round_lock/watching
       # D DELETE  /api/rounds/:round_id/round_lock/watching
+    
+    Invitations
+      C POST    /api/rounds/:round_id/invitations/:invited_fid
+    # R GET     /api/rounds/:round_id/invitations/
+    # U PUT     /api/rounds/:round_id/invitations/
+      D DELETE  /api/rounds/:round_id/invitations/:id
+      I GET     /api/rounds/:round_id/invitations/
+      
 
     Slides, round_id and type ('Sentence' or 'Picture') required for create and index
       Sentences
@@ -109,5 +117,3 @@ UNIMPLEMENTED
     Feeds - optional param 'time' (otherwise returns most recent)
       GET   /api/users/activity # only the activity for current_user
       GET   /api/users/whats_hot
-
-  Invitations

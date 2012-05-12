@@ -23,7 +23,7 @@ Draw::Application.routes.draw do
 
       resources :slides, :except => [:new,:edit]
 
-      match     'invite/:invited_fid' => 'invitations#create'
+      match     'invitations/:invited_fid' => 'invitations#create', :via => :post
       resources :invitations, :only => [:index,:destroy]
 
       resource  :round_lock, :only => [:show,:create,:destroy] do
