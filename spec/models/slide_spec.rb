@@ -27,6 +27,15 @@ describe Slide do
     end
   end
 
+  it 'should have many Ballots', :focus do
+    @slide.ballots << Factory(:ballot)
+    @slide.ballots << Factory(:ballot)
+
+    @slide.ballots.all? do |ballot|
+      ballot.instance_of?(Ballot)
+    end.should be_true
+  end
+
   describe '.create_next' do
     before(:each) do
       @round = Factory(:round)

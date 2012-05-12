@@ -30,6 +30,7 @@ class Slide < ActiveRecord::Base
   belongs_to :round
 
   has_many :comments
+  has_many :ballots
 
   def self.of_type_and_before(type, time=nil)
     time   = Time.parse time rescue nil

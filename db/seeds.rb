@@ -11,12 +11,14 @@ def random_text
 end
 
 def make_sentence
+  puts "Creating Sentence for Round #{@round.id}"
   fid = random_user().fid
   params = { :round_id => @round.to_param, :fid => fid }
   FactoryGirl.create(:sentence, params) 
 end
 
 def make_picture
+  puts "Creating Picture for Round #{@round.id}"
   fid = random_user().fid
   pic = FactoryGirl.build(:picture, :with_file) 
   pic.round_id = @round.to_param
@@ -25,12 +27,16 @@ def make_picture
 end
 
 def add_arbitrary_comments_to(slide)
-  # comments
   (rand(5)+1).times do
     slide.comments << FactoryGirl.create(:comment, {:fid => random_user().fid, :text => random_text()})
   end
 end
 
+def add_arbitrary_ballots_to(slide)
+  rand(4).times do
+    slide.ballots << FactoryGirl.create(:ballot, {:fid => FactoryGirl.create(:user).fid, :vote => (rand(5)+1)})
+  end
+end
 
 
 puts "** Begin seeding"
@@ -79,8 +85,10 @@ puts '    ** Slides'
 @rounds.each do |round|
   @round = round
   (rand(10)+1).times do |i|
-    klass = i.odd? ? make_sentence : make_picture 
+    # puts "Round #{round.id} Slide #{i} odd? #{i.odd?}"
+    i.odd? ? make_sentence : make_picture 
   end
+  @round.save
 end
 
 
@@ -95,6 +103,22 @@ puts '      ** Comments'
   round.slides.each do |slide|
     add_arbitrary_comments_to(slide)
   end
+  round.save
+end
+
+
+
+##########################################
+############### Ballots ##################
+##########################################
+
+puts '      ** Ballots'
+
+@rounds.each do |round|
+  round.slides.each do |slide|
+    add_arbitrary_ballots_to(slide)
+  end
+  round.save
 end
 
 
