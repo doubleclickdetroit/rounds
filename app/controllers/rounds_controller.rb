@@ -14,7 +14,9 @@ class RoundsController < ApplicationController
   end
 
   def create
-    respond_with Round.create(params[:round]).to_json
+    @round = Round.create(params[:round])
+    @round.round_lock = RoundLock.create(:fid => current_user.fid)
+    respond_with @round.to_json
   end
 
   def update

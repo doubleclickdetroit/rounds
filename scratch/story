@@ -28,13 +28,13 @@ X   - POST /api/rounds/:round_id/sentences {:sentence => {...}} # checks for Rou
 
   CREATE A ROUND
   the user then clicks '+' to create a new round, chooses to draw a picture, draws, and submits it
-*   #create round
-*   #create round lock
-_   - POST /api/rounds/
-*   #create picture
-_   - POST /api/rounds/:round_id/pictures {:picture => {...}} # needs to ignore the need for RoundLock for an empty round...
+    # create round
+    # also creates round lock
+X   - POST /api/rounds/ # HOLD ONTO RETURNED ID
+    #create picture
+X   - POST /api/rounds/:round_id/pictures {:picture => {...}} # needs to ignore the need for RoundLock for an empty round...
     # destroys round lock
-      # destroys waiting list
+  *** IF A USER BACKS OUT FROM MAKING THE FIRST SLIDE IN THE ROUND, THE CLIENT NEEDS TO DESTROY THE EMPTY ROUND ***
 
   VIEW A SLIDE
   the user finds himself back on the feed, sees a slide he likes, clicks to view it

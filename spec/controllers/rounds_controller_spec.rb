@@ -35,6 +35,16 @@ describe RoundsController do
         post :create, params, valid_session
       }.to change(Round, :count).by(1)
     end
+
+    it 'should create a new RoundLock for current_user' do
+      params = { :round => {} }
+
+      expect {
+        post :create, params, valid_session
+      }.to change(RoundLock, :count).by(1)
+      
+      RoundLock.last.fid.should == @user.fid
+    end
   end
 
   describe 'PUT update' do

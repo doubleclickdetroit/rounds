@@ -27,7 +27,7 @@ describe Slide do
     end
   end
 
-  it 'should have many Ballots', :focus do
+  it 'should have many Ballots' do
     @slide.ballots << Factory(:ballot)
     @slide.ballots << Factory(:ballot)
 
