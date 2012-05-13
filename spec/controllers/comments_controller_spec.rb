@@ -8,19 +8,53 @@ describe CommentsController do
   it 'should authenticate the user'
 
   describe 'GET index' do
-    it 'should throw a 406 if there is no slide_id' do
-      get :index, {}, valid_session
-      response.status.should == 406
+    context 'with slide_id' do
+      it 'should show Comments for a Slide' do
+        @slide = Factory(:slide)
+        @comment = Factory(:comment, :slide_id => @slide.id)
+        Factory(:comment, :slide_id => @slide.id + 1)
+        params = { :slide_id => @slide.to_param }
+
+        get :index, params, valid_session
+        assigns(:comments).should == [@comment]
+      end
     end
 
-    it 'should assign Slide.comments to @comments' do
-      @slide = Factory(:slide)
-      @comment = Factory(:comment)
-      @slide.comments << @comment
-      params = { :slide_id => @slide.to_param }
+    context 'without slide_id' do
+      context 'and without time arg' do
+        it 'should show recent Comments' do
+          3.times { @comment = Factory(:comment, :fid => @user.fid) }
+          4.times { @comment = Factory(:comment) }
 
-      get :index, params, valid_session
-      assigns(:comments).should == [@comment]
+          get :index, {}, valid_session
+          assigns(:comments).count.should == 3
+
+          # brings total by user to 9
+          6.times { @comment = Factory(:comment, :fid => @user.fid) }
+
+          get :index, {}, valid_session
+          assigns(:comments).count.should == 8
+        end
+      end
+
+      context 'with time arg' do
+        it 'should show Slides created by the current_user' do
+          earlier_time = Time.now
+          3.times { @comment = Factory(:comment, :fid => @user.fid, :created_at => earlier_time) }
+          time = earlier_time + 3
+          4.times { @comment = Factory(:comment, :fid => @user.fid, :created_at => time) }
+
+          # get comments before time
+          get :index, {:time => time}, valid_session
+          assigns(:comments).count.should == 3
+
+          # brings total to 9
+          6.times { @comment = Factory(:comment, :fid => @user.fid, :created_at => earlier_time) }
+
+          get :index, {:time => time}, valid_session
+          assigns(:comments).count.should == 8
+        end
+      end
     end
   end
 
@@ -37,6 +71,15 @@ describe CommentsController do
       expect {
         post :create, params, valid_session
       }.to change(Comment, :count).by(1)
+    end
+
+    it 'should assign the current user as creator of the new Comment' do
+      @slide = Factory(:slide)
+      params = { :slide_id => @slide.to_param, :comment => {} }
+
+      post :create, params, valid_session
+
+      Comment.last.creator.should == @user
     end
   end
 
