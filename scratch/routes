@@ -21,7 +21,7 @@ Watching a Round that is locked
 
 IMPLEMENTED
 
-  (Slide) Feeds
+  (Slide) Feeds, all can be passed ?time=[time] to fetch rows before that time
     GET /api/sentences
     * GET /api/sentences/private
       GET /api/sentences/friends
@@ -30,13 +30,17 @@ IMPLEMENTED
     * GET /api/pictures/private
       GET /api/pictures/friends
       GET /api/pictures/recent
+  * GET /api/me
+      GET /api/rounds
+    * GET /api/slides
+    * GET /api/comments
 
   Rounds 
     C POST    /api/rounds/
     R GET     /api/rounds/:id
-    U PUT     /api/rounds/:id
+  # U PUT     /api/rounds/:id
     D DELETE  /api/rounds/:id
-  # I GET     /api/rounds/
+    I GET     /api/rounds/ # NOTE: this is for rounds for current user
 
     RoundLocks
       C POST    /api/rounds/:round_id/round_lock/

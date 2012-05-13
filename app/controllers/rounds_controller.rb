@@ -4,8 +4,9 @@ class RoundsController < ApplicationController
   respond_to :json
 
   def index
-    # todo not sure if this action is needed
-    @rounds = []
+    time    = params[:time] ? Time.parse(params[:time]) : nil
+    @rounds = Round.where(:fid => current_user.fid)
+    @rounds = time ? @rounds.before(time).recent : @rounds.recent
     respond_with @rounds.to_json
   end
 
@@ -14,14 +15,14 @@ class RoundsController < ApplicationController
   end
 
   def create
-    @round = Round.create(params[:round])
+    @round = Round.create(:fid => current_user.fid)
     @round.round_lock = RoundLock.create(:fid => current_user.fid)
     respond_with @round.to_json
   end
 
-  def update
-    respond_with Round.update(params[:id],params[:round]).to_json
-  end
+  # def update
+  #   respond_with Round.update(params[:id],params[:round]).to_json
+  # end
 
   def destroy
     respond_with Round.destroy(params[:id]).to_json
