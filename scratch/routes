@@ -12,20 +12,21 @@ Adding a Slide to a Round (first requires RoundLock)
 
 Watching a Round that is locked
   GET  /api/rounds/1/round_lock # check for lock
-* POST /api/rounds/1/round_lock/watching
+  POST /api/rounds/1/round_lock/watching
     Watching.create(:round_lock => 1, :fid => 123)
 
+
+  ***** WHERE DO COMPLETED ROUND FEEDS GO? *****
+  ***** WHERE DO INVITATION FEEDS GO? *****
 
 IMPLEMENTED
 
   (Slide) Feeds
     GET /api/sentences
-    * GET /api/sentences/invitations
     * GET /api/sentences/private
       GET /api/sentences/friends
       GET /api/sentences/recent
     GET /api/pictures
-    * GET /api/pictures/invitations
     * GET /api/pictures/private
       GET /api/pictures/friends
       GET /api/pictures/recent

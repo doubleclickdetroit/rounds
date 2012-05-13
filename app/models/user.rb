@@ -36,48 +36,6 @@ class User < ActiveRecord::Base
     Round.friends_recent(filtered_friends_fids)
   end
 
-  def recent_activity
-    # THIS LOOKS AWFUL REFACTOR BEFORE ANYTHING ELSE
-    
-    # todo move this to controller/view
-    
-    # todo scopes for models below
-    @rounds   = Round.find   :all, :conditions => ['fid = ?', self.fid], :order => 'created_at desc', :limit => 10
-    @slides   = Slide.find   :all, :conditions => ['fid = ?', self.fid], :order => 'created_at desc', :limit => 10
-    @comments = Comment.find :all, :conditions => ['fid = ?', self.fid], :order => 'created_at desc', :limit => 10
-
-    json = JSONBuilder::Compiler.generate do
-      rounds @rounds do |round|
-        id round.id
-        created_at round.created_at
-        updated_at round.updated_at
-        fid round.fid
-      end
-      # todo differentiate Sentences/Pictures
-      slides @slides do |slide|
-        id slide.id
-        type slide.type
-        round_id slide.round_id
-        created_at slide.created_at
-        updated_at slide.updated_at
-        fid slide.fid
-        content slide.content
-      end
-      comments @comments do |comment|
-        id comment.id
-        type comment.type
-        slide_id comment.slide_id
-        created_at comment.created_at
-        updated_at comment.updated_at
-        fid comment.fid
-        text comment.text
-        inappropriate comment.inappropriate
-      end
-    end
-
-    json
-  end
-
 
 private
   def remove_blocked_fids_from(fids_arr)
