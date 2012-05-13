@@ -10,18 +10,52 @@ describe SlidesController do
   it 'should authenticate the user'
 
   describe 'GET index' do
-    it 'should throw a 406 if there is no round_id' do
-      get :index, {}, valid_session 
-      response.status.should == 406
+    context 'with round_id' do
+      it 'should show Slides for a Round' do
+        @round = Factory(:round)
+        @slide = Factory(:slide, :round_id => @round.id)
+        params = { :round_id => @round.to_param }
+
+        get :index, params, valid_session
+        assigns(:slides).should == [@slide]
+      end
     end
 
-    it 'should show Slides for a Round' do
-      @round = Factory(:round)
-      @slide = Factory(:slide, :round_id => @round.id)
-      params = { :round_id => @round.to_param }
+    context 'without round_id' do
+      context 'and without time arg' do
+        it 'should show recent Slides' do
+          3.times { @slide = Factory(:slide, :fid => @user.fid) }
+          4.times { @slide = Factory(:slide) }
 
-      get :index, params, valid_session
-      assigns(:slides).should == [@slide]
+          get :index, {}, valid_session
+          assigns(:slides).count.should == 3
+
+          # brings total by user to 9
+          6.times { @slide = Factory(:slide, :fid => @user.fid) }
+
+          get :index, {}, valid_session
+          assigns(:slides).count.should == 8
+        end
+      end
+
+      context 'with time arg' do
+        it 'should show Rounds created by the current_user' do
+          earlier_time = Time.now
+          3.times { @slide = Factory(:slide, :fid => @user.fid, :created_at => earlier_time) }
+          time = earlier_time + 3
+          4.times { @slide = Factory(:slide, :fid => @user.fid, :created_at => time) }
+
+          # get slides before time
+          get :index, {:time => time}, valid_session
+          assigns(:slides).count.should == 3
+
+          # brings total to 9
+          6.times { @slide = Factory(:slide, :fid => @user.fid, :created_at => earlier_time) }
+
+          get :index, {:time => time}, valid_session
+          assigns(:slides).count.should == 8
+        end
+      end
     end
   end
 
@@ -122,6 +156,19 @@ describe SlidesController do
         expect {
           post :create, params, valid_session
         }.to change(Slide, :count).by(1)
+      end
+
+      it 'should create a new Slide with current_user as creator' do
+        @round = Factory(:round)
+        @lock  = Factory(:round_lock, :round_id => @round.id, :fid => @user.fid)
+        Factory(:picture, :round_id => @round.id)
+        Factory(:round_lock, :round_id => @round.id)
+        slide  = Factory.build(:sentence).attributes
+        params = { :round_id => @round.to_param, :slide => slide }
+
+        post :create, params, valid_session
+
+        Slide.last.creator.should == @user
       end
     end
   end

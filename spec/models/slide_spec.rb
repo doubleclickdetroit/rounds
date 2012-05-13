@@ -11,6 +11,8 @@ describe Slide do
     @slide.comments << Factory(:comment)
   end
 
+  it 'should validate presence of round_id'
+
   it 'should belong to a Round' do
     @slide.round.should be_an_instance_of Round
   end
@@ -92,6 +94,7 @@ describe Slide do
       expect {
         Slide.create_next(slide)
       }.to raise_error('"Foobar" is not a valid slide type')
+
     end
 
     it 'should raise without a lock' do

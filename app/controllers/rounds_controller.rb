@@ -3,6 +3,7 @@ class RoundsController < ApplicationController
 
   respond_to :json
 
+  # todo refactor
   def index
     time    = params[:time] ? Time.parse(params[:time]) : nil
     @rounds = Round.where(:fid => current_user.fid)
@@ -14,6 +15,7 @@ class RoundsController < ApplicationController
     respond_with Round.find(params[:id]).to_json
   end
 
+  # todo refactor
   def create
     @round = Round.create(:fid => current_user.fid)
     @round.round_lock = RoundLock.create(:fid => current_user.fid)

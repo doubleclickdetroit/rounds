@@ -1,5 +1,5 @@
 class SlidesController < ApplicationController
-  before_filter :check_for_round_id, :only => [:index,:create]
+  before_filter :check_for_round_id, :only => :create # [:index,:create]
   before_filter :check_for_type, :only => [:create,:feed,:recent,:friends]
   before_filter :force_current_user_fid, :only => :create
   
@@ -8,9 +8,12 @@ class SlidesController < ApplicationController
   respond_to :json
 
 
+  # todo refactor
   def index
-    @slides = Round.find(@round_id).slides
-    respond_with @slides.map(&:to_hash).to_json
+    time    = params[:time] ? Time.parse(params[:time]) : nil
+    @slides = Slide.where(:fid => current_user.fid)
+    @slides = time ? @slides.before(time).recent : @slides.recent
+    respond_with @slides.to_json
   end
 
   def show
@@ -18,6 +21,7 @@ class SlidesController < ApplicationController
   end
 
   def create
+    params[:slide][:fid] = current_user.fid
     respond_with Slide.create_next(params[:slide]).to_json
   end
 
