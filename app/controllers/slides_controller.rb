@@ -10,9 +10,17 @@ class SlidesController < ApplicationController
 
   # todo refactor
   def index
-    time    = params[:time] ? Time.parse(params[:time]) : nil
-    @slides = Slide.where(:fid => current_user.fid)
-    @slides = time ? @slides.before(time).recent : @slides.recent
+    if round_id = params[:round_id]
+      @slides = Round.find(round_id).slides
+    else
+      @slides = Slide.where(:fid => current_user.fid)
+      if time = params[:time]
+        time = Time.parse params[:time]
+        @slides = @slides.before(time).recent
+      else
+        @slides = @slides.recent
+      end
+    end
     respond_with @slides.to_json
   end
 

@@ -14,6 +14,7 @@ describe SlidesController do
       it 'should show Slides for a Round' do
         @round = Factory(:round)
         @slide = Factory(:slide, :round_id => @round.id)
+        Factory(:slide, :round_id => @round.id + 1)
         params = { :round_id => @round.to_param }
 
         get :index, params, valid_session
