@@ -32,8 +32,8 @@ IMPLEMENTED
       GET /api/pictures/recent
   * GET /api/me
       GET /api/rounds
-    * GET /api/slides
-    * GET /api/comments
+      GET /api/slides
+      GET /api/comments
 
   Rounds 
     C POST    /api/rounds/

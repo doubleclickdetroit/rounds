@@ -6,7 +6,9 @@ gem 'rails', '3.2.0'
 gem 'devise'
 # gem 'cancan'
 
-gem 'json_builder'
+gem 'yajl-ruby'
+gem 'rabl'
+# gem 'json_builder'
 
 gem 'factory_girl_rails'
 
