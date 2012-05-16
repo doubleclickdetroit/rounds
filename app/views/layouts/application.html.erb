@@ -2,8 +2,8 @@
 <html>
 <head>
   <title>Draw</title>
-  <%= stylesheet_link_tag    "application", :media => "all" %>
-  <%= javascript_include_tag "application" %>
+  <%= stylesheet_link_tag   "application", :media => "all" %>
+  <%= requirejs_include_tag "application" %>
   <%= csrf_meta_tags %>
 </head>
 <body>
@@ -11,17 +11,17 @@
   <li>
     <% if user_signed_in? %>
       <%= link_to('Edit account', edit_user_registration_path) %>
-    <% else %> 
+    <% else %>
       <%= link_to('Sign up', new_user_registration_path) %>
-    <% end %> 
+    <% end %>
   </li>
 
   <li>
     <% if user_signed_in? %>
       <%= link_to('Logout', destroy_user_session_path, :method => :delete) %>
-    <% else %> 
+    <% else %>
       <%= link_to('Login', new_user_session_path) %>
-    <% end %> 
+    <% end %>
   </li>
 
 
