@@ -21,11 +21,12 @@ class SlidesController < ApplicationController
         @slides = @slides.recent
       end
     end
-    respond_with @slides.to_json
+    respond_with @slides
   end
 
   def show
-    respond_with Slide.find(params[:id]).to_json
+    @slide = Slide.find(params[:id])
+    respond_with @slide
   end
 
   def create

@@ -13,7 +13,7 @@ describe Round do
     end.should be_true
   end
 
-  it 'should have many Invitations', :focus do
+  it 'should have many Invitations' do
     @round.invitations.all? do |invitation|
       invitation.kind_of?(Invitation)
     end.should be_true
