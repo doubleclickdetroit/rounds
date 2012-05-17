@@ -10,7 +10,7 @@ Draw::Application.routes.draw do
     # scope 'users' do
     #   match "/:fid/activity"         => "feeds#activity"
     #   match "/:fid/friends_activity" => "feeds#friends_activity"
-    #   match "/recent"                => "feeds#recent"
+    #   match "/community"                => "feeds#community"
     #   match "/whats_hot"             => "feeds#whats_hot"
     # end
 
@@ -48,13 +48,13 @@ Draw::Application.routes.draw do
 
     # todo cleaner
     scope 'sentences' do
-      match '/recent' => 'slides#recent', :type => 'Sentence'
+      match '/community' => 'slides#community', :type => 'Sentence'
       match '/friends' => 'slides#friends', :type => 'Sentence'
     end
 
     # todo cleaner
     scope 'pictures' do
-      match '/recent' => 'slides#recent', :type => 'Picture'
+      match '/community' => 'slides#community', :type => 'Picture'
       match '/friends' => 'slides#friends', :type => 'Picture'
     end
     ##### END MESS

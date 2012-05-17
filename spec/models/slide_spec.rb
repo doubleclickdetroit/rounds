@@ -46,8 +46,6 @@ describe Slide do
       @lock  = Factory(:round_lock, :round_id => @round.id, :fid => fid)
     end
 
-    it 'should not save if a RoundLock exists by another user for .round' 
-
     context 'sentence' do
       before(:each) do
         Factory(:picture, :round_id => @round.id)
@@ -134,31 +132,6 @@ describe Slide do
     end
   end
 
-  describe '.to_hash' do
-    before(:each) do
-      @slide.stub(:content).and_return('')
-      @hash = @slide.to_hash 
-    end
-
-    keys = %w[type id round_id fid created_at updated_at comment_count votes content]
-    it "should have no other keys than these #{keys.inspect}" do
-      (@hash.keys && keys).sort.should == @hash.keys.sort
-    end
-  end
-
-  describe '.to_json' do
-    it 'should call Slide.to_hash' do
-      @slide.should_receive :to_hash
-      @slide.to_json
-    end
-
-    it 'should call .to_json on Slide.to_hash' do
-      @slide.stub(:to_hash).and_return({})
-      Hash.any_instance.should_receive :to_json
-      @slide.to_json
-    end
-  end
-
   describe 'after_create' do
     it 'should assign a position of 0 if it is the first Slide in the Round' do
       @round.slides = []
@@ -242,7 +215,6 @@ describe Slide do
   end
 
   describe '.friends' do
-    pending 'converting this over'
     before(:each) do
       8.times { Factory(:slide) }
       friend1 = Factory(:user)
@@ -258,7 +230,6 @@ describe Slide do
   end
 
   describe '.friends_recent' do
-    pending 'converting this over'
     before(:each) do
       friend = Factory(:user)
       9.times { Factory(:slide, :fid => friend.fid) }
@@ -270,8 +241,20 @@ describe Slide do
     end
   end
 
+  describe '.friends_recent_for' do
+    before(:each) do
+      @user  = Factory(:user)
+      friend = Factory(:user)
+      9.times { Factory(:slide, :fid => friend.fid) }
+      @user.stub(:friends_fids).and_return([friend.fid])
+    end
+
+    it 'should only return 8 Slides at most' do
+      Slide.friends_recent_for(@user).count.should == 8
+    end
+  end
+
   describe ".of_type_and_before" do
-    pending 'just chains two scopes...'
     before(:each) do
       @time = Time.now
       5.times { Factory(:sentence, :created_at => @time) }
@@ -296,39 +279,66 @@ describe Slide do
     end
   end
 
-  describe '.feed' do
-    [Sentence, Picture].each do |klass|
-      describe "for #{klass}" do
-        before(:each) do
-          Slide.destroy_all
-
-          fid   = 525 
-          @fids = [fid]
-
-          4.times { Factory(klass.to_s.downcase.intern) }
-          4.times { Factory(klass.to_s.downcase.intern, :fid => fid) }
-        end
-
-        pending 'unhappy path? nils?'
-
-        it 'should put .invitations hashed as the value for the key invitations'
-        it 'should put .private_feed as the value for the key private'
-        it 'should put .friends_recent hashed as the value for the key friends' do
-          friends_hash = klass.friends_recent(@fids).map(&:to_hash)
-          klass.feed(@fids)['friends'].should == friends_hash
-        end
-        it 'should put .recent hashed as the value for the key community' do
-          recent_hash = klass.recent.map(&:to_hash)
-          klass.feed(@fids)['community'].should == recent_hash
-        end
-
-        it "should have an Array of Hashes as the value for all keys"
-
-        it 'should return a Hash' do
-          Slide.feed(@fids).should be_a_kind_of Hash
-        end
-      end
-    end
-  end
-
 end
+
+
+# describe '.to_hash' do
+#   before(:each) do
+#     @slide.stub(:content).and_return('')
+#     @hash = @slide.to_hash 
+#   end
+
+#   keys = %w[type id round_id fid created_at updated_at comment_count votes content]
+#   it "should have no other keys than these #{keys.inspect}" do
+#     (@hash.keys && keys).sort.should == @hash.keys.sort
+#   end
+# end
+
+# describe '.to_json' do
+#   it 'should call Slide.to_hash' do
+#     @slide.should_receive :to_hash
+#     @slide.to_json
+#   end
+
+#   it 'should call .to_json on Slide.to_hash' do
+#     @slide.stub(:to_hash).and_return({})
+#     Hash.any_instance.should_receive :to_json
+#     @slide.to_json
+#   end
+# end
+
+# describe '.feed' do
+#   [Sentence, Picture].each do |klass|
+#     describe "for #{klass}" do
+#       before(:each) do
+#         Slide.destroy_all
+
+#         fid   = 525 
+#         @fids = [fid]
+
+#         4.times { Factory(klass.to_s.downcase.intern) }
+#         4.times { Factory(klass.to_s.downcase.intern, :fid => fid) }
+#       end
+
+#       pending 'unhappy path? nils?'
+
+#       it 'should put .invitations hashed as the value for the key invitations'
+#       it 'should put .private_feed as the value for the key private'
+#       it 'should put .friends_recent hashed as the value for the key friends' do
+#         friends_hash = klass.friends_recent(@fids).map(&:to_hash)
+#         klass.feed(@fids)['friends'].should == friends_hash
+#       end
+#       it 'should put .recent hashed as the value for the key community' do
+#         recent_hash = klass.recent.map(&:to_hash)
+#         klass.feed(@fids)['community'].should == recent_hash
+#       end
+
+#       it "should have an Array of Hashes as the value for all keys"
+
+#       it 'should return a Hash' do
+#         Slide.feed(@fids).should be_a_kind_of Hash
+#       end
+#     end
+#   end
+# end
+

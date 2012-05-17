@@ -1,6 +1,6 @@
 class SlidesController < ApplicationController
   before_filter :check_for_round_id, :only => :create # [:index,:create]
-  before_filter :check_for_type, :only => [:create,:feed,:recent,:friends]
+  before_filter :check_for_type, :only => [:create,:feed,:community,:friends]
   before_filter :force_current_user_fid, :only => :create
   
   before_filter :authenticate_user!
@@ -46,17 +46,19 @@ class SlidesController < ApplicationController
   # RESTless
   def feed
     # todo dangerous?
-    respond_with @type.constantize.feed(current_user.friends_fids)
+    @community_slides = @type.constantize.recent
+    @friends_slides   = @type.constantize.friends(current_user.friends_fids).recent
+    respond_with @type
   end
 
-  def recent
+  def community
     @slides = Slide.of_type_and_before(@type,params[:time])
-    respond_with @slides.map(&:to_hash).to_json
+    respond_with @slides
   end
 
   def friends
     @slides = Slide.friends(current_user.friends_fids).of_type_and_before(@type,params[:time])
-    respond_with @slides.map(&:to_hash).to_json
+    respond_with @slides
   end
 
 

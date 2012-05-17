@@ -213,7 +213,7 @@ describe SlidesController do
     end
   end
 
-  describe 'GET recent' do
+  describe 'GET community' do
     pending 'unhappy path'
 
     before(:each) do 
@@ -229,7 +229,7 @@ describe SlidesController do
       [Sentence,Picture].each do |klass|
         context klass.to_s do
           it "should assign only proper number of #{klass.to_s.pluralize} to @slides" do 
-            get :recent, {:type => klass.to_s}, valid_session
+            get :community, {:type => klass.to_s}, valid_session
 
             assigns(:slides).count.should == 5
             assigns(:slides).all?{|s|s.instance_of?(klass)}.should be_true
@@ -242,7 +242,7 @@ describe SlidesController do
       [Sentence,Picture].each do |klass|
         context klass.to_s do
           it "should assign only proper number of #{klass.to_s.pluralize} to @slides" do 
-            get :recent, {:type => klass.to_s, :time => @time}, valid_session
+            get :community, {:type => klass.to_s, :time => @time}, valid_session
 
             assigns(:slides).count.should == 3
             assigns(:slides).all?{|s|s.instance_of?(klass)}.should be_true

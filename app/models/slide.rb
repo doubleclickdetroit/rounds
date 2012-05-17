@@ -3,24 +3,9 @@ require Rails.root.join('lib/modules/common.rb')
 class Slide < ActiveRecord::Base
   include Common::Scopes::FriendsAndRecent
   include Common::Associations::HasCreator
-
-  # todo refactor to common.rb?
-  def self.feed(friends_fids)
-    hash = {}
-
-    # todo
-    invitations = []
-    private_feed = []
-
-    friends   = friends_recent(friends_fids).map(&:to_hash)
-    community = recent.all.map(&:to_hash)
-
-    hash['invitations'] = invitations
-    hash['private']     = private_feed
-    hash['friends']     = friends
-    hash['community']   = community
-    
-    hash
+  # todo move to common?
+  def self.friends_recent_for(user)
+    friends_recent(user.friends_fids)
   end
 
   after_create  :add_position
@@ -71,15 +56,6 @@ class Slide < ActiveRecord::Base
     comments.count
   end
 
-  def to_hash
-    attrs = %w[type id round_id fid created_at updated_at comment_count votes content]
-    attrs.inject({}) {|h,k| h.merge({k => self.send(k)})}
-  end
-
-  def to_json
-    to_hash.to_json
-  end
-
 private
   # todo maybe remove this...
   def add_position
@@ -96,3 +72,30 @@ private
   end
 
 end
+
+  # def self.feed(friends_fids)
+  #   hash = {}
+
+  #   # todo
+  #   invitations = []
+  #   private_feed = []
+
+  #   friends   = friends_recent(friends_fids).map(&:to_hash)
+  #   community = recent.all.map(&:to_hash)
+
+  #   hash['invitations'] = invitations
+  #   hash['private']     = private_feed
+  #   hash['friends']     = friends
+  #   hash['community']   = community
+  #   
+  #   hash
+  # end
+
+  # def to_hash
+  #   attrs = %w[type id round_id fid created_at updated_at comment_count votes content]
+  #   attrs.inject({}) {|h,k| h.merge({k => self.send(k)})}
+  # end
+
+  # def to_json
+  #   to_hash.to_json
+  # end

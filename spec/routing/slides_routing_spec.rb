@@ -61,8 +61,8 @@ describe SlidesController do
         get("/api/sentences").should route_to("slides#feed", :type => 'Sentence')
       end
 
-      it "routes to #recent" do
-        get("/api/sentences/recent").should route_to("slides#recent", :type => 'Sentence')
+      it "routes to #community" do
+        get("/api/sentences/community").should route_to("slides#community", :type => 'Sentence')
       end
 
       it "routes to #friends" do
@@ -81,8 +81,8 @@ describe SlidesController do
         get("/api/pictures").should route_to("slides#feed", :type => 'Picture')
       end
 
-      it "routes to #recent" do
-        get("/api/pictures/recent").should route_to("slides#recent", :type => 'Picture')
+      it "routes to #community" do
+        get("/api/pictures/community").should route_to("slides#community", :type => 'Picture')
       end
 
       it "routes to #friends" do
