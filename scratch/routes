@@ -25,11 +25,11 @@ IMPLEMENTED
     GET /api/sentences
     * GET /api/sentences/private
       GET /api/sentences/friends
-      GET /api/sentences/recent
+      GET /api/sentences/community
     GET /api/pictures
     * GET /api/pictures/private
       GET /api/pictures/friends
-      GET /api/pictures/recent
+      GET /api/pictures/community
   * GET /api/me
       GET /api/rounds
       GET /api/slides

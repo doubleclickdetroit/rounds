@@ -12,7 +12,7 @@
 _     - GET /api/pictures/invitations # relative to logged in user
 _     - GET /api/pictures/private     # relative to logged in user
 X     - GET /api/pictures/friends     # relative to logged in user
-X     - GET /api/pictures/recent
+X     - GET /api/pictures/community
   NOTE: upon completion of a private round, all invitations are destroyed
 
   FEED UPDATE
