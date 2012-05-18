@@ -4,8 +4,6 @@ class InvitationsController < ApplicationController
   before_filter :check_for_invited_fid, :only => :create
   before_filter :force_current_user_fid, :only => :create
   
-  before_filter :authenticate_user!
-
   respond_to :json
 
 

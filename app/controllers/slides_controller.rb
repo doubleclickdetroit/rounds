@@ -3,8 +3,6 @@ class SlidesController < ApplicationController
   before_filter :check_for_type, :only => [:create,:feed,:community,:friends]
   before_filter :force_current_user_fid, :only => :create
   
-  before_filter :authenticate_user!
-
   respond_to :json
 
 

@@ -1,8 +1,6 @@
 class BlacklistEntriesController < ApplicationController
   before_filter :check_for_fids, :only => [:create,:destroy]
 
-  before_filter :authenticate_user!
-
   respond_to :json
 
   def create

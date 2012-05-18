@@ -3,7 +3,7 @@ source 'http://rubygems.org'
 gem 'rails', '3.2.0'
 
 # auth
-gem 'devise'
+# gem 'devise'
 # gem 'cancan'
 
 gem 'yajl-ruby'

@@ -14,8 +14,6 @@ Draw::Application.routes.draw do
     #   match "/whats_hot"             => "feeds#whats_hot"
     # end
 
-    devise_for :users 
-
     resources :rounds, :except => [:new,:edit] do
       # todo DRY?
       match     'sentences' => 'slides#create', :type => 'Sentence', :via => :post
@@ -62,6 +60,6 @@ Draw::Application.routes.draw do
     resources :comments, :except => [:show,:new,:edit]
   end
 
-  # todo remove if devise doesnt _need_ this
+  # todo needed?
   root :to => 'home#index'
 end

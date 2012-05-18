@@ -1,8 +1,6 @@
 class BallotsController < ApplicationController
   before_filter :check_for_slide_id, :only => [:index,:create]
 
-  before_filter :authenticate_user!
-
   respond_to :json
 
   def create
