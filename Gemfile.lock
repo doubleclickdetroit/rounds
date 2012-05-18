@@ -78,6 +78,8 @@ GEM
     factory_girl_rails (3.0.0)
       factory_girl (~> 3.0.0)
       railties (>= 3.0.0)
+    faraday (0.8.0)
+      multipart-post (~> 1.1)
     ffi (1.0.11)
     fssm (0.2.8.1)
     gherkin (2.9.1)
@@ -95,6 +97,7 @@ GEM
       spork (>= 0.8.4)
     hashie (1.2.0)
     hike (1.2.1)
+    httpauth (0.1)
     i18n (0.6.0)
     journey (1.0.3)
     jquery-rails (2.0.1)
@@ -110,10 +113,20 @@ GEM
       treetop (~> 1.4.8)
     mime-types (1.18)
     multi_json (1.1.0)
+    multipart-post (1.1.5)
     nokogiri (1.5.2)
+    oauth2 (0.6.0)
+      faraday (~> 0.7)
+      httpauth (~> 0.1)
+      multi_json (~> 1.0)
     omniauth (1.1.0)
       hashie (~> 1.2)
       rack
+    omniauth-facebook (1.3.0)
+      omniauth-oauth2 (~> 1.0.2)
+    omniauth-oauth2 (1.0.2)
+      oauth2 (~> 0.6.0)
+      omniauth (~> 1.0)
     paperclip (2.7.0)
       activerecord (>= 2.3.0)
       activesupport (>= 2.3.2)
@@ -225,7 +238,7 @@ DEPENDENCIES
   guard-spork
   jquery-rails
   launchy
-  omniauth
+  omniauth-facebook
   paperclip (~> 2.7)
   pg
   rabl

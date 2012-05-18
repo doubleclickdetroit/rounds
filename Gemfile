@@ -3,7 +3,7 @@ source 'http://rubygems.org'
 gem 'rails', '3.2.0'
 
 # auth
-gem 'omniauth'
+gem 'omniauth-facebook'
 # gem 'devise'
 # gem 'cancan'
 

@@ -1,7 +1,11 @@
 Draw::Application.routes.draw do
   # todo use :via for all matches
   
+  match '/auth/facebook/callback' => 'sessions#create'
+  match '/signout' => 'sessions#destroy', :as => :signout #, :via => :delete
+
   scope 'api' do
+
     # resources :blacklist_entries, :only => [:create,:destroy]
     scope 'users' do
       match '/block/:fid'   => "blacklist_entries#create"

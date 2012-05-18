@@ -8,22 +8,15 @@
 </head>
 <body>
 
-  <%# <li>
-  <%#   <% if user_signed_in? %>
-  <%#     <%= link_to('Edit account', edit_user_registration_path) %>
-  <%#   <% else %>
-  <%#     <%= link_to('Sign up', new_user_registration_path) %>
-  <%#   <% end %>
-  <%# </li>
-
-  <%# <li>
-  <%#   <% if user_signed_in? %>
-  <%#     <%= link_to('Logout', destroy_user_session_path, :method => :delete) %>
-  <%#   <% else %>
-  <%#     <%= link_to('Login', new_user_session_path) %>
-  <%#   <% end %>
-  <%# </li>
-
+  <div class="user_nav">
+    <% if current_user %>
+      <%= image_tag session[:image] %> | 
+      Logged in as <%= current_user.name %> | 
+      <%= link_to "Sign out", signout_path %> 
+    <% else %>
+      <%= link_to "Sign in with Facebook", '/auth/facebook/'%>
+    <% end %>
+  </div>
 
   <p class="notice"><%= notice %></p>
   <p class="alert"><%= alert %></p>
