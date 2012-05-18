@@ -5,12 +5,12 @@ describe Feed do
 
   describe '#recent' do
     before(:each) do
-      3.times { Factory(:round) }
-      3.times { Factory(:slide) }
-      3.times { Factory(:comment) }
-      3.times { Factory(:round) }
-      3.times { Factory(:slide) }
-      3.times { Factory(:comment) }
+      3.times { FactoryGirl.create(:round) }
+      3.times { FactoryGirl.create(:slide) }
+      3.times { FactoryGirl.create(:comment) }
+      3.times { FactoryGirl.create(:round) }
+      3.times { FactoryGirl.create(:slide) }
+      3.times { FactoryGirl.create(:comment) }
     end
 
     it 'should return 10 results' do

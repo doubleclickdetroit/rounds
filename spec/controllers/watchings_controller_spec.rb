@@ -3,7 +3,7 @@ require 'spec_helper'
 describe WatchingsController do
   attr_accessor :valid_attributes, :valid_session
 
-  login_user()
+  # login_user()
 
   it 'should authenticate the user'
 
@@ -16,7 +16,7 @@ describe WatchingsController do
     end
 
     it 'should create a new Watching' do
-      @round = Factory(:round)
+      @round = FactoryGirl.create(:round)
       params = { :round_id => @round.id }
 
       expect {
@@ -37,7 +37,7 @@ describe WatchingsController do
   #   end
 
   #   it 'should destroy the Watching whose id was passed in' do
-  #     @watching = Factory(:watching)
+  #     @watching = FactoryGirl.create(:watching)
   #     params = { :id => @watching.to_param }
 
   #     expect {

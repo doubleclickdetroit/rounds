@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Round do
   before(:each) do
-    @round = Factory(:round)
+    @round = FactoryGirl.create(:round)
     @round.slides << Factory.build(:sentence)
     @round.slides << Factory.build(:picture)
   end
@@ -34,8 +34,8 @@ describe Round do
   it 'should return Slides in order' do
     # the first shall be last...
     puts @round.slides.inspect
-    @round.slides << Factory(:sentence)
-    @round.slides << Factory(:picture)
+    @round.slides << FactoryGirl.create(:sentence)
+    @round.slides << FactoryGirl.create(:picture)
     @round.save
     @round.slides.first.position = 1 
     @round.slides.last.position = 0 
@@ -61,7 +61,7 @@ describe Round do
     pending 'do i need to check this more thoroughly here or just in the controller spec?'
 
     it 'should return a User' do
-      @round.created_by = Factory(:user)
+      @round.created_by = FactoryGirl.create(:user)
       @round.created_by.should be_an_instance_of(User)
     end
   end
@@ -75,7 +75,7 @@ describe Round do
 
   describe '.recent' do
     before(:each) do
-      9.times { Factory(:round) }
+      9.times { FactoryGirl.create(:round) }
     end
 
     pending 'test recent? not just limit 8?'
@@ -90,11 +90,11 @@ describe Round do
 
   describe '.friends' do
     before(:each) do
-      8.times { Factory(:round) }
-      friend1 = Factory(:user)
-      friend2 = Factory(:user)
-      Factory(:round, :fid => friend1.fid)
-      Factory(:round, :fid => friend2.fid)
+      8.times { FactoryGirl.create(:round) }
+      friend1 = FactoryGirl.create(:user)
+      friend2 = FactoryGirl.create(:user)
+      FactoryGirl.create(:round, :fid => friend1.fid)
+      FactoryGirl.create(:round, :fid => friend2.fid)
       @fids = [friend1.fid, friend2.fid]
     end
 
@@ -105,8 +105,8 @@ describe Round do
 
   describe '.friends_recent' do
     before(:each) do
-      friend = Factory(:user)
-      9.times { Factory(:round, :fid => friend.fid) }
+      friend = FactoryGirl.create(:user)
+      9.times { FactoryGirl.create(:round, :fid => friend.fid) }
       @fids = [friend.fid]
     end
 

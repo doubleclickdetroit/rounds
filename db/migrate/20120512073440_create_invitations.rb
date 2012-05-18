@@ -1,8 +1,8 @@
 class CreateInvitations < ActiveRecord::Migration
   def change
     create_table :invitations do |t|
-      t.integer :fid
-      t.integer :invited_fid
+      t.string :fid
+      t.string :invited_fid
       t.references :round
       t.boolean :accepted, :default => false
 

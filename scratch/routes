@@ -100,20 +100,7 @@ IMPLEMENTED
     C POST    /api/users/block/:fid
     D DELETE  /api/users/unblock/:fid
 
-  Users - dump from `rake routes`, extra detail can be added as needed
-    GET     /api/users/sign_in(.:format)        devise/sessions#new
-    POST    /api/users/sign_in(.:format)        devise/sessions#create
-    DELETE  /api/users/sign_out(.:format)       devise/sessions#destroy
-    POST    /api/users/password(.:format)       devise/passwords#create
-    GET     /api/users/password/new(.:format)   devise/passwords#new
-    GET     /api/users/password/edit(.:format)  devise/passwords#edit
-    PUT     /api/users/password(.:format)       devise/passwords#update
-    GET     /api/users/cancel(.:format)         devise/registrations#cancel
-    POST    /api/users(.:format)                devise/registrations#create
-    GET     /api/users/sign_up(.:format)        devise/registrations#new
-    GET     /api/users/edit(.:format)           devise/registrations#edit
-    PUT     /api/users(.:format)                devise/registrations#update
-    DELETE  /api/users(.:format)                devise/registrations#destroy
+  Users ...
 
 
 UNIMPLEMENTED

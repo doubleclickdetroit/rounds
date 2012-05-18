@@ -3,16 +3,16 @@ require 'spec_helper'
 describe CommentsController do
   attr_accessor :valid_attributes, :valid_session
 
-  login_user()
+  # login_user()
 
   it 'should authenticate the user'
 
   describe 'GET index' do
     context 'with slide_id' do
       it 'should show Comments for a Slide' do
-        @slide = Factory(:slide)
-        @comment = Factory(:comment, :slide_id => @slide.id)
-        Factory(:comment, :slide_id => @slide.id + 1)
+        @slide = FactoryGirl.create(:slide)
+        @comment = FactoryGirl.create(:comment, :slide_id => @slide.id)
+        FactoryGirl.create(:comment, :slide_id => @slide.id + 1)
         params = { :slide_id => @slide.to_param }
 
         get :index, params, valid_session
@@ -23,14 +23,14 @@ describe CommentsController do
     context 'without slide_id' do
       context 'and without time arg' do
         it 'should show recent Comments' do
-          3.times { @comment = Factory(:comment, :fid => @user.fid) }
-          4.times { @comment = Factory(:comment) }
+          3.times { @comment = FactoryGirl.create(:comment, :fid => @user.fid) }
+          4.times { @comment = FactoryGirl.create(:comment) }
 
           get :index, {}, valid_session
           assigns(:comments).count.should == 3
 
           # brings total by user to 9
-          6.times { @comment = Factory(:comment, :fid => @user.fid) }
+          6.times { @comment = FactoryGirl.create(:comment, :fid => @user.fid) }
 
           get :index, {}, valid_session
           assigns(:comments).count.should == 8
@@ -40,16 +40,16 @@ describe CommentsController do
       context 'with time arg' do
         it 'should show Slides created by the current_user' do
           earlier_time = Time.now
-          3.times { @comment = Factory(:comment, :fid => @user.fid, :created_at => earlier_time) }
+          3.times { @comment = FactoryGirl.create(:comment, :fid => @user.fid, :created_at => earlier_time) }
           time = earlier_time + 3
-          4.times { @comment = Factory(:comment, :fid => @user.fid, :created_at => time) }
+          4.times { @comment = FactoryGirl.create(:comment, :fid => @user.fid, :created_at => time) }
 
           # get comments before time
           get :index, {:time => time}, valid_session
           assigns(:comments).count.should == 3
 
           # brings total to 9
-          6.times { @comment = Factory(:comment, :fid => @user.fid, :created_at => earlier_time) }
+          6.times { @comment = FactoryGirl.create(:comment, :fid => @user.fid, :created_at => earlier_time) }
 
           get :index, {:time => time}, valid_session
           assigns(:comments).count.should == 8
@@ -65,7 +65,7 @@ describe CommentsController do
     end
 
     it 'should create a new Comment' do
-      @slide = Factory(:slide)
+      @slide = FactoryGirl.create(:slide)
       params = { :slide_id => @slide.to_param, :comment => {} }
 
       expect {
@@ -74,7 +74,7 @@ describe CommentsController do
     end
 
     it 'should assign the current user as creator of the new Comment' do
-      @slide = Factory(:slide)
+      @slide = FactoryGirl.create(:slide)
       params = { :slide_id => @slide.to_param, :comment => {} }
 
       post :create, params, valid_session
@@ -91,8 +91,8 @@ describe CommentsController do
     end
 
     it 'should update the Comment whose id was passed in' do
-      @slide = Factory(:slide)
-      @comment = Factory(:comment)
+      @slide = FactoryGirl.create(:slide)
+      @comment = FactoryGirl.create(:comment)
       @slide.comments << @comment
 
       id = @comment.to_param
@@ -115,7 +115,7 @@ describe CommentsController do
     end
 
     it 'should destroy the Comment whose id was passed in' do
-      @comment = Factory(:comment)
+      @comment = FactoryGirl.create(:comment)
       params = { :id => @comment.to_param }
 
       expect {

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Picture do
   before(:each) do
-    @pic = Factory(:picture, :with_file)
+    @pic = FactoryGirl.create(:picture, :with_file)
     @url = @pic.file.url
   end
 

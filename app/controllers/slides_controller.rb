@@ -1,7 +1,7 @@
 class SlidesController < ApplicationController
   before_filter :check_for_round_id, :only => :create # [:index,:create]
   before_filter :check_for_type, :only => [:create,:feed,:community,:friends]
-  before_filter :force_current_user_fid, :only => :create
+  before_filter :force_current_fid, :only => :create
   
   respond_to :json
 
@@ -79,7 +79,7 @@ private
     end
   end
 
-  def force_current_user_fid
+  def force_current_fid
     params[:slide][:fid] = current_user.fid
   end
 end

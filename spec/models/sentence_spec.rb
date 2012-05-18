@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Sentence do
   before(:each) do
-    @sent = Factory(:sentence)
+    @sent = FactoryGirl.create(:sentence)
   end
 
   subject { @sent }

@@ -2,12 +2,12 @@ require 'spec_helper'
 
 describe Invitation do
   before(:each) do
-    @invitation = Factory(:invitation)
+    @invitation = FactoryGirl.create(:invitation)
   end
 
   describe '.round' do
     it 'should return a Round' do
-      @invitation.round = Factory(:round)
+      @invitation.round = FactoryGirl.create(:round)
       @invitation.round.should be_an_instance_of(Round)
     end
   end
@@ -16,7 +16,7 @@ describe Invitation do
 
   describe '.created_by' do
     it 'should return a User' do
-      @invitation.created_by = Factory(:user)
+      @invitation.created_by = FactoryGirl.create(:user)
       @invitation.created_by.should be_an_instance_of(User)
     end
   end

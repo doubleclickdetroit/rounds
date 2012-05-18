@@ -2,8 +2,7 @@ require 'set'
 
 class User < ActiveRecord::Base
   # todo left over from devise...
-  # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :password, :password_confirmation, :remember_me
+  # attr_accessible :email, :password, :password_confirmation, :remember_me
 
   # todo do this better 
   # or DRY it out 
@@ -12,7 +11,7 @@ class User < ActiveRecord::Base
   has_many :comments, :class_name => 'Comment', :foreign_key => :fid, :primary_key => :fid
   has_many :watchings, :class_name => 'Watching', :foreign_key => :fid, :primary_key => :fid
 
-  has_many :blacklist_entries, :foreign_key => :user_fid, :primary_key => :fid
+  has_many :blacklist_entries, :foreign_key => :fid, :primary_key => :fid
 
   def blocked_fids
     blacklist_entries.map {|ble| ble.blocked_fid}

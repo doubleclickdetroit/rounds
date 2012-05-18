@@ -2,10 +2,10 @@ require 'spec_helper'
 
 describe RoundLock do
   before(:each) do
-    @round = Factory(:round)
-    @lock  = Factory(:round_lock, :round_id => @round.id)
+    @round = FactoryGirl.create(:round)
+    @lock  = FactoryGirl.create(:round_lock, :round_id => @round.id)
     @num_of_watchings = 3
-    @num_of_watchings.times { @lock.watchings << Factory(:watching, :round_id => @lock.round_id) }
+    @num_of_watchings.times { @lock.watchings << FactoryGirl.create(:watching, :round_id => @lock.round_id) }
   end
 
   describe 'before_destroy callbacks' do

@@ -3,7 +3,7 @@ require 'spec_helper'
 describe SlidesController do
   attr_accessor :valid_attributes, :valid_session
 
-  login_user()
+  # login_user()
 
   before(:each) { Slide.any_instance.stub(:content).and_return('') }
 
@@ -12,9 +12,9 @@ describe SlidesController do
   describe 'GET index' do
     context 'with round_id' do
       it 'should show Slides for a Round' do
-        @round = Factory(:round)
-        @slide = Factory(:slide, :round_id => @round.id)
-        Factory(:slide, :round_id => @round.id + 1)
+        @round = FactoryGirl.create(:round)
+        @slide = FactoryGirl.create(:slide, :round_id => @round.id)
+        FactoryGirl.create(:slide, :round_id => @round.id + 1)
         params = { :round_id => @round.to_param }
 
         get :index, params, valid_session
@@ -25,14 +25,14 @@ describe SlidesController do
     context 'without round_id' do
       context 'and without time arg' do
         it 'should show recent Slides' do
-          3.times { @slide = Factory(:slide, :fid => @user.fid) }
-          4.times { @slide = Factory(:slide) }
+          3.times { @slide = FactoryGirl.create(:slide, :fid => @user.fid) }
+          4.times { @slide = FactoryGirl.create(:slide) }
 
           get :index, {}, valid_session
           assigns(:slides).count.should == 3
 
           # brings total by user to 9
-          6.times { @slide = Factory(:slide, :fid => @user.fid) }
+          6.times { @slide = FactoryGirl.create(:slide, :fid => @user.fid) }
 
           get :index, {}, valid_session
           assigns(:slides).count.should == 8
@@ -42,16 +42,16 @@ describe SlidesController do
       context 'with time arg' do
         it 'should show Rounds created by the current_user' do
           earlier_time = Time.now
-          3.times { @slide = Factory(:slide, :fid => @user.fid, :created_at => earlier_time) }
+          3.times { @slide = FactoryGirl.create(:slide, :fid => @user.fid, :created_at => earlier_time) }
           time = earlier_time + 3
-          4.times { @slide = Factory(:slide, :fid => @user.fid, :created_at => time) }
+          4.times { @slide = FactoryGirl.create(:slide, :fid => @user.fid, :created_at => time) }
 
           # get slides before time
           get :index, {:time => time}, valid_session
           assigns(:slides).count.should == 3
 
           # brings total to 9
-          6.times { @slide = Factory(:slide, :fid => @user.fid, :created_at => earlier_time) }
+          6.times { @slide = FactoryGirl.create(:slide, :fid => @user.fid, :created_at => earlier_time) }
 
           get :index, {:time => time}, valid_session
           assigns(:slides).count.should == 8
@@ -62,7 +62,7 @@ describe SlidesController do
 
   describe 'GET show' do
     it 'should return a given Slide' do
-      @slide = Factory(:slide)
+      @slide = FactoryGirl.create(:slide)
       params = { :id => @slide.to_param }
 
       Slide.should_receive(:find).with(@slide.to_param)
@@ -79,8 +79,8 @@ describe SlidesController do
 
     it 'should show Slides for a Round' do
       pending 'need for a show action'
-      @round = Factory(:round)
-      @slide = Factory(:slide)
+      @round = FactoryGirl.create(:round)
+      @slide = FactoryGirl.create(:slide)
       @round.slides << @slide
       params = { :round_id => @round.to_param }
 
@@ -107,9 +107,9 @@ describe SlidesController do
     describe 'without RoundLock' do
       it 'should create a new Sentence' do
         pending 'rescue errors to :bad_request or something?'
-        @round = Factory(:round)
-        Factory(:picture, :round_id => @round.id)
-        Factory(:round_lock, :round_id => @round.id)
+        @round = FactoryGirl.create(:round)
+        FactoryGirl.create(:picture, :round_id => @round.id)
+        FactoryGirl.create(:round_lock, :round_id => @round.id)
         slide  = Factory.build(:sentence).attributes
         params = { :round_id => @round.to_param, :slide => slide }
 
@@ -120,9 +120,9 @@ describe SlidesController do
 
       it 'should create a new Picture' do
         pending 'rescue errors to :bad_request or something?'
-        @round = Factory(:round)
-        Factory(:sentence, :round_id => @round.id)
-        Factory(:round_lock, :round_id => @round.id)
+        @round = FactoryGirl.create(:round)
+        FactoryGirl.create(:sentence, :round_id => @round.id)
+        FactoryGirl.create(:round_lock, :round_id => @round.id)
         slide  = Factory.build(:picture).attributes
         params = { :round_id => @round.to_param, :slide => slide }
 
@@ -134,10 +134,10 @@ describe SlidesController do
 
     describe 'with RoundLock' do
       it 'should create a new Sentence' do
-        @round = Factory(:round)
-        @lock  = Factory(:round_lock, :round_id => @round.id, :fid => @user.fid)
-        Factory(:picture, :round_id => @round.id)
-        Factory(:round_lock, :round_id => @round.id)
+        @round = FactoryGirl.create(:round)
+        @lock  = FactoryGirl.create(:round_lock, :round_id => @round.id, :fid => @user.fid)
+        FactoryGirl.create(:picture, :round_id => @round.id)
+        FactoryGirl.create(:round_lock, :round_id => @round.id)
         slide  = Factory.build(:sentence).attributes
         params = { :round_id => @round.to_param, :slide => slide }
 
@@ -147,10 +147,10 @@ describe SlidesController do
       end
 
       it 'should create a new Picture' do
-        @round = Factory(:round)
-        @lock  = Factory(:round_lock, :round_id => @round.id, :fid => @user.fid)
-        Factory(:sentence, :round_id => @round.id)
-        Factory(:round_lock, :round_id => @round.id)
+        @round = FactoryGirl.create(:round)
+        @lock  = FactoryGirl.create(:round_lock, :round_id => @round.id, :fid => @user.fid)
+        FactoryGirl.create(:sentence, :round_id => @round.id)
+        FactoryGirl.create(:round_lock, :round_id => @round.id)
         slide  = Factory.build(:picture).attributes
         params = { :round_id => @round.to_param, :slide => slide }
 
@@ -160,10 +160,10 @@ describe SlidesController do
       end
 
       it 'should create a new Slide with current_user as creator' do
-        @round = Factory(:round)
-        @lock  = Factory(:round_lock, :round_id => @round.id, :fid => @user.fid)
-        Factory(:picture, :round_id => @round.id)
-        Factory(:round_lock, :round_id => @round.id)
+        @round = FactoryGirl.create(:round)
+        @lock  = FactoryGirl.create(:round_lock, :round_id => @round.id, :fid => @user.fid)
+        FactoryGirl.create(:picture, :round_id => @round.id)
+        FactoryGirl.create(:round_lock, :round_id => @round.id)
         slide  = Factory.build(:sentence).attributes
         params = { :round_id => @round.to_param, :slide => slide }
 
@@ -182,7 +182,7 @@ describe SlidesController do
     end
 
     it 'should update the Slide whose id was passed in' do
-      @slide = Factory(:slide)
+      @slide = FactoryGirl.create(:slide)
 
       id = @slide.to_param
       round_id = 1 
@@ -204,7 +204,7 @@ describe SlidesController do
     end
 
     it 'should destroy the Slide whose id was passed in' do
-      @slide = Factory(:slide)
+      @slide = FactoryGirl.create(:slide)
       params = { :id => @slide.to_param }
 
       expect {
@@ -218,11 +218,11 @@ describe SlidesController do
 
     before(:each) do 
       @time = Time.now
-      3.times { Factory(:sentence, :created_at => @time) }
-      3.times { Factory(:picture, :created_at => @time) }
+      3.times { FactoryGirl.create(:sentence, :created_at => @time) }
+      3.times { FactoryGirl.create(:picture, :created_at => @time) }
       @time += 30 # arbitrary
-      2.times { Factory(:sentence, :created_at => @time) }
-      2.times { Factory(:picture, :created_at => @time) }
+      2.times { FactoryGirl.create(:sentence, :created_at => @time) }
+      2.times { FactoryGirl.create(:picture, :created_at => @time) }
     end
 
     context 'with no time arg' do
@@ -269,17 +269,17 @@ describe SlidesController do
       params[:fid]        = other_fid
 
       # other slides
-      2.times { Factory(:sentence, params) }
-      2.times { Factory(:picture, params) }
+      2.times { FactoryGirl.create(:sentence, params) }
+      2.times { FactoryGirl.create(:picture, params) }
 
       # friends slides
       params[:fid] = friend_fid
-      5.times { Factory(:sentence, params) }
-      5.times { Factory(:picture, params) }
+      5.times { FactoryGirl.create(:sentence, params) }
+      5.times { FactoryGirl.create(:picture, params) }
       @time += 30 # arbitrary
       params[:created_at] = @time
-      4.times { Factory(:sentence, params) }
-      4.times { Factory(:picture, params) }
+      4.times { FactoryGirl.create(:sentence, params) }
+      4.times { FactoryGirl.create(:picture, params) }
     end
 
     [Sentence,Picture].each do |klass|

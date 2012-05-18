@@ -11,14 +11,14 @@ def random_text
 end
 
 def make_sentence
-  puts "Creating Sentence for Round #{@round.id}"
+  # puts "Creating Sentence for Round #{@round.id}"
   fid = random_user().fid
   params = { :round_id => @round.to_param, :fid => fid }
   FactoryGirl.create(:sentence, params) 
 end
 
 def make_picture
-  puts "Creating Picture for Round #{@round.id}"
+  # puts "Creating Picture for Round #{@round.id}"
   fid = random_user().fid
   pic = FactoryGirl.build(:picture, :with_file) 
   pic.round_id = @round.to_param
@@ -51,9 +51,9 @@ puts '  ** Users'
 
 @users = []
 
-@ammar = FactoryGirl.create(:user, :email => 'ammar@almakzumi.com', :password => 'ammaralmakzumi')
-@ben   = FactoryGirl.create(:user, :email => 'ben@babics.com', :password => 'benbabics')
-@brad  = FactoryGirl.create(:user, :email => 'brad@chase.com', :password => 'bradchase')
+@ammar = FactoryGirl.create(:user, :name => 'Ammar Ulmakzumi', :fid => '1')
+@ben   = FactoryGirl.create(:user, :name => 'Ben Babics',      :fid => '2')
+@brad  = FactoryGirl.create(:user, :name => 'Brad Chase',      :fid => '3')
 
 @users << @ammar
 @users << @ben

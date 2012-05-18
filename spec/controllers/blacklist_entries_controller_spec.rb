@@ -3,7 +3,7 @@ require 'spec_helper'
 describe BlacklistEntriesController do
   attr_accessor :valid_attributes, :valid_session
 
-  login_user()
+  # login_user()
 
   it 'should authenticate the user'
 
@@ -28,7 +28,7 @@ describe BlacklistEntriesController do
 
     it "should destroy a BlacklistEntry" do
       pending 'stupid SQL error'
-      Factory(:blacklist_entry, :user_fid => 1, :blocked_fid => 2)
+      FactoryGirl.create(:blacklist_entry, :user_fid => 1, :blocked_fid => 2)
       expect {
         delete :destroy, {:user_fid => 1, :blocked_fid => 2}, valid_session 
       }.to change(BlacklistEntry, :count).by(-1)

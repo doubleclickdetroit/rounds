@@ -3,21 +3,21 @@ require 'spec_helper'
 describe RoundsController do
   attr_accessor :valid_attributes, :valid_session
 
-  login_user()
+  # login_user()
 
   it 'should authenticate the user'
 
   describe 'GET index' do
     context 'with no time arg' do
       it 'should show Rounds created by the current_user' do
-        3.times { @round = Factory(:round, :fid => @user.fid) }
-        4.times { @round = Factory(:round) }
+        3.times { @round = FactoryGirl.create(:round, :fid => @user.fid) }
+        4.times { @round = FactoryGirl.create(:round) }
 
         get :index, {}, valid_session
         assigns(:rounds).count.should == 3
 
         # brings total by user to 9
-        6.times { @round = Factory(:round, :fid => @user.fid) }
+        6.times { @round = FactoryGirl.create(:round, :fid => @user.fid) }
 
         get :index, {}, valid_session
         assigns(:rounds).count.should == 8
@@ -27,16 +27,16 @@ describe RoundsController do
     context 'with time arg' do
       it 'should show Rounds created by the current_user' do
         earlier_time = Time.now
-        3.times { @round = Factory(:round, :fid => @user.fid, :created_at => earlier_time) }
+        3.times { @round = FactoryGirl.create(:round, :fid => @user.fid, :created_at => earlier_time) }
         time = earlier_time + 3
-        4.times { @round = Factory(:round, :fid => @user.fid, :created_at => time) }
+        4.times { @round = FactoryGirl.create(:round, :fid => @user.fid, :created_at => time) }
 
         # get Rounds before time
         get :index, {:time => time}, valid_session
         assigns(:rounds).count.should == 3
 
         # brings total to 9
-        6.times { @round = Factory(:round, :fid => @user.fid, :created_at => earlier_time) }
+        6.times { @round = FactoryGirl.create(:round, :fid => @user.fid, :created_at => earlier_time) }
 
         get :index, {:time => time}, valid_session
         assigns(:rounds).count.should == 8
@@ -46,7 +46,7 @@ describe RoundsController do
 
   describe 'GET show' do
     it 'should return a given Round' do
-      @round = Factory(:round)
+      @round = FactoryGirl.create(:round)
       params = { :id => @round.to_param }
 
       Round.should_receive(:find).with(@round.to_param)
@@ -79,7 +79,7 @@ describe RoundsController do
   describe 'PUT update' do
     it 'should update the Round whose id was passed in' do
       pending 'dont think this is needed'
-      @round = Factory(:round, :fid => 1)
+      @round = FactoryGirl.create(:round, :fid => 1)
 
       id  = @round.to_param
       fid = 2
@@ -95,7 +95,7 @@ describe RoundsController do
 
   describe 'DELETE destroy' do
     it 'should destroy the Round whose id was passed in' do
-      @round = Factory(:round)
+      @round = FactoryGirl.create(:round)
       params = { :id => @round.to_param }
 
       expect {

@@ -2,9 +2,9 @@ require 'spec_helper'
 
 describe Comment do
   before(:each) do
-    @comment = Factory(:comment)
+    @comment = FactoryGirl.create(:comment)
 
-    @slide   = Factory(:slide) 
+    @slide   = FactoryGirl.create(:slide) 
     @slide.comments << @comment
   end
 
@@ -16,7 +16,7 @@ describe Comment do
     pending 'do i need to check this more thoroughly here or just in the controller spec?'
 
     it 'should return a User' do
-      @comment.created_by = Factory(:user)
+      @comment.created_by = FactoryGirl.create(:user)
       @comment.created_by.should be_an_instance_of(User)
     end
   end
@@ -30,7 +30,7 @@ describe Comment do
 
   describe '.recent' do
     before(:each) do
-      9.times { Factory(:comment) }
+      9.times { FactoryGirl.create(:comment) }
     end
 
     pending 'test recent? not just limit 8?'
@@ -45,11 +45,11 @@ describe Comment do
 
   describe '.friends' do
     before(:each) do
-      8.times { Factory(:comment) }
-      friend1 = Factory(:user)
-      friend2 = Factory(:user)
-      Factory(:comment, :fid => friend1.fid)
-      Factory(:comment, :fid => friend2.fid)
+      8.times { FactoryGirl.create(:comment) }
+      friend1 = FactoryGirl.create(:user)
+      friend2 = FactoryGirl.create(:user)
+      FactoryGirl.create(:comment, :fid => friend1.fid)
+      FactoryGirl.create(:comment, :fid => friend2.fid)
       @fids = [friend1.fid, friend2.fid]
     end
 
@@ -60,8 +60,8 @@ describe Comment do
 
   describe '.friends_recent' do
     before(:each) do
-      friend = Factory(:user)
-      9.times { Factory(:comment, :fid => friend.fid) }
+      friend = FactoryGirl.create(:user)
+      9.times { FactoryGirl.create(:comment, :fid => friend.fid) }
       @fids = [friend.fid]
     end
 

@@ -3,14 +3,14 @@ require 'spec_helper'
 describe RoundLocksController do
   attr_accessor :valid_attributes, :valid_session
 
-  login_user()
+  # login_user()
 
   it 'should authenticate the user'
 
   describe 'GET show' do
     it 'should return a given RoundLock' do
-      @round      = Factory(:round)
-      @round_lock = Factory(:round_lock, :round_id => @round.id)
+      @round      = FactoryGirl.create(:round)
+      @round_lock = FactoryGirl.create(:round_lock, :round_id => @round.id)
       params = { :round_id => @round.to_param }
 
       RoundLock.should_receive(:find_by_round_id).with(@round.to_param)
@@ -20,8 +20,8 @@ describe RoundLocksController do
 
   describe 'POST create' do
     it 'should first check for a RoundLock' do
-      @round      = Factory(:round)
-      @round_lock = Factory(:round_lock, :round_id => @round.to_param)
+      @round      = FactoryGirl.create(:round)
+      @round_lock = FactoryGirl.create(:round_lock, :round_id => @round.to_param)
       params      = { :round_id => @round.to_param }
 
       post :create, params, valid_session
@@ -29,7 +29,7 @@ describe RoundLocksController do
     end
 
     it 'should create a new RoundLock' do
-      @round = Factory(:round)
+      @round = FactoryGirl.create(:round)
       params = { :round_id => @round.to_param }
 
       expect {
@@ -45,8 +45,8 @@ describe RoundLocksController do
 
   describe 'DELETE destroy' do
     it 'should destroy the RoundLock whose id was passed in' do
-      @round      = Factory(:round)
-      @round_lock = Factory(:round_lock, :round_id => @round.to_param)
+      @round      = FactoryGirl.create(:round)
+      @round_lock = FactoryGirl.create(:round_lock, :round_id => @round.to_param)
       params = { :round_id => @round.to_param }
 
       expect {

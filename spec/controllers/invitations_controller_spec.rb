@@ -3,7 +3,7 @@ require 'spec_helper'
 describe InvitationsController do
   attr_accessor :valid_attributes, :valid_session
 
-  login_user()
+  # login_user()
 
   before(:each) { Invitation.any_instance.stub(:content).and_return('') }
 
@@ -16,8 +16,8 @@ describe InvitationsController do
     end
 
     it 'should show Invitations for a Round' do
-      @round = Factory(:round)
-      @invitation = Factory(:invitation, :round_id => @round.id)
+      @round = FactoryGirl.create(:round)
+      @invitation = FactoryGirl.create(:invitation, :round_id => @round.id)
       params = { :round_id => @round.to_param }
 
       get :index, params, valid_session
@@ -33,7 +33,7 @@ describe InvitationsController do
       end
 
       it 'should throw a 406 if there is no invited_fid' do
-        post :create, { :round_id => Factory(:round).to_param }, valid_session 
+        post :create, { :round_id => FactoryGirl.create(:round).to_param }, valid_session 
         response.status.should == 406
       end
 
@@ -41,8 +41,8 @@ describe InvitationsController do
     end
 
     it 'should create a new Invitation' do
-      round   = Factory(:round)
-      invited = Factory(:user)
+      round   = FactoryGirl.create(:round)
+      invited = FactoryGirl.create(:user)
 
       expect {
         post :create, { :round_id => round.to_param, :invited_fid => invited.fid }, valid_session 
@@ -62,7 +62,7 @@ describe InvitationsController do
     end
 
     it 'should destroy the Invitation whose id was passed in' do
-      @invitation = Factory(:invitation)
+      @invitation = FactoryGirl.create(:invitation)
       params = { :id => @invitation.to_param }
 
       expect {

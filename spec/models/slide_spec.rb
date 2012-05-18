@@ -2,13 +2,13 @@ require 'spec_helper'
 
 describe Slide do
   before(:each) do
-    @round = Factory(:round)
+    @round = FactoryGirl.create(:round)
 
-    @slide = Factory(:slide) 
+    @slide = FactoryGirl.create(:slide) 
     @round.slides << @slide 
 
-    @slide.comments << Factory(:comment)
-    @slide.comments << Factory(:comment)
+    @slide.comments << FactoryGirl.create(:comment)
+    @slide.comments << FactoryGirl.create(:comment)
   end
 
   it 'should validate presence of round_id'
@@ -30,8 +30,8 @@ describe Slide do
   end
 
   it 'should have many Ballots' do
-    @slide.ballots << Factory(:ballot)
-    @slide.ballots << Factory(:ballot)
+    @slide.ballots << FactoryGirl.create(:ballot)
+    @slide.ballots << FactoryGirl.create(:ballot)
 
     @slide.ballots.all? do |ballot|
       ballot.instance_of?(Ballot)
@@ -40,15 +40,15 @@ describe Slide do
 
   describe '.create_next' do
     before(:each) do
-      @round = Factory(:round)
+      @round = FactoryGirl.create(:round)
       fid = 1
-      Factory(:user, :fid => fid)
-      @lock  = Factory(:round_lock, :round_id => @round.id, :fid => fid)
+      FactoryGirl.create(:user, :fid => fid)
+      @lock  = FactoryGirl.create(:round_lock, :round_id => @round.id, :fid => fid)
     end
 
     context 'sentence' do
       before(:each) do
-        Factory(:picture, :round_id => @round.id)
+        FactoryGirl.create(:picture, :round_id => @round.id)
         @sentence = Factory.build(:sentence, :round_id => @round.id).attributes
         @picture  = Factory.build(:picture, :round_id => @round.id).attributes
       end
@@ -68,7 +68,7 @@ describe Slide do
 
     context 'picture' do
       before(:each) do
-        Factory(:sentence, :round_id => @round.id)
+        FactoryGirl.create(:sentence, :round_id => @round.id)
         @picture  = Factory.build(:picture, :round_id => @round.id).attributes
         @sentence = Factory.build(:sentence, :round_id => @round.id).attributes
       end
@@ -96,7 +96,7 @@ describe Slide do
     end
 
     it 'should raise without a lock' do
-      Factory(:sentence, :round_id => @round.id)
+      FactoryGirl.create(:sentence, :round_id => @round.id)
       slide = Factory.build(:picture, :round_id => @round.id).attributes
       @lock.destroy 
 
@@ -107,11 +107,11 @@ describe Slide do
 
     it 'should raise if the RoundLock doesnt belong to the User' do
       fid = 525
-      Factory(:user, :fid => fid)
+      FactoryGirl.create(:user, :fid => fid)
       @lock.fid = fid
       @lock.save
 
-      Factory(:sentence, :round_id => @round.id)
+      FactoryGirl.create(:sentence, :round_id => @round.id)
       slide = Factory.build(:picture, :round_id => @round.id).attributes
       expect {
         Slide.create_next(slide)
@@ -122,7 +122,7 @@ describe Slide do
     it "shouldn't require a lock for the first slide..." 
 
     it 'should destroy the lock upon successful slide creation' do
-      Factory(:sentence, :round_id => @round.id)
+      FactoryGirl.create(:sentence, :round_id => @round.id)
       slide = Factory.build(:picture, :round_id => @round.id).attributes
 
       RoundLock.count.should == 1
@@ -135,16 +135,16 @@ describe Slide do
   describe 'after_create' do
     it 'should assign a position of 0 if it is the first Slide in the Round' do
       @round.slides = []
-      slide = Factory(:slide, :round_id => @round.to_param)
+      slide = FactoryGirl.create(:slide, :round_id => @round.to_param)
       @round.slides << slide
       slide.position.should == 0
     end
 
     it 'should assign a position one greater than the last Slide in the Round' do
       @round.slides = []
-      slide = Factory(:slide, :round_id => @round.to_param)
+      slide = FactoryGirl.create(:slide, :round_id => @round.to_param)
       @round.slides << slide
-      slide = Factory(:slide, :round_id => @round.to_param)
+      slide = FactoryGirl.create(:slide, :round_id => @round.to_param)
       @round.slides << slide
       slide.position.should == 1
     end
@@ -154,7 +154,7 @@ describe Slide do
     pending 'do i need to check this more thoroughly here or just in the controller spec?'
 
     it 'should return a User' do
-      @slide.created_by = Factory(:user)
+      @slide.created_by = FactoryGirl.create(:user)
       @slide.created_by.should be_an_instance_of(User)
     end
   end
@@ -171,8 +171,8 @@ describe Slide do
       # todo wasteful, 43 created before
       Slide.destroy_all
 
-      Factory(:slide, :type => 'Sentence') 
-      Factory(:slide, :type => 'Picture') 
+      FactoryGirl.create(:slide, :type => 'Sentence') 
+      FactoryGirl.create(:slide, :type => 'Picture') 
     end
 
     it 'should only return Sentences when passed that type' do
@@ -188,7 +188,7 @@ describe Slide do
 
   describe '.recent' do
     before(:each) do
-      9.times { Factory(:slide) }
+      9.times { FactoryGirl.create(:slide) }
     end
 
     pending 'test recent (by date)? not just limit 8?'
@@ -204,8 +204,8 @@ describe Slide do
       # todo wasteful
       Slide.destroy_all
 
-      slide1 = Factory(:slide, :created_at => time-1)
-      slide2 = Factory(:slide, :created_at => time+1)
+      slide1 = FactoryGirl.create(:slide, :created_at => time-1)
+      slide2 = FactoryGirl.create(:slide, :created_at => time+1)
 
       Slide.count.should == 2
       Slide.before(time).count.should == 1
@@ -216,11 +216,11 @@ describe Slide do
 
   describe '.friends' do
     before(:each) do
-      8.times { Factory(:slide) }
-      friend1 = Factory(:user)
-      friend2 = Factory(:user)
-      Factory(:slide, :fid => friend1.fid)
-      Factory(:slide, :fid => friend2.fid)
+      8.times { FactoryGirl.create(:slide) }
+      friend1 = FactoryGirl.create(:user)
+      friend2 = FactoryGirl.create(:user)
+      FactoryGirl.create(:slide, :fid => friend1.fid)
+      FactoryGirl.create(:slide, :fid => friend2.fid)
       @fids = [friend1.fid, friend2.fid]
     end
 
@@ -231,8 +231,8 @@ describe Slide do
 
   describe '.friends_recent' do
     before(:each) do
-      friend = Factory(:user)
-      9.times { Factory(:slide, :fid => friend.fid) }
+      friend = FactoryGirl.create(:user)
+      9.times { FactoryGirl.create(:slide, :fid => friend.fid) }
       @fids = [friend.fid]
     end
 
@@ -243,9 +243,9 @@ describe Slide do
 
   describe '.friends_recent_for' do
     before(:each) do
-      @user  = Factory(:user)
-      friend = Factory(:user)
-      9.times { Factory(:slide, :fid => friend.fid) }
+      @user  = FactoryGirl.create(:user)
+      friend = FactoryGirl.create(:user)
+      9.times { FactoryGirl.create(:slide, :fid => friend.fid) }
       @user.stub(:friends_fids).and_return([friend.fid])
     end
 
@@ -257,11 +257,11 @@ describe Slide do
   describe ".of_type_and_before" do
     before(:each) do
       @time = Time.now
-      5.times { Factory(:sentence, :created_at => @time) }
-      5.times { Factory(:picture, :created_at => @time) }
+      5.times { FactoryGirl.create(:sentence, :created_at => @time) }
+      5.times { FactoryGirl.create(:picture, :created_at => @time) }
       @time += 30 # arbitrary
-      4.times { Factory(:sentence, :created_at => @time) }
-      4.times { Factory(:picture, :created_at => @time) }
+      4.times { FactoryGirl.create(:sentence, :created_at => @time) }
+      4.times { FactoryGirl.create(:picture, :created_at => @time) }
     end
 
     [Sentence,Picture].each do |klass|

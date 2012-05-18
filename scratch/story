@@ -1,7 +1,7 @@
   LOGIN
   the user starts up the app and sees a loading screen
     - ***** FACEBOOK MAGIC *****
-    - ***** APP LOGIN (DEVISE) *****
+    - ***** APP LOGIN (OMNIAUTH?) *****
 
   FEED
   (the user is now logged in) 

@@ -2,14 +2,14 @@ require 'spec_helper'
 
 describe Watching do
   before(:each) do
-    @watching = Factory(:watching)
+    @watching = FactoryGirl.create(:watching)
   end
 
   describe '.round_lock' do
     it 'should return the associated RoundLock' do                  
-      @round = Factory(:round)
-      @watching = Factory(:watching, :round_id => @round.id)
-      @lock = Factory(:round_lock, :round_id => @round.id) 
+      @round = FactoryGirl.create(:round)
+      @watching = FactoryGirl.create(:watching, :round_id => @round.id)
+      @lock = FactoryGirl.create(:round_lock, :round_id => @round.id) 
       @watching.round_lock = @lock
       @watching.reload.round_lock.should == @lock
     end                                                             

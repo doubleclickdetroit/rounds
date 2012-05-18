@@ -2,12 +2,12 @@ require 'spec_helper'
 
 describe User do
   before(:each) do
-    @user = Factory(:user)
+    @user = FactoryGirl.create(:user)
   end
 
   describe '.rounds' do
     it 'should return an array of Rounds' do
-      @round = Factory(:round)
+      @round = FactoryGirl.create(:round)
       @user.rounds << @round
       @user.rounds.should == [@round]
     end
@@ -17,7 +17,7 @@ describe User do
 
   describe '.slides' do
     it 'should return an array of Slides' do
-      @slide = Factory(:slide)
+      @slide = FactoryGirl.create(:slide)
       @user.slides << @slide
       @user.slides.should == [@slide]
     end
@@ -27,7 +27,7 @@ describe User do
 
   describe '.comments' do
     it 'should return an array of Comments' do
-      @comment = Factory(:comment)
+      @comment = FactoryGirl.create(:comment)
       @user.comments << @comment
       @user.comments.should == [@comment]
     end
@@ -37,7 +37,7 @@ describe User do
 
   describe '.watchings' do
     it 'should return an array of Watchings' do
-      @watching = Factory(:watching)
+      @watching = FactoryGirl.create(:watching)
       @user.watchings << @watching
       @user.watchings.should == [@watching]
     end
@@ -47,9 +47,9 @@ describe User do
 
   describe 'blocking functionality' do
     before(:each) do
-      @user         = Factory(:user)
-      @blocked_user = Factory(:user)
-      @blentry      = Factory(:blacklist_entry, :user_fid => @user.fid, :blocked_fid => @blocked_user.fid)
+      @user         = FactoryGirl.create(:user)
+      @blocked_user = FactoryGirl.create(:user)
+      @blentry      = FactoryGirl.create(:blacklist_entry, :fid => @user.fid, :blocked_fid => @blocked_user.fid)
     end
 
     describe '.blacklist_entries' do
@@ -78,10 +78,10 @@ describe User do
 
     pending 'ensure this tests Slides/Comments as well eventually'
     it 'should not return anything by a blocked User' do
-      blocked_user = Factory(:user)
-      Factory(:blacklist_entry, :user_fid => @user.fid, :blocked_fid => blocked_user.fid)
-      6.times { Factory(:round, :fid => blocked_user.fid) }
-      5.times { Factory(:round, :fid => blocked_user.fid+1) }
+      blocked_user = FactoryGirl.create(:user)
+      FactoryGirl.create(:blacklist_entry, :fid => @user.fid, :blocked_fid => blocked_user.fid)
+      6.times { FactoryGirl.create(:round, :fid => blocked_user.fid) }
+      5.times { FactoryGirl.create(:round, :fid => "#{blocked_user.fid.to_i+1}") }
 
       @user.new_feed.count.should == 5
     end
@@ -102,12 +102,12 @@ describe User do
 
     pending 'ensure this tests Slides/Comments as well eventually'
     it 'should not return anything by a blocked User' do
-      blocked_user = Factory(:user)
-      friend_user  = Factory(:user)
-      Factory(:blacklist_entry, :user_fid => @user.fid, :blocked_fid => blocked_user.fid)
-      6.times { Factory(:round, :fid => blocked_user.fid) }
-      5.times { Factory(:round, :fid => friend_user.fid) }
-      4.times { Factory(:round, :fid => friend_user.fid+1) }
+      blocked_user = FactoryGirl.create(:user)
+      friend_user  = FactoryGirl.create(:user)
+      FactoryGirl.create(:blacklist_entry, :fid => @user.fid, :blocked_fid => blocked_user.fid)
+      6.times { FactoryGirl.create(:round, :fid => blocked_user.fid) }
+      5.times { FactoryGirl.create(:round, :fid => friend_user.fid) }
+      4.times { FactoryGirl.create(:round, :fid => "#{friend_user.fid.to_i+1}") }
 
       @user.stub(:friends_fids).and_return([friend_user.fid, blocked_user.fid])
       feed = @user.friends_feed

@@ -15,7 +15,7 @@ ActiveRecord::Schema.define(:version => 20120512073440) do
 
   create_table "ballots", :force => true do |t|
     t.integer  "slide_id"
-    t.integer  "fid"
+    t.string   "fid"
     t.integer  "vote"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
@@ -25,20 +25,20 @@ ActiveRecord::Schema.define(:version => 20120512073440) do
   add_index "ballots", ["slide_id"], :name => "index_ballots_on_slide_id"
 
   create_table "blacklist_entries", :id => false, :force => true do |t|
-    t.integer  "user_fid"
-    t.integer  "blocked_fid"
+    t.string   "fid"
+    t.string   "blocked_fid"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
   end
 
-  add_index "blacklist_entries", ["user_fid"], :name => "index_blacklist_entries_on_user_fid"
+  add_index "blacklist_entries", ["fid"], :name => "index_blacklist_entries_on_fid"
 
   create_table "comments", :force => true do |t|
     t.integer  "slide_id"
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
     t.text     "text"
-    t.integer  "fid"
+    t.string   "fid"
     t.boolean  "inappropriate"
   end
 
@@ -46,8 +46,8 @@ ActiveRecord::Schema.define(:version => 20120512073440) do
   add_index "comments", ["slide_id"], :name => "index_comments_on_slide_id"
 
   create_table "invitations", :force => true do |t|
-    t.integer  "fid"
-    t.integer  "invited_fid"
+    t.string   "fid"
+    t.string   "invited_fid"
     t.integer  "round_id"
     t.boolean  "accepted",    :default => false
     t.datetime "created_at",                     :null => false
@@ -60,7 +60,7 @@ ActiveRecord::Schema.define(:version => 20120512073440) do
 
   create_table "round_locks", :force => true do |t|
     t.integer  "round_id"
-    t.integer  "fid"
+    t.string   "fid"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
@@ -70,7 +70,7 @@ ActiveRecord::Schema.define(:version => 20120512073440) do
   create_table "rounds", :force => true do |t|
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
-    t.integer  "fid"
+    t.string   "fid"
   end
 
   add_index "rounds", ["fid"], :name => "index_rounds_on_fid"
@@ -86,7 +86,7 @@ ActiveRecord::Schema.define(:version => 20120512073440) do
     t.datetime "file_updated_at"
     t.string   "type"
     t.integer  "position"
-    t.integer  "fid"
+    t.string   "fid"
     t.integer  "votes",             :default => 0
   end
 
@@ -94,27 +94,15 @@ ActiveRecord::Schema.define(:version => 20120512073440) do
   add_index "slides", ["round_id"], :name => "index_slides_on_round_id"
 
   create_table "users", :force => true do |t|
-    t.string   "email",                  :default => "", :null => false
-    t.string   "encrypted_password",     :default => "", :null => false
-    t.string   "reset_password_token"
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          :default => 0
-    t.datetime "current_sign_in_at"
-    t.datetime "last_sign_in_at"
-    t.string   "current_sign_in_ip"
-    t.string   "last_sign_in_ip"
-    t.datetime "created_at",                             :null => false
-    t.datetime "updated_at",                             :null => false
-    t.integer  "fid"
+    t.string   "name"
+    t.string   "fid"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
-
-  add_index "users", ["email"], :name => "index_users_on_email", :unique => true
-  add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
 
   create_table "watchings", :force => true do |t|
     t.integer  "round_id"
-    t.integer  "fid"
+    t.string   "fid"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end

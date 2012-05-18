@@ -4,7 +4,7 @@ describe BallotsController do
 
   attr_accessor :valid_attributes, :valid_session
 
-  login_user()
+  # login_user()
 
   it 'should authenticate the user'
 
@@ -16,7 +16,7 @@ describe BallotsController do
     end
 
     it 'should create a new Ballot' do
-      @slide = Factory(:slide)
+      @slide = FactoryGirl.create(:slide)
       params = { :slide_id => @slide.to_param, :vote => 3 }
 
       expect {

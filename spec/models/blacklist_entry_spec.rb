@@ -2,9 +2,9 @@ require 'spec_helper'
 
 describe BlacklistEntry do
   before(:each) do
-    @user         = Factory(:user)
-    @blocked_user = Factory(:user)
-    @blentry      = Factory(:blacklist_entry, :user_fid => @user.fid, :blocked_fid => @blocked_user.fid)
+    @user         = FactoryGirl.create(:user)
+    @blocked_user = FactoryGirl.create(:user)
+    @blentry      = FactoryGirl.create(:blacklist_entry, :fid => @user.fid, :blocked_fid => @blocked_user.fid)
   end
 
   # todo this is likely unnecessary...
