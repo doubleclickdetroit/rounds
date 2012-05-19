@@ -15,7 +15,7 @@ describe BlacklistEntriesController do
 
     it "should create a BlacklistEntry" do
       expect {
-        post 'create', {:user_user_id => 1, :blocked_user_id => 2}, valid_session 
+        post 'create', {:user_id => 1, :blocked_user_id => 2}, valid_session 
       }.to change(BlacklistEntry, :count).by(1)
     end
   end
