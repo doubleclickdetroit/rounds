@@ -3,7 +3,7 @@ require 'spec_helper'
 describe SlidesController do
   attr_accessor :valid_attributes, :valid_session
 
-  # login_user()
+  login_user()
 
   before(:each) { Slide.any_instance.stub(:content).and_return('') }
 

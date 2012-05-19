@@ -16,6 +16,14 @@ Spork.prefork do
   # in spec/support/ and its subdirectories.
   Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
+
+  OmniAuth.config.test_mode = true
+  OmniAuth.config.add_mock(:facebook, {  'provider'    => 'facebook', 
+                                         'uid'         => '1234', 
+                                         'info'        => { 'name' => 'Foo Bar' }
+                                       })
+
+
   RSpec.configure do |config|
     config.treat_symbols_as_metadata_keys_with_true_values = true
     config.filter_run :focus => true
@@ -42,16 +50,16 @@ Spork.prefork do
     # rspec-rails.
     config.infer_base_class_for_anonymous_controllers = false
 
+    config.extend ControllerMacros, :type => :controller
     # config.include Devise::TestHelpers, :type => :controller
-    # config.extend ControllerMacros, :type => :controller
     # config.extend ModelMacros # , :type => :controller
   end
+
 
   # RSpec.configure do |config|
   #   unless defined?(SPEC_ROOT)
   #     SPEC_ROOT = File.join(File.dirname(__FILE__))
   #   end
-
   #   config.include Mailman::SpecHelpers
   #   config.before do
   #     Mailman.config.logger = Logger.new(File.join(SPEC_ROOT, 'mailman-log.log'))

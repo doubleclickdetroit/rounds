@@ -3,7 +3,7 @@ require 'spec_helper'
 describe RoundLocksController do
   attr_accessor :valid_attributes, :valid_session
 
-  # login_user()
+  login_user()
 
   it 'should authenticate the user'
 
