@@ -1,7 +1,7 @@
-class AddFidToSlides < ActiveRecord::Migration
+class Adduser_idToSlides < ActiveRecord::Migration
   def change
-    add_column :slides, :fid, :string
-    add_index :slides, :fid
+    add_column :slides, :user_id, :string
+    add_index :slides, :user_id
 
   end
 end
