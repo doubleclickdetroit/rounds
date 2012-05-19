@@ -49,7 +49,7 @@ describe User do
     before(:each) do
       @user         = FactoryGirl.create(:user)
       @blocked_user = FactoryGirl.create(:user)
-      @blentry      = FactoryGirl.create(:blacklist_entry, :fid => @user.fid, :blocked_fid => @blocked_user.fid)
+      @blentry      = FactoryGirl.create(:blacklist_entry, :fid => @user.id, :blocked_fid => @blocked_user.id)
     end
 
     describe '.blacklist_entries' do
@@ -62,7 +62,7 @@ describe User do
 
     describe '.blacklist_fids' do
       it 'should map the BlacklistEntry fids to an Array' do
-        @user.blocked_fids.should == [@blocked_user.fid]
+        @user.blocked_fids.should == [@blocked_user.id]
       end
     end
   end
@@ -79,9 +79,9 @@ describe User do
     pending 'ensure this tests Slides/Comments as well eventually'
     it 'should not return anything by a blocked User' do
       blocked_user = FactoryGirl.create(:user)
-      FactoryGirl.create(:blacklist_entry, :fid => @user.fid, :blocked_fid => blocked_user.fid)
-      6.times { FactoryGirl.create(:round, :fid => blocked_user.fid) }
-      5.times { FactoryGirl.create(:round, :fid => "#{blocked_user.fid.to_i+1}") }
+      FactoryGirl.create(:blacklist_entry, :fid => @user.id, :blocked_fid => blocked_user.id)
+      6.times { FactoryGirl.create(:round, :fid => blocked_user.id) }
+      5.times { FactoryGirl.create(:round, :fid => "#{blocked_user.id.to_i+1}") }
 
       @user.new_feed.count.should == 5
     end
@@ -104,12 +104,12 @@ describe User do
     it 'should not return anything by a blocked User' do
       blocked_user = FactoryGirl.create(:user)
       friend_user  = FactoryGirl.create(:user)
-      FactoryGirl.create(:blacklist_entry, :fid => @user.fid, :blocked_fid => blocked_user.fid)
-      6.times { FactoryGirl.create(:round, :fid => blocked_user.fid) }
-      5.times { FactoryGirl.create(:round, :fid => friend_user.fid) }
-      4.times { FactoryGirl.create(:round, :fid => "#{friend_user.fid.to_i+1}") }
+      FactoryGirl.create(:blacklist_entry, :fid => @user.id, :blocked_fid => blocked_user.id)
+      6.times { FactoryGirl.create(:round, :fid => blocked_user.id) }
+      5.times { FactoryGirl.create(:round, :fid => friend_user.id) }
+      4.times { FactoryGirl.create(:round, :fid => "#{friend_user.id.to_i+1}") }
 
-      @user.stub(:friends_fids).and_return([friend_user.fid, blocked_user.fid])
+      @user.stub(:friends_fids).and_return([friend_user.id, blocked_user.id])
       feed = @user.friends_feed
       feed.count.should == 5
     end

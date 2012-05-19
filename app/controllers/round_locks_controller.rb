@@ -10,7 +10,7 @@ class RoundLocksController < ApplicationController
     lock = RoundLock.find_by_round_id(params[:round_id])
     head :locked and return if lock
 
-    respond_with RoundLock.create(:round_id => params[:round_id], :fid => current_user.fid).to_json
+    respond_with RoundLock.create(:round_id => params[:round_id], :fid => current_user.id).to_json
   end
 
   def destroy

@@ -23,14 +23,14 @@ describe CommentsController do
     context 'without slide_id' do
       context 'and without time arg' do
         it 'should show recent Comments' do
-          3.times { @comment = FactoryGirl.create(:comment, :fid => @user.fid) }
+          3.times { @comment = FactoryGirl.create(:comment, :fid => @user.id) }
           4.times { @comment = FactoryGirl.create(:comment) }
 
           get :index, {}, valid_session
           assigns(:comments).count.should == 3
 
           # brings total by user to 9
-          6.times { @comment = FactoryGirl.create(:comment, :fid => @user.fid) }
+          6.times { @comment = FactoryGirl.create(:comment, :fid => @user.id) }
 
           get :index, {}, valid_session
           assigns(:comments).count.should == 8
@@ -40,16 +40,16 @@ describe CommentsController do
       context 'with time arg' do
         it 'should show Slides created by the current_user' do
           earlier_time = Time.now
-          3.times { @comment = FactoryGirl.create(:comment, :fid => @user.fid, :created_at => earlier_time) }
+          3.times { @comment = FactoryGirl.create(:comment, :fid => @user.id, :created_at => earlier_time) }
           time = earlier_time + 3
-          4.times { @comment = FactoryGirl.create(:comment, :fid => @user.fid, :created_at => time) }
+          4.times { @comment = FactoryGirl.create(:comment, :fid => @user.id, :created_at => time) }
 
           # get comments before time
           get :index, {:time => time}, valid_session
           assigns(:comments).count.should == 3
 
           # brings total to 9
-          6.times { @comment = FactoryGirl.create(:comment, :fid => @user.fid, :created_at => earlier_time) }
+          6.times { @comment = FactoryGirl.create(:comment, :fid => @user.id, :created_at => earlier_time) }
 
           get :index, {:time => time}, valid_session
           assigns(:comments).count.should == 8

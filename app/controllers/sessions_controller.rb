@@ -5,7 +5,7 @@ class SessionsController < ApplicationController
     user = User.find_by_fid(auth['uid']) || User.create(:fid => auth['uid'], :name => auth['info']['name'])
 
     session[:user_id] = user.id
-    # session[:fid]     = user.fid
+    # session[:fid]     = user.id
     # todo remove
     session[:image]   = auth['info']['image']
 

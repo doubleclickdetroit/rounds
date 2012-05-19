@@ -39,7 +39,7 @@ describe RoundLocksController do
       lock = RoundLock.last
 
       lock.round_id.should == @round.id
-      lock.fid.should      == @user.fid
+      lock.fid.should      == @user.id
     end
   end
 

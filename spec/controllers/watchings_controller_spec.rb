@@ -7,7 +7,7 @@ describe WatchingsController do
 
   it 'should authenticate the user'
 
-  pending 'needs to use current_user.fid'
+  pending 'needs to use current_user.id'
 
   describe 'POST create' do
     it 'should throw a 406 if there is no round_id' do
@@ -25,7 +25,7 @@ describe WatchingsController do
 
       w = Watching.last
       w.round_id.should == @round.id
-      w.fid.should      == @user.fid
+      w.fid.should      == @user.id
     end
   end
 

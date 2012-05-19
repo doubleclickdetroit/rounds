@@ -11,7 +11,7 @@ class SlidesController < ApplicationController
     if round_id = params[:round_id]
       @slides = Round.find(round_id).slides
     else
-      @slides = Slide.where(:fid => current_user.fid)
+      @slides = Slide.where(:fid => current_user.id)
       if time = params[:time]
         time = Time.parse params[:time]
         @slides = @slides.before(time).recent
@@ -28,7 +28,7 @@ class SlidesController < ApplicationController
   end
 
   def create
-    params[:slide][:fid] = current_user.fid
+    params[:slide][:fid] = current_user.id
     respond_with Slide.create_next(params[:slide]).to_json
   end
 
@@ -80,6 +80,6 @@ private
   end
 
   def force_current_fid
-    params[:slide][:fid] = current_user.fid
+    params[:slide][:fid] = current_user.id
   end
 end

@@ -45,6 +45,6 @@ private
   end
 
   def force_current_fid
-    @invitation[:fid] = current_user.fid
+    @invitation[:fid] = current_user.id
   end
 end

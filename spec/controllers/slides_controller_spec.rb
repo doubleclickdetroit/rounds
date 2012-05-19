@@ -25,14 +25,14 @@ describe SlidesController do
     context 'without round_id' do
       context 'and without time arg' do
         it 'should show recent Slides' do
-          3.times { @slide = FactoryGirl.create(:slide, :fid => @user.fid) }
+          3.times { @slide = FactoryGirl.create(:slide, :fid => @user.id) }
           4.times { @slide = FactoryGirl.create(:slide) }
 
           get :index, {}, valid_session
           assigns(:slides).count.should == 3
 
           # brings total by user to 9
-          6.times { @slide = FactoryGirl.create(:slide, :fid => @user.fid) }
+          6.times { @slide = FactoryGirl.create(:slide, :fid => @user.id) }
 
           get :index, {}, valid_session
           assigns(:slides).count.should == 8
@@ -42,16 +42,16 @@ describe SlidesController do
       context 'with time arg' do
         it 'should show Rounds created by the current_user' do
           earlier_time = Time.now
-          3.times { @slide = FactoryGirl.create(:slide, :fid => @user.fid, :created_at => earlier_time) }
+          3.times { @slide = FactoryGirl.create(:slide, :fid => @user.id, :created_at => earlier_time) }
           time = earlier_time + 3
-          4.times { @slide = FactoryGirl.create(:slide, :fid => @user.fid, :created_at => time) }
+          4.times { @slide = FactoryGirl.create(:slide, :fid => @user.id, :created_at => time) }
 
           # get slides before time
           get :index, {:time => time}, valid_session
           assigns(:slides).count.should == 3
 
           # brings total to 9
-          6.times { @slide = FactoryGirl.create(:slide, :fid => @user.fid, :created_at => earlier_time) }
+          6.times { @slide = FactoryGirl.create(:slide, :fid => @user.id, :created_at => earlier_time) }
 
           get :index, {:time => time}, valid_session
           assigns(:slides).count.should == 8
@@ -135,7 +135,7 @@ describe SlidesController do
     describe 'with RoundLock' do
       it 'should create a new Sentence' do
         @round = FactoryGirl.create(:round)
-        @lock  = FactoryGirl.create(:round_lock, :round_id => @round.id, :fid => @user.fid)
+        @lock  = FactoryGirl.create(:round_lock, :round_id => @round.id, :fid => @user.id)
         FactoryGirl.create(:picture, :round_id => @round.id)
         FactoryGirl.create(:round_lock, :round_id => @round.id)
         slide  = Factory.build(:sentence).attributes
@@ -148,7 +148,7 @@ describe SlidesController do
 
       it 'should create a new Picture' do
         @round = FactoryGirl.create(:round)
-        @lock  = FactoryGirl.create(:round_lock, :round_id => @round.id, :fid => @user.fid)
+        @lock  = FactoryGirl.create(:round_lock, :round_id => @round.id, :fid => @user.id)
         FactoryGirl.create(:sentence, :round_id => @round.id)
         FactoryGirl.create(:round_lock, :round_id => @round.id)
         slide  = Factory.build(:picture).attributes
@@ -161,7 +161,7 @@ describe SlidesController do
 
       it 'should create a new Slide with current_user as creator' do
         @round = FactoryGirl.create(:round)
-        @lock  = FactoryGirl.create(:round_lock, :round_id => @round.id, :fid => @user.fid)
+        @lock  = FactoryGirl.create(:round_lock, :round_id => @round.id, :fid => @user.id)
         FactoryGirl.create(:picture, :round_id => @round.id)
         FactoryGirl.create(:round_lock, :round_id => @round.id)
         slide  = Factory.build(:sentence).attributes
