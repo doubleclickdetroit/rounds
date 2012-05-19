@@ -4,7 +4,7 @@ FactoryGirl.define do
   factory :slide do
     # todo this is awful
     round { @round ? @round : FactoryGirl.build(:round) }
-    user_id '1'
+    sequence(:user_id) {|n| n}
     position nil
 
     factory :sentence, :class => ::Sentence do

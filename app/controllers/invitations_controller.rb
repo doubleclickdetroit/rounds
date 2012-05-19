@@ -13,6 +13,7 @@ class InvitationsController < ApplicationController
   end
 
   def create
+    raise @invitation.to_yaml
     respond_with Invitation.create(@invitation).to_json
   end
 
