@@ -11,16 +11,16 @@ def random_text
 end
 
 def make_sentence
-  # puts "Creating Sentence for Round #{@round.id}"
-  user_id = random_user().user_id
+  puts "Creating Sentence for Round #{@round.id}"
+  user_id = random_user().id
   params = { :round_id => @round.to_param, :user_id => user_id }
   FactoryGirl.create(:sentence, params) 
 end
 
 def make_picture
-  # puts "Creating Picture for Round #{@round.id}"
-  user_id = random_user().user_id
-  pic = FactoryGirl.build(:picture, :with_file) 
+  puts "Creating Picture for Round #{@round.id}"
+  user_id = random_user().id
+  pic = FactoryGirl.create(:picture, :with_file) 
   pic.round_id = @round.to_param
   pic.user_id = user_id
   pic.save
@@ -28,13 +28,13 @@ end
 
 def add_arbitrary_comments_to(slide)
   (rand(5)+1).times do
-    slide.comments << FactoryGirl.create(:comment, {:user_id => random_user().user_id, :text => random_text()})
+    slide.comments << FactoryGirl.create(:comment, {:user_id => random_user().id, :text => random_text()})
   end
 end
 
 def add_arbitrary_ballots_to(slide)
   rand(4).times do
-    slide.ballots << FactoryGirl.create(:ballot, {:user_id => FactoryGirl.create(:user).user_id, :vote => (rand(5)+1)})
+    slide.ballots << FactoryGirl.create(:ballot, {:user_id => FactoryGirl.create(:user).id, :vote => (rand(5)+1)})
   end
 end
 
@@ -51,9 +51,9 @@ puts '  ** Users'
 
 @users = []
 
-@ammar = FactoryGirl.create(:user, :name => 'Ammar Ulmakzumi', :user_id => '1')
-@ben   = FactoryGirl.create(:user, :name => 'Ben Babics',      :user_id => '2')
-@brad  = FactoryGirl.create(:user, :name => 'Brad Chase',      :user_id => '3')
+@ammar = FactoryGirl.create(:user, :name => 'Ammar Ulmakzumi')
+@ben   = FactoryGirl.create(:user, :name => 'Ben Babics')
+@brad  = FactoryGirl.create(:user, :name => 'Brad Chase')
 
 @users << @ammar
 @users << @ben
@@ -70,7 +70,7 @@ puts '  ** Round'
 @rounds = []
 
 20.times do 
-  round = FactoryGirl.create(:round, :user_id => random_user().user_id)
+  round = FactoryGirl.create(:round, :user_id => random_user().id)
   @rounds << round
 end
 
@@ -89,6 +89,8 @@ puts '    ** Slides'
     i.odd? ? make_sentence : make_picture 
   end
   @round.save
+  puts "Round##{@round.id}:"
+  @round.slides.each {|s| puts "  #{s.type}"}
 end
 
 

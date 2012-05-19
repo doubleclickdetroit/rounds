@@ -2,8 +2,6 @@ include ActionDispatch::TestProcess
 
 FactoryGirl.define do
   factory :slide do
-    # todo this is awful
-    round { @round ? @round : FactoryGirl.build(:round) }
     sequence(:user_id) {|n| n}
     position nil
 

@@ -32,6 +32,7 @@ describe Round do
   end
 
   it 'should return Slides in order' do
+    pending 'not sure this is even needed, but it can probably be done better'
     # the first shall be last...
     puts @round.slides.inspect
     @round.slides << FactoryGirl.create(:sentence)

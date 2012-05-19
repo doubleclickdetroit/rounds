@@ -1,6 +1,5 @@
 require Rails.root.join('lib/modules/common.rb')
 
-
 class Slide < ActiveRecord::Base
   include Common::Scopes::FriendsAndRecent
   include Common::Associations::HasCreator
