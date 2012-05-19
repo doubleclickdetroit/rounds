@@ -25,7 +25,7 @@ describe InvitationsController do
     end
   end
 
-  describe 'POST create', :focus do
+  describe 'POST create' do
     describe 'with incorrect params' do
       it 'should throw a 406 if there is no round_id' do
         post :create, {}, valid_session 
