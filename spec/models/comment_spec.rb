@@ -48,9 +48,9 @@ describe Comment do
       8.times { FactoryGirl.create(:comment) }
       friend1 = FactoryGirl.create(:user)
       friend2 = FactoryGirl.create(:user)
-      FactoryGirl.create(:comment, :user_id => friend1.user_id)
-      FactoryGirl.create(:comment, :user_id => friend2.user_id)
-      @user_ids = [friend1.user_id, friend2.user_id]
+      FactoryGirl.create(:comment, :user_id => friend1.id)
+      FactoryGirl.create(:comment, :user_id => friend2.id)
+      @user_ids = [friend1.id, friend2.id]
     end
 
     it 'should only return Comments made by friends' do
@@ -61,8 +61,8 @@ describe Comment do
   describe '.friends_recent' do
     before(:each) do
       friend = FactoryGirl.create(:user)
-      9.times { FactoryGirl.create(:comment, :user_id => friend.user_id) }
-      @user_ids = [friend.user_id]
+      9.times { FactoryGirl.create(:comment, :user_id => friend.id) }
+      @user_ids = [friend.id]
     end
 
     it 'should only return 8 Comments at most' do

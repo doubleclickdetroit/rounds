@@ -27,7 +27,7 @@ module Common
 
             cond_str = user_id_arr.inject('') do |str,user_id|
               str << " OR " unless str.empty?
-              str << "id = #{user_id}"
+              str << "user_id = #{user_id}"
             end
 
             where(cond_str)

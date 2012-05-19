@@ -5,5 +5,5 @@ class Comment < ActiveRecord::Base
   include Common::Associations::HasCreator
 
   belongs_to :slide
-
+  belongs_to :user
 end
