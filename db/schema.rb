@@ -86,7 +86,6 @@ ActiveRecord::Schema.define(:version => 20120512073440) do
     t.integer  "file_file_size"
     t.datetime "file_updated_at"
     t.string   "type"
-    t.integer  "position"
     t.integer  "votes",             :default => 0
   end
 
