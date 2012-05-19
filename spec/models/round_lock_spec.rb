@@ -8,6 +8,16 @@ describe RoundLock do
     @num_of_watchings.times { @lock.watchings << FactoryGirl.create(:watching, :round_id => @lock.round_id) }
   end
 
+  describe '.creator' do
+    it 'should return a User' do
+      user = Factory(:user)
+      @lock.user = user
+      @lock.save
+      @lock.reload.creator.should == user
+      @lock.creator.id.should == user.id
+    end
+  end
+
   describe 'before_destroy callbacks' do
     it 'should destroy all watchings' do
       @lock.watchings.count.should == @num_of_watchings

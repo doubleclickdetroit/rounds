@@ -40,17 +40,16 @@ describe Slide do
 
   describe '.create_next' do
     before(:each) do
+      @user  = FactoryGirl.create(:user)
       @round = FactoryGirl.create(:round)
-      user_id = 1
-      FactoryGirl.create(:user, :id => user_id)
-      @lock  = FactoryGirl.create(:round_lock, :round_id => @round.id, :user_id => user_id)
+      @lock  = FactoryGirl.create(:round_lock, :round_id => @round.id, :user_id => @user.id)
     end
 
     context 'sentence' do
       before(:each) do
         FactoryGirl.create(:picture, :round_id => @round.id)
-        @sentence = Factory.build(:sentence, :round_id => @round.id).attributes
-        @picture  = Factory.build(:picture, :round_id => @round.id).attributes
+        @sentence = Factory.build(:sentence, :round_id => @round.id, :user_id => @user.id).attributes
+        @picture  = Factory.build(:picture, :round_id => @round.id, :user_id => @user.id).attributes
       end
 
       it 'should allow a Sentence added after a Picture' do
@@ -59,7 +58,7 @@ describe Slide do
         }.to change(Sentence, :count).by(1)
       end
 
-      it 'should raise for a Sentence after a Sentence' do
+      it 'should raise for a Picture after a Picture' do
         expect {
           Slide.create_next(@picture)
         }.to raise_error('Cannot create a picture after a picture')
@@ -69,8 +68,8 @@ describe Slide do
     context 'picture' do
       before(:each) do
         FactoryGirl.create(:sentence, :round_id => @round.id)
-        @picture  = Factory.build(:picture, :round_id => @round.id).attributes
-        @sentence = Factory.build(:sentence, :round_id => @round.id).attributes
+        @picture  = Factory.build(:picture, :round_id => @round.id, :user_id => @user.id).attributes
+        @sentence = Factory.build(:sentence, :round_id => @round.id, :user_id => @user.id).attributes
       end
 
       it 'should allow a Picture added after a Sentence' do
@@ -79,7 +78,7 @@ describe Slide do
         }.to change(Picture, :count).by(1)
       end
 
-      it 'should raise for a Picture after a Picture' do
+      it 'should raise for a Sentence after a Sentence' do
         expect {
           Slide.create_next(@sentence)
         }.to raise_error('Cannot create a sentence after a sentence')
@@ -123,7 +122,7 @@ describe Slide do
 
     it 'should destroy the lock upon successful slide creation' do
       FactoryGirl.create(:sentence, :round_id => @round.id)
-      slide = Factory.build(:picture, :round_id => @round.id).attributes
+      slide = Factory.build(:picture, :round_id => @round.id, :user_id => @user.id).attributes
 
       RoundLock.count.should == 1
       expect {
