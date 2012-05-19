@@ -13,7 +13,7 @@ module Common
         module_name = self.to_s
         base.class_eval do
           # todo breaking heroku...
-          # raise "#{self.to_s} must have an attribute 'user_id' to include #{module_name}" unless self.new.respond_to?(:user_id)
+          # raise "#{self.to_s} must have an attribute 'id' to include #{module_name}" unless self.new.respond_to?(:id)
 
           # todo not really FriendsAndRecent...
           scope :of_type, lambda {|type| where :type => type}
@@ -27,7 +27,7 @@ module Common
 
             cond_str = user_id_arr.inject('') do |str,user_id|
               str << " OR " unless str.empty?
-              str << "user_id = #{user_id}"
+              str << "id = #{user_id}"
             end
 
             where(cond_str)
@@ -44,10 +44,19 @@ module Common
         module_name = self.to_s
         base.class_eval do
           # todo breaking heroku...
-          # raise "#{self.to_s} must have an attribute 'user_id' to include #{module_name}" unless self.new.respond_to?(:user_id)
+          # raise "#{self.to_s} must have an attribute 'id' to include #{module_name}" unless self.new.respond_to?(:id)
 
-          belongs_to :created_by, :class_name => 'User', :foreign_key => :user_id, :primary_key => :user_id
+          belongs_to :user
         end
+      end
+
+      # todo by alias
+      def created_by
+        user
+      end
+
+      def created_by=(user)
+        self.user = user
       end
 
       # todo by alias

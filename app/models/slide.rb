@@ -1,5 +1,6 @@
 require Rails.root.join('lib/modules/common.rb')
 
+
 class Slide < ActiveRecord::Base
   include Common::Scopes::FriendsAndRecent
   include Common::Associations::HasCreator
@@ -40,7 +41,7 @@ class Slide < ActiveRecord::Base
     lock = slide.round.try(:round_lock)
     raise "Cannot create slide without round lock" unless lock.is_a? RoundLock
 
-    lock_belongs_to_user = lock.creator.user_id == slide.user_id 
+    lock_belongs_to_user = lock.creator.id == slide.user_id 
     raise "User does not have the round locked" unless lock_belongs_to_user
 
     last_type  = slide.round.slides.last.type
