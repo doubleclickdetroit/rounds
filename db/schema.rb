@@ -15,7 +15,7 @@ ActiveRecord::Schema.define(:version => 20120512073440) do
 
   create_table "ballots", :force => true do |t|
     t.integer  "slide_id"
-    t.string   "user_id"
+    t.integer  "user_id"
     t.integer  "vote"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
@@ -25,8 +25,8 @@ ActiveRecord::Schema.define(:version => 20120512073440) do
   add_index "ballots", ["user_id"], :name => "index_ballots_on_user_id"
 
   create_table "blacklist_entries", :id => false, :force => true do |t|
-    t.string   "user_id"
-    t.string   "blocked_user_id"
+    t.integer  "user_id"
+    t.integer  "blocked_user_id"
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
   end
@@ -34,7 +34,7 @@ ActiveRecord::Schema.define(:version => 20120512073440) do
   add_index "blacklist_entries", ["user_id"], :name => "index_blacklist_entries_on_user_id"
 
   create_table "comments", :force => true do |t|
-    t.string   "user_id"
+    t.integer  "user_id"
     t.integer  "slide_id"
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
@@ -46,8 +46,8 @@ ActiveRecord::Schema.define(:version => 20120512073440) do
   add_index "comments", ["user_id"], :name => "index_comments_on_user_id"
 
   create_table "invitations", :force => true do |t|
-    t.string   "user_id"
-    t.string   "invited_user_id"
+    t.integer  "user_id"
+    t.integer  "invited_user_id"
     t.integer  "round_id"
     t.boolean  "accepted",        :default => false
     t.datetime "created_at",                         :null => false
@@ -60,7 +60,7 @@ ActiveRecord::Schema.define(:version => 20120512073440) do
 
   create_table "round_locks", :force => true do |t|
     t.integer  "round_id"
-    t.string   "user_id"
+    t.integer  "user_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
@@ -68,7 +68,7 @@ ActiveRecord::Schema.define(:version => 20120512073440) do
   add_index "round_locks", ["round_id"], :name => "index_round_locks_on_round_id"
 
   create_table "rounds", :force => true do |t|
-    t.string   "user_id"
+    t.integer  "user_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
@@ -76,7 +76,7 @@ ActiveRecord::Schema.define(:version => 20120512073440) do
   add_index "rounds", ["user_id"], :name => "index_rounds_on_user_id"
 
   create_table "slides", :force => true do |t|
-    t.string   "user_id"
+    t.integer  "user_id"
     t.integer  "round_id"
     t.datetime "created_at",                       :null => false
     t.datetime "updated_at",                       :null => false
@@ -95,14 +95,13 @@ ActiveRecord::Schema.define(:version => 20120512073440) do
 
   create_table "users", :force => true do |t|
     t.string   "name"
-    t.string   "user_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
 
   create_table "watchings", :force => true do |t|
     t.integer  "round_id"
-    t.string   "user_id"
+    t.integer  "user_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
