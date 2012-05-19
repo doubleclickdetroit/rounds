@@ -4,7 +4,7 @@ class Round < ActiveRecord::Base
   include Common::Scopes::FriendsAndRecent
   include Common::Associations::HasCreator
 
-  has_many :slides
+  has_many :slides, :order => 'created_at DESC'
   has_many :watchings
   has_many :invitations
   has_one  :round_lock
