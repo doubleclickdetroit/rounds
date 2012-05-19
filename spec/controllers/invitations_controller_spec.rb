@@ -45,11 +45,11 @@ describe InvitationsController do
       invited = FactoryGirl.create(:user)
 
       expect {
-        post :create, { :round_id => round.to_param, :invited_user_id => invited.user_id }, valid_session 
+        post :create, { :round_id => round.to_param, :invited_user_id => invited.id }, valid_session 
       }.to change(Invitation, :count).by(1)
 
       Invitation.last.creator.should     == @user
-      Invitation.last.invited_user_id.should == invited.user_id
+      Invitation.last.invited_user_id.should == invited.id
       Invitation.last.round.should       == round
     end
   end
