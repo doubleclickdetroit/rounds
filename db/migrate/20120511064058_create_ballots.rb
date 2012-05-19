@@ -2,7 +2,7 @@ class CreateBallots < ActiveRecord::Migration
   def change
     create_table :ballots do |t|
       t.references :slide
-      t.string :user_id
+      t.integer :user_id
       t.integer :vote
 
       t.timestamps

@@ -2,7 +2,7 @@ class CreateWatchings < ActiveRecord::Migration
   def change
     create_table :watchings do |t|
       t.integer :round_id
-      t.string :user_id
+      t.integer :user_id
 
       t.timestamps
     end

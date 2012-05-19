@@ -1,7 +1,7 @@
 class CreateSlides < ActiveRecord::Migration
   def change
     create_table :slides do |t|
-      t.string :user_id
+      t.integer :user_id
       t.references :round
 
       t.timestamps
