@@ -4,7 +4,7 @@ class BallotsController < ApplicationController
   respond_to :json
 
   def create
-    respond_with Ballot.create(:vote => params[:vote], :slide_id => @slide_id, :fid => current_user.id).to_json
+    respond_with Ballot.create(:vote => params[:vote], :slide_id => @slide_id, :user_id => current_user.id).to_json
   end
 
 private

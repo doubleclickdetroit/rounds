@@ -4,7 +4,7 @@ describe BlacklistEntry do
   before(:each) do
     @user         = FactoryGirl.create(:user)
     @blocked_user = FactoryGirl.create(:user)
-    @blentry      = FactoryGirl.create(:blacklist_entry, :fid => @user.id, :blocked_fid => @blocked_user.id)
+    @blentry      = FactoryGirl.create(:blacklist_entry, :user_id => @user.id, :blocked_user_id => @blocked_user.id)
   end
 
   # todo this is likely unnecessary...

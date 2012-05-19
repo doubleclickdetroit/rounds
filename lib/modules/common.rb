@@ -2,8 +2,8 @@ module Common
   module Scopes
     module FriendsAndRecent
       module ClassMethods
-        def friends_recent(fid_arr)
-          friends(fid_arr).recent
+        def friends_recent(user_id_arr)
+          friends(user_id_arr).recent
         end
       end
 
@@ -13,7 +13,7 @@ module Common
         module_name = self.to_s
         base.class_eval do
           # todo breaking heroku...
-          # raise "#{self.to_s} must have an attribute 'fid' to include #{module_name}" unless self.new.respond_to?(:fid)
+          # raise "#{self.to_s} must have an attribute 'user_id' to include #{module_name}" unless self.new.respond_to?(:user_id)
 
           # todo not really FriendsAndRecent...
           scope :of_type, lambda {|type| where :type => type}
@@ -22,12 +22,12 @@ module Common
 
           scope :recent, :order => 'created_at desc', :limit => 8
 
-          scope :friends, lambda {|fid_arr|
-            return where('1 = 0') if fid_arr.empty?
+          scope :friends, lambda {|user_id_arr|
+            return where('1 = 0') if user_id_arr.empty?
 
-            cond_str = fid_arr.inject('') do |str,fid|
+            cond_str = user_id_arr.inject('') do |str,user_id|
               str << " OR " unless str.empty?
-              str << "fid = #{fid}"
+              str << "user_id = #{user_id}"
             end
 
             where(cond_str)
@@ -44,9 +44,9 @@ module Common
         module_name = self.to_s
         base.class_eval do
           # todo breaking heroku...
-          # raise "#{self.to_s} must have an attribute 'fid' to include #{module_name}" unless self.new.respond_to?(:fid)
+          # raise "#{self.to_s} must have an attribute 'user_id' to include #{module_name}" unless self.new.respond_to?(:user_id)
 
-          belongs_to :created_by, :class_name => 'User', :foreign_key => :fid, :primary_key => :fid
+          belongs_to :created_by, :class_name => 'User', :foreign_key => :user_id, :primary_key => :user_id
         end
       end
 

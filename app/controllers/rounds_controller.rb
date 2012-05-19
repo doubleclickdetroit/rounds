@@ -4,7 +4,7 @@ class RoundsController < ApplicationController
   # todo refactor
   def index
     time    = params[:time] ? Time.parse(params[:time]) : nil
-    @rounds = Round.where(:fid => current_user.id)
+    @rounds = Round.where(:user_id => current_user.id)
     @rounds = time ? @rounds.before(time).recent : @rounds.recent
     respond_with @rounds.to_json
   end
@@ -15,8 +15,8 @@ class RoundsController < ApplicationController
 
   # todo refactor
   def create
-    @round = Round.create(:fid => current_user.id)
-    @round.round_lock = RoundLock.create(:fid => current_user.id)
+    @round = Round.create(:user_id => current_user.id)
+    @round.round_lock = RoundLock.create(:user_id => current_user.id)
     respond_with @round.to_json
   end
 

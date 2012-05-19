@@ -4,7 +4,7 @@ class WatchingsController < ApplicationController
   respond_to :json
 
   def create
-    respond_with Watching.create(:round_id => @round_id, :fid => current_user.id).to_json
+    respond_with Watching.create(:round_id => @round_id, :user_id => current_user.id).to_json
   end
 
   # def destroy

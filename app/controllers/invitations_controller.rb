@@ -1,8 +1,8 @@
 class InvitationsController < ApplicationController
   before_filter :setup_invitation, :only => [:index,:create]
   before_filter :check_for_round_id, :only => [:index,:create]
-  before_filter :check_for_invited_fid, :only => :create
-  before_filter :force_current_fid, :only => :create
+  before_filter :check_for_invited_user_id, :only => :create
+  before_filter :force_current_user_id, :only => :create
   
   respond_to :json
 
@@ -35,16 +35,16 @@ private
     end
   end
 
-  def check_for_invited_fid
+  def check_for_invited_user_id
     # todo ?
-    if not @invited_fid = params[:invited_fid]
+    if not @invited_user_id = params[:invited_user_id]
       respond_with :bad_request
     else
-      @invitation[:invited_fid] ||= @invited_fid
+      @invitation[:invited_user_id] ||= @invited_user_id
     end
   end
 
-  def force_current_fid
-    @invitation[:fid] = current_user.id
+  def force_current_user_id
+    @invitation[:user_id] = current_user.id
   end
 end

@@ -35,7 +35,7 @@ describe Ballot do
   describe 'validation' do
     let(:slide) { FactoryGirl.create(:slide) }
 
-    [:vote, :fid].each do |att|
+    [:vote, :user_id].each do |att|
       it "should validate the presence of #{att}" do
         expect {
           FactoryGirl.create(:ballot, att => nil)
@@ -59,12 +59,12 @@ describe Ballot do
       end
     end
 
-    it 'should not allow a second Ballot to be created by the same fid' do
-      fid = 1
-      FactoryGirl.create(:ballot, :fid => fid)
+    it 'should not allow a second Ballot to be created by the same user_id' do
+      user_id = 1
+      FactoryGirl.create(:ballot, :user_id => user_id)
 
       expect {
-        FactoryGirl.create(:ballot, :fid => fid)
+        FactoryGirl.create(:ballot, :user_id => user_id)
       }.to raise_error(ActiveRecord::RecordInvalid)
     end
   end

@@ -2,7 +2,7 @@ class Watching < ActiveRecord::Base
   belongs_to :round_lock, :class_name => 'RoundLock', :primary_key => :round_id, :foreign_key => :round_id
 
   # todo
-  # validates_presence_of :slide_id, :fid
+  # validates_presence_of :slide_id, :user_id
 
   before_destroy :send_push_notification
 

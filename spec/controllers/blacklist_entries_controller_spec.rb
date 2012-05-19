@@ -15,7 +15,7 @@ describe BlacklistEntriesController do
 
     it "should create a BlacklistEntry" do
       expect {
-        post 'create', {:user_fid => 1, :blocked_fid => 2}, valid_session 
+        post 'create', {:user_user_id => 1, :blocked_user_id => 2}, valid_session 
       }.to change(BlacklistEntry, :count).by(1)
     end
   end
@@ -28,9 +28,9 @@ describe BlacklistEntriesController do
 
     it "should destroy a BlacklistEntry" do
       pending 'stupid SQL error'
-      FactoryGirl.create(:blacklist_entry, :user_fid => 1, :blocked_fid => 2)
+      FactoryGirl.create(:blacklist_entry, :user_user_id => 1, :blocked_user_id => 2)
       expect {
-        delete :destroy, {:user_fid => 1, :blocked_fid => 2}, valid_session 
+        delete :destroy, {:user_user_id => 1, :blocked_user_id => 2}, valid_session 
       }.to change(BlacklistEntry, :count).by(-1)
     end
   end

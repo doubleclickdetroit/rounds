@@ -41,9 +41,9 @@ describe Slide do
   describe '.create_next' do
     before(:each) do
       @round = FactoryGirl.create(:round)
-      fid = 1
-      FactoryGirl.create(:user, :fid => fid)
-      @lock  = FactoryGirl.create(:round_lock, :round_id => @round.id, :fid => fid)
+      user_id = 1
+      FactoryGirl.create(:user, :user_id => user_id)
+      @lock  = FactoryGirl.create(:round_lock, :round_id => @round.id, :user_id => user_id)
     end
 
     context 'sentence' do
@@ -106,9 +106,9 @@ describe Slide do
     end
 
     it 'should raise if the RoundLock doesnt belong to the User' do
-      fid = 525
-      FactoryGirl.create(:user, :fid => fid)
-      @lock.fid = fid
+      user_id = 525
+      FactoryGirl.create(:user, :user_id => user_id)
+      @lock.user_id = user_id
       @lock.save
 
       FactoryGirl.create(:sentence, :round_id => @round.id)
@@ -219,25 +219,25 @@ describe Slide do
       8.times { FactoryGirl.create(:slide) }
       friend1 = FactoryGirl.create(:user)
       friend2 = FactoryGirl.create(:user)
-      FactoryGirl.create(:slide, :fid => friend1.fid)
-      FactoryGirl.create(:slide, :fid => friend2.fid)
-      @fids = [friend1.fid, friend2.fid]
+      FactoryGirl.create(:slide, :user_id => friend1.user_id)
+      FactoryGirl.create(:slide, :user_id => friend2.user_id)
+      @user_ids = [friend1.user_id, friend2.user_id]
     end
 
     it 'should only return Slides made by friends' do
-      Slide.friends(@fids).count.should == 2
+      Slide.friends(@user_ids).count.should == 2
     end
   end
 
   describe '.friends_recent' do
     before(:each) do
       friend = FactoryGirl.create(:user)
-      9.times { FactoryGirl.create(:slide, :fid => friend.fid) }
-      @fids = [friend.fid]
+      9.times { FactoryGirl.create(:slide, :user_id => friend.user_id) }
+      @user_ids = [friend.user_id]
     end
 
     it 'should only return 8 Slides at most' do
-      Slide.friends_recent(@fids).count.should == 8
+      Slide.friends_recent(@user_ids).count.should == 8
     end
   end
 
@@ -245,8 +245,8 @@ describe Slide do
     before(:each) do
       @user  = FactoryGirl.create(:user)
       friend = FactoryGirl.create(:user)
-      9.times { FactoryGirl.create(:slide, :fid => friend.fid) }
-      @user.stub(:friends_fids).and_return([friend.fid])
+      9.times { FactoryGirl.create(:slide, :user_id => friend.user_id) }
+      @user.stub(:friends_user_ids).and_return([friend.user_id])
     end
 
     it 'should only return 8 Slides at most' do

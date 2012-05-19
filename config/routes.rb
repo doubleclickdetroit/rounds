@@ -8,12 +8,12 @@ Draw::Application.routes.draw do
 
     # resources :blacklist_entries, :only => [:create,:destroy]
     scope 'users' do
-      match '/block/:fid'   => "blacklist_entries#create"
-      match '/unblock/:fid' => "blacklist_entries#destroy"
+      match '/block/:user_id'   => "blacklist_entries#create"
+      match '/unblock/:user_id' => "blacklist_entries#destroy"
     end
     # scope 'users' do
-    #   match "/:fid/activity"         => "feeds#activity"
-    #   match "/:fid/friends_activity" => "feeds#friends_activity"
+    #   match "/:user_id/activity"         => "feeds#activity"
+    #   match "/:user_id/friends_activity" => "feeds#friends_activity"
     #   match "/community"                => "feeds#community"
     #   match "/whats_hot"             => "feeds#whats_hot"
     # end
@@ -25,7 +25,7 @@ Draw::Application.routes.draw do
 
       resources :slides, :except => [:new,:edit]
 
-      match     'invitations/:invited_fid' => 'invitations#create', :via => :post
+      match     'invitations/:invited_user_id' => 'invitations#create', :via => :post
       resources :invitations, :only => [:index,:destroy]
 
       resource  :round_lock, :only => [:show,:create,:destroy] do

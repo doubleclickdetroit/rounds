@@ -32,7 +32,7 @@ describe InvitationsController do
         response.status.should == 406
       end
 
-      it 'should throw a 406 if there is no invited_fid' do
+      it 'should throw a 406 if there is no invited_user_id' do
         post :create, { :round_id => FactoryGirl.create(:round).to_param }, valid_session 
         response.status.should == 406
       end
@@ -45,11 +45,11 @@ describe InvitationsController do
       invited = FactoryGirl.create(:user)
 
       expect {
-        post :create, { :round_id => round.to_param, :invited_fid => invited.fid }, valid_session 
+        post :create, { :round_id => round.to_param, :invited_user_id => invited.user_id }, valid_session 
       }.to change(Invitation, :count).by(1)
 
       Invitation.last.creator.should     == @user
-      Invitation.last.invited_fid.should == invited.fid
+      Invitation.last.invited_user_id.should == invited.user_id
       Invitation.last.round.should       == round
     end
   end

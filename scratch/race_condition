@@ -27,7 +27,7 @@ suggested solutions:
 
       there will have to be a series of push notifications for the unhappy path to both the bidding and blocking user
 
-      SlideBid bidding_fid:integer owner_fid:integer round_id:integer preceding_slide_id:integer owner_responded:boolean created_at:datetime
+      SlideBid bidding_user_id:integer owner_user_id:integer round_id:integer preceding_slide_id:integer owner_responded:boolean created_at:datetime
 
 
     2 - implement rounds as a singly linked list

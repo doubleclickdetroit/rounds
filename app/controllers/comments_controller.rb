@@ -8,7 +8,7 @@ class CommentsController < ApplicationController
     if slide_id = params[:slide_id]
       @comments = Slide.find(slide_id).comments
     else
-      @comments = Comment.where(:fid => current_user.id)
+      @comments = Comment.where(:user_id => current_user.id)
       if time = params[:time]
         time = Time.parse params[:time]
         @comments = @comments.before(time).recent
@@ -20,7 +20,7 @@ class CommentsController < ApplicationController
   end
 
   def create
-    params[:comment][:fid] = current_user.id
+    params[:comment][:user_id] = current_user.id
     respond_with Comment.create(params[:comment]).to_json
   end
 

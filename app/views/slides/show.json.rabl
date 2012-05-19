@@ -1,6 +1,6 @@
 object @slide
 
-attributes :type, :id, :round_id, :position, :fid, :votes
+attributes :type, :id, :round_id, :position, :user_id, :votes
 
 node(:content) {|slide| slide.content }
 node(:comment_count) {|slide| slide.comment_count }

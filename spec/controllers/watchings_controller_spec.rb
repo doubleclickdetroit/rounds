@@ -25,7 +25,7 @@ describe WatchingsController do
 
       w = Watching.last
       w.round_id.should == @round.id
-      w.fid.should      == @user.id
+      w.user_id.should      == @user.id
     end
   end
 

@@ -93,25 +93,25 @@ describe Round do
       8.times { FactoryGirl.create(:round) }
       friend1 = FactoryGirl.create(:user)
       friend2 = FactoryGirl.create(:user)
-      FactoryGirl.create(:round, :fid => friend1.fid)
-      FactoryGirl.create(:round, :fid => friend2.fid)
-      @fids = [friend1.fid, friend2.fid]
+      FactoryGirl.create(:round, :user_id => friend1.user_id)
+      FactoryGirl.create(:round, :user_id => friend2.user_id)
+      @user_ids = [friend1.user_id, friend2.user_id]
     end
 
     it 'should only return Rounds made by friends' do
-      Round.friends(@fids).count.should == 2
+      Round.friends(@user_ids).count.should == 2
     end
   end
 
   describe '.friends_recent' do
     before(:each) do
       friend = FactoryGirl.create(:user)
-      9.times { FactoryGirl.create(:round, :fid => friend.fid) }
-      @fids = [friend.fid]
+      9.times { FactoryGirl.create(:round, :user_id => friend.user_id) }
+      @user_ids = [friend.user_id]
     end
 
     it 'should only return 8 Rounds at most' do
-      Round.friends_recent(@fids).count.should == 8
+      Round.friends_recent(@user_ids).count.should == 8
     end
   end
 

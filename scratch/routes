@@ -13,7 +13,7 @@ Adding a Slide to a Round (first requires RoundLock)
 Watching a Round that is locked
   GET  /api/rounds/1/round_lock # check for lock
   POST /api/rounds/1/round_lock/watching
-    Watching.create(:round_lock => 1, :fid => 123)
+    Watching.create(:round_lock => 1, :user_id => 123)
 
 
   ***** WHERE DO COMPLETED ROUND FEEDS GO? *****
@@ -55,7 +55,7 @@ IMPLEMENTED
       # D DELETE  /api/rounds/:round_id/round_lock/watching
     
     Invitations
-      C POST    /api/rounds/:round_id/invitations/:invited_fid
+      C POST    /api/rounds/:round_id/invitations/:invited_user_id
     # R GET     /api/rounds/:round_id/invitations/
     # U PUT     /api/rounds/:round_id/invitations/
       D DELETE  /api/rounds/:round_id/invitations/:id
@@ -96,9 +96,9 @@ IMPLEMENTED
       Ballots, :vote must be an integer between 1 and 5
         C POST    /api/slides/:slide_id/votes/:vote
 
-  BlacklistEntries, :fid is being blocked by current_user
-    C POST    /api/users/block/:fid
-    D DELETE  /api/users/unblock/:fid
+  BlacklistEntries, :user_id is being blocked by current_user
+    C POST    /api/users/block/:user_id
+    D DELETE  /api/users/unblock/:user_id
 
   Users ...
 

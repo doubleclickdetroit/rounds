@@ -9,7 +9,7 @@ describe InvitationsController do
     end
 
     it "routes to #create" do
-      post("/api/rounds/1/invitations/2").should route_to("invitations#create", :round_id => "1", :invited_fid => "2")
+      post("/api/rounds/1/invitations/2").should route_to("invitations#create", :round_id => "1", :invited_user_id => "2")
     end
 
     it "routes to #destroy" do

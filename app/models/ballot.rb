@@ -5,8 +5,8 @@ class Ballot < ActiveRecord::Base
   belongs_to :slide
 
   validates :vote, :inclusion => { :in => 1..5, :message => '%{value} is not a valid vote'}
-  validates_presence_of :fid
-  validates :fid, :presence => true, :uniqueness => true
+  validates_presence_of :user_id
+  validates :user_id, :presence => true, :uniqueness => true
 
   after_create :increment_slide_votes
 

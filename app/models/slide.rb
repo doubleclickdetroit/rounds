@@ -5,7 +5,7 @@ class Slide < ActiveRecord::Base
   include Common::Associations::HasCreator
   # todo move to common?
   def self.friends_recent_for(user)
-    friends_recent(user.friends_fids)
+    friends_recent(user.friends_user_ids)
   end
 
   after_create  :add_position
@@ -40,7 +40,7 @@ class Slide < ActiveRecord::Base
     lock = slide.round.try(:round_lock)
     raise "Cannot create slide without round lock" unless lock.is_a? RoundLock
 
-    lock_belongs_to_user = lock.creator.fid == slide.fid 
+    lock_belongs_to_user = lock.creator.user_id == slide.user_id 
     raise "User does not have the round locked" unless lock_belongs_to_user
 
     last_type  = slide.round.slides.last.type

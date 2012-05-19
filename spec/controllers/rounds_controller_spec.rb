@@ -10,14 +10,14 @@ describe RoundsController do
   describe 'GET index' do
     context 'with no time arg' do
       it 'should show Rounds created by the current_user' do
-        3.times { @round = FactoryGirl.create(:round, :fid => @user.id) }
+        3.times { @round = FactoryGirl.create(:round, :user_id => @user.id) }
         4.times { @round = FactoryGirl.create(:round) }
 
         get :index, {}, valid_session
         assigns(:rounds).count.should == 3
 
         # brings total by user to 9
-        6.times { @round = FactoryGirl.create(:round, :fid => @user.id) }
+        6.times { @round = FactoryGirl.create(:round, :user_id => @user.id) }
 
         get :index, {}, valid_session
         assigns(:rounds).count.should == 8
@@ -27,16 +27,16 @@ describe RoundsController do
     context 'with time arg' do
       it 'should show Rounds created by the current_user' do
         earlier_time = Time.now
-        3.times { @round = FactoryGirl.create(:round, :fid => @user.id, :created_at => earlier_time) }
+        3.times { @round = FactoryGirl.create(:round, :user_id => @user.id, :created_at => earlier_time) }
         time = earlier_time + 3
-        4.times { @round = FactoryGirl.create(:round, :fid => @user.id, :created_at => time) }
+        4.times { @round = FactoryGirl.create(:round, :user_id => @user.id, :created_at => time) }
 
         # get Rounds before time
         get :index, {:time => time}, valid_session
         assigns(:rounds).count.should == 3
 
         # brings total to 9
-        6.times { @round = FactoryGirl.create(:round, :fid => @user.id, :created_at => earlier_time) }
+        6.times { @round = FactoryGirl.create(:round, :user_id => @user.id, :created_at => earlier_time) }
 
         get :index, {:time => time}, valid_session
         assigns(:rounds).count.should == 8
@@ -66,7 +66,7 @@ describe RoundsController do
         post :create, {}, valid_session
       }.to change(RoundLock, :count).by(1)
       
-      RoundLock.last.fid.should   == @user.id
+      RoundLock.last.user_id.should   == @user.id
       RoundLock.last.round.should == Round.last
     end
 
@@ -79,17 +79,17 @@ describe RoundsController do
   describe 'PUT update' do
     it 'should update the Round whose id was passed in' do
       pending 'dont think this is needed'
-      @round = FactoryGirl.create(:round, :fid => 1)
+      @round = FactoryGirl.create(:round, :user_id => 1)
 
       id  = @round.to_param
-      fid = 2
+      user_id = 2
       params = { 
         :id => id,
-        :round  => {:fid => fid} 
+        :round  => {:user_id => user_id} 
       }
 
       put :update, params, valid_session
-      Round.find(id).fid.should == fid 
+      Round.find(id).user_id.should == user_id 
     end
   end
 

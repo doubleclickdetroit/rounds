@@ -1,7 +1,7 @@
 class SlidesController < ApplicationController
   before_filter :check_for_round_id, :only => :create # [:index,:create]
   before_filter :check_for_type, :only => [:create,:feed,:community,:friends]
-  before_filter :force_current_fid, :only => :create
+  before_filter :force_current_user_id, :only => :create
   
   respond_to :json
 
@@ -11,7 +11,7 @@ class SlidesController < ApplicationController
     if round_id = params[:round_id]
       @slides = Round.find(round_id).slides
     else
-      @slides = Slide.where(:fid => current_user.id)
+      @slides = Slide.where(:user_id => current_user.id)
       if time = params[:time]
         time = Time.parse params[:time]
         @slides = @slides.before(time).recent
@@ -28,7 +28,7 @@ class SlidesController < ApplicationController
   end
 
   def create
-    params[:slide][:fid] = current_user.id
+    params[:slide][:user_id] = current_user.id
     respond_with Slide.create_next(params[:slide]).to_json
   end
 
@@ -45,7 +45,7 @@ class SlidesController < ApplicationController
   def feed
     # todo dangerous?
     @community_slides = @type.constantize.recent
-    @friends_slides   = @type.constantize.friends(current_user.friends_fids).recent
+    @friends_slides   = @type.constantize.friends(current_user.friends_user_ids).recent
     respond_with @type
   end
 
@@ -55,7 +55,7 @@ class SlidesController < ApplicationController
   end
 
   def friends
-    @slides = Slide.friends(current_user.friends_fids).of_type_and_before(@type,params[:time])
+    @slides = Slide.friends(current_user.friends_user_ids).of_type_and_before(@type,params[:time])
     respond_with @slides
   end
 
@@ -79,7 +79,7 @@ private
     end
   end
 
-  def force_current_fid
-    params[:slide][:fid] = current_user.id
+  def force_current_user_id
+    params[:slide][:user_id] = current_user.id
   end
 end

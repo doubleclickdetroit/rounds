@@ -5,11 +5,11 @@ describe FeedsController do
     pending 'may just be getting rid of these'
   
     # it "routes to #activity" do
-    #   get("/api/users/1/activity").should route_to("feeds#activity", :fid => "1")
+    #   get("/api/users/1/activity").should route_to("feeds#activity", :user_id => "1")
     # end
 
     # it "routes to #friends_activity" do
-    #   get("/api/users/1/friends_activity").should route_to("feeds#friends_activity", :fid => "1")
+    #   get("/api/users/1/friends_activity").should route_to("feeds#friends_activity", :user_id => "1")
     # end
 
     # it "routes to #recent" do
