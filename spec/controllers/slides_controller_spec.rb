@@ -295,6 +295,7 @@ describe SlidesController do
     context 'without time arg' do
       [Sentence,Picture].each do |klass|
         it "should return the most recent slides by friends of the proper type (#{klass.to_s}) with no time arg" do
+          pending 'proper auth/friends_ids'
           get :friends, {:type => klass.to_s}, valid_session
 
           slides = assigns(:slides)

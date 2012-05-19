@@ -8,10 +8,6 @@ class Slide < ActiveRecord::Base
     friends_recent(user.friends_user_ids)
   end
 
-  after_create  :add_position
-
-  # before_create :before_create_processing
-
   belongs_to :round
 
   has_many :comments
@@ -54,21 +50,6 @@ class Slide < ActiveRecord::Base
 
   def comment_count
     comments.count
-  end
-
-private
-  # todo maybe remove this...
-  def add_position
-    self.position = round.slides.count - 1 if round
-    self.save
-  end
-
-  def check_for_round_lock
-    !round.round_lock
-  end
-
-  def before_create_processing
-    check_for_round_lock
   end
 
 end

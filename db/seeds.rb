@@ -11,14 +11,12 @@ def random_text
 end
 
 def make_sentence
-  puts "Creating Sentence for Round #{@round.id}"
   user_id = random_user().id
   params = { :round_id => @round.to_param, :user_id => user_id }
   FactoryGirl.create(:sentence, params) 
 end
 
 def make_picture
-  puts "Creating Picture for Round #{@round.id}"
   user_id = random_user().id
   pic = FactoryGirl.create(:picture, :with_file) 
   pic.round_id = @round.to_param
@@ -89,8 +87,6 @@ puts '    ** Slides'
     i.odd? ? make_sentence : make_picture 
   end
   @round.save
-  puts "Round##{@round.id}:"
-  @round.slides.each {|s| puts "  #{s.type}"}
 end
 
 

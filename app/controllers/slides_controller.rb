@@ -45,7 +45,7 @@ class SlidesController < ApplicationController
   def feed
     # todo dangerous?
     @community_slides = @type.constantize.recent
-    @friends_slides   = @type.constantize.friends(current_user.friends_user_ids).recent
+    @friends_slides   = [] # @type.constantize.friends(current_user.friends_user_ids).recent
     respond_with @type
   end
 
@@ -55,7 +55,7 @@ class SlidesController < ApplicationController
   end
 
   def friends
-    @slides = Slide.friends(current_user.friends_user_ids).of_type_and_before(@type,params[:time])
+    @slides = [] # Slide.friends(current_user.friends_user_ids).of_type_and_before(@type,params[:time])
     respond_with @slides
   end
 

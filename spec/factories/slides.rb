@@ -3,7 +3,6 @@ include ActionDispatch::TestProcess
 FactoryGirl.define do
   factory :slide do
     sequence(:user_id) {|n| n}
-    position nil
 
     factory :sentence, :class => ::Sentence do
       type 'Sentence'

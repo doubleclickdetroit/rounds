@@ -1,2 +1,2 @@
-collection @slides, :root => 'community', :object_root => @type.downcase
+collection @slides, :root => 'community'
 extends 'slides/index'

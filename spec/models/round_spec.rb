@@ -31,32 +31,7 @@ describe Round do
     end.should be_true
   end
 
-  it 'should return Slides in order' do
-    pending 'not sure this is even needed, but it can probably be done better'
-    # the first shall be last...
-    puts @round.slides.inspect
-    @round.slides << FactoryGirl.create(:sentence)
-    @round.slides << FactoryGirl.create(:picture)
-    @round.save
-    @round.slides.first.position = 1 
-    @round.slides.last.position = 0 
-    @round.save
-    @round.reload
-    # forces position opposite
-    # of chronological creation
-
-    # each position should be one
-    # greater than the previous
-    slides_are_ordered_by_position = true
-    positions = @round.slides.map {|s| s.position}
-    last = -2
-    positions.each do |pos|
-      last = last + 1
-      slides_are_ordered_by_position = false unless (last + 1) == pos
-    end
-
-    slides_are_ordered_by_position.should be_true
-  end
+  it 'should return .slides in order of their created_by'
 
   describe '.created_by' do
     pending 'do i need to check this more thoroughly here or just in the controller spec?'

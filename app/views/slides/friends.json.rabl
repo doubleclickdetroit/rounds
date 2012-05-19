@@ -1,2 +1,2 @@
-collection @slides, :root => 'friends', :object_root => @type.downcase
+collection @slides, :root => 'friends'
 extends 'slides/show'
