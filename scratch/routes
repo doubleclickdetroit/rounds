@@ -99,7 +99,6 @@ WORKING ON THE FOLLOWING
     D DELETE  /api/rounds/:round_id/invitations/:id
     I GET     /api/rounds/:round_id/invitations/
       
-
   BlacklistEntries (current user is derived from session)
     C POST    /api/providers/:provider/users/:uid/block/
     D DELETE  /api/providers/:provider/users/:uid/block/

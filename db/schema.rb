@@ -32,7 +32,7 @@ ActiveRecord::Schema.define(:version => 20120521193305) do
   add_index "ballots", ["slide_id"], :name => "index_ballots_on_slide_id"
   add_index "ballots", ["user_id"], :name => "index_ballots_on_user_id"
 
-  create_table "blacklist_entries", :id => false, :force => true do |t|
+  create_table "blacklist_entries", :force => true do |t|
     t.integer  "user_id"
     t.integer  "blocked_user_id"
     t.datetime "created_at",      :null => false

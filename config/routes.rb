@@ -1,23 +1,23 @@
 Draw::Application.routes.draw do
   # todo use :via for all matches
   
+  # session
   match '/auth/facebook/callback' => 'sessions#create'
   match '/signout' => 'sessions#destroy', :as => :signout #, :via => :delete
 
   scope 'api' do
-
-    # resources :blacklist_entries, :only => [:create,:destroy]
+    # blocking
     scope 'users' do
-      match '/block/:user_id'   => "blacklist_entries#create"
-      match '/unblock/:user_id' => "blacklist_entries#destroy"
+      # blocking by User.id
+      match '/block/:blocked_user_id' => "blacklist_entries#create", :via => :post
+      match '/block/:blocked_user_id' => "blacklist_entries#destroy", :via => :delete
     end
-    # scope 'users' do
-    #   match "/:user_id/activity"         => "feeds#activity"
-    #   match "/:user_id/friends_activity" => "feeds#friends_activity"
-    #   match "/community"                => "feeds#community"
-    #   match "/whats_hot"             => "feeds#whats_hot"
-    # end
+    # blocking by provider
+    match '/providers/:provider/users/:blocked_uid/block' => 'blacklist_entries#create', :via => :post
+    match '/providers/:provider/users/:blocked_uid/block' => 'blacklist_entries#destroy', :via => :delete
 
+    # activity
+    
     resources :rounds, :except => [:new,:edit] do
       # todo DRY?
       match     'sentences' => 'slides#create', :type => 'Sentence', :via => :post
