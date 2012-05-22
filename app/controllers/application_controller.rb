@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
 
-  before_filter :authenticate_user_for_api!
+  # before_filter :authenticate_user_for_api!
 
   # before_filter :authenticate if Rails.env.production?
 
