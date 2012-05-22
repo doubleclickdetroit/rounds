@@ -5,6 +5,67 @@ describe User do
     @user = FactoryGirl.create(:user)
   end
 
+  it 'should have many Authorizations'
+
+  describe '#via_auth' do
+    before(:each) do
+      @user.destroy
+      @auth_hash = {
+        'provider' => 'facebook',
+        'uid' => '1337',
+        'info' => {
+          'name' => 'Fox McCloud'
+        }
+      }
+    end
+
+    context 'where User exists', :focus do
+      context 'and where Authorization exists' do
+        before(:each) do
+          @user = FactoryGirl.create(:user, :name => @auth_hash['info']['name'])
+          @auth = FactoryGirl.create(:authorization, :user_id => @user.id, :provider => @auth_hash['provider'], :uid => @auth_hash['uid'])
+        end
+
+        it 'should find the Authorization from the hash' do
+          pending 'how do i spec this?'
+          # Authorization.should_receive(:find_or_initialize_by_provider_and_uid).with(@auth_hash['provider'], @auth_hash['uid'])
+          User.via_auth(@auth_hash)
+        end
+
+        it 'should return the associated User' do
+          User.via_auth(@auth_hash).should == @user
+        end
+      end
+
+      context 'and where no Authorization exists' do
+        it 'should create an Authorization' do
+          expect {
+            User.via_auth(@auth_hash)
+          }.to change(Authorization, :count).by(1)
+        end
+
+        it 'should create a User' do
+          expect {
+            User.via_auth(@auth_hash)
+          }.to change(User, :count).by(1)
+        end
+
+        it 'should associate the Authorization and the User' do
+          Authorization.count.should == 0
+          User.count.should == 0
+
+          User.via_auth(@auth_hash)
+
+          Authorization.last.user.should == User.last
+        end
+      end
+    end
+
+    context 'where no user exists' do
+      pending "not sure if this is it, but theres another case im not handling..."
+    end
+  end
+
   describe '.rounds' do
     it 'should return an array of Rounds' do
       @round = FactoryGirl.create(:round)
