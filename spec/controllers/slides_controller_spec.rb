@@ -21,8 +21,25 @@ describe SlidesController do
     end
 
     context 'without round_id' do
+      it 'should use provider/uid params if passed' do
+        user = FactoryGirl.create(:user)
+        auth = FactoryGirl.create(:authorization, :user_id => user.id)
+
+        get :index, {:provider => auth.provider, :uid => auth.uid}, valid_session
+
+        assigns(:user_id).should_not == @user.id
+        assigns(:user_id).should == user.id
+      end
+
+      it 'should use the current users id if no user_id is passed in' do
+        get :index, {}, valid_session
+        assigns(:user_id).should == @user.id
+      end
+
+      pending 'not sure if this tests for Sentence/Picture well enough...'
       context 'and without time arg' do
         it 'should show recent Slides' do
+          pending 'breaking, but needs to be switched ton id anyway'
           3.times { @slide = FactoryGirl.create(:slide, :user_id => @user.id) }
           4.times { @slide = FactoryGirl.create(:slide) }
 

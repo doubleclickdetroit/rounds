@@ -5,7 +5,9 @@ Draw::Application.routes.draw do
   match '/auth/facebook/callback' => 'sessions#create'
   match '/signout' => 'sessions#destroy', :as => :signout #, :via => :delete
 
+
   scope 'api' do
+
     # blocking
     scope 'users' do
       # blocking by User.id
@@ -13,13 +15,17 @@ Draw::Application.routes.draw do
       match '/block/:blocked_user_id' => "blacklist_entries#destroy", :via => :delete
     end
     # blocking by provider
+    # todo clean up the match's
     match '/providers/:provider/users/:blocked_uid/block' => 'blacklist_entries#create', :via => :post
     match '/providers/:provider/users/:blocked_uid/block' => 'blacklist_entries#destroy', :via => :delete
-    # todo clean up the match's above and below
 
-    # user activity
+
+    # user activity / feeds
+    # todo clean up the match's
     match '/providers/:provider/users/:uid/rounds' => 'rounds#index', :via => :get
+    match '/providers/:provider/users/:uid/slides' => 'slides#index', :via => :get
     
+
     resources :rounds, :except => [:new,:edit] do
       # todo DRY?
       match     'sentences' => 'slides#create', :type => 'Sentence', :via => :post
@@ -63,9 +69,12 @@ Draw::Application.routes.draw do
     end
     ##### END MESS
 
+
+    # todo needed?
     resources :comments, :except => [:show,:new,:edit]
   end
 
-  # todo needed?
+
   root :to => 'home#index'
+
 end

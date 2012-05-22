@@ -2,6 +2,7 @@ class RoundsController < ApplicationController
   respond_to :json
 
   # todo refactor
+  # todo dup'd in slides/comments
   def index
     provider, uid = params[:provider], params[:uid]
     @user_id = uid ? User.find_by_auth_provider_and_uid(provider, uid).try(:id) : current_user.id

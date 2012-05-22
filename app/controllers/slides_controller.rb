@@ -12,7 +12,10 @@ class SlidesController < ApplicationController
     if round_id = params[:round_id]
       @slides = Round.find(round_id).slides
     else
-      @slides = Slide.where(:user_id => current_user.id)
+      provider, uid = params[:provider], params[:uid]
+      @user_id = uid ? User.find_by_auth_provider_and_uid(provider, uid).try(:id) : current_user.id
+
+      @slides = Slide.where(:user_id => @user_id)
       if time = params[:time]
         time = Time.parse params[:time]
         @slides = @slides.before(time).recent
