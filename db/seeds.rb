@@ -25,16 +25,25 @@ def make_picture
 end
 
 def add_arbitrary_comments_to(slide)
-  (rand(5)+1).times do
-    slide.comments << FactoryGirl.create(:comment, {:user_id => random_user().id, :text => random_text()})
+  (rand(3)+1).times do
+    FactoryGirl.create(:comment, {:user_id => random_user().id, :slide_id => slide.id, :text => random_text()})
+    print '.'
   end
 end
 
 def add_arbitrary_ballots_to(slide)
-  rand(4).times do
-    slide.ballots << FactoryGirl.create(:ballot, {:user_id => FactoryGirl.create(:user).id, :vote => (rand(5)+1)})
+  @users.sample(rand(@users.count+1)).each do |user|
+    user_id = user.id
+    vote    = rand(5)+1
+    FactoryGirl.create(:ballot, {:user_id => user_id, :slide_id => slide.id, :vote => vote})
+    print '.'
   end
 end
+
+
+
+
+
 
 
 puts "** Begin seeding"
@@ -45,17 +54,25 @@ puts "** Begin seeding"
 ################ Users ###################
 ##########################################
 
-puts '  ** Users'
+print '  ** Users '
 
 @users = []
 
-@ammar = FactoryGirl.create(:user, :name => 'Ammar Ulmakzumi')
-@ben   = FactoryGirl.create(:user, :name => 'Ben Babics')
-@brad  = FactoryGirl.create(:user, :name => 'Brad Chase')
 
+@ammar = FactoryGirl.create(:user, :name => 'Ammar Almakzumi')
+FactoryGirl.create(:authorization, :user_id => @ammar.id, :provider => 'facebook', :uid => '1')
 @users << @ammar
+print '.'
+
+@ben   = FactoryGirl.create(:user, :name => 'Ben Babics')
+FactoryGirl.create(:authorization, :user_id => @ben.id, :provider => 'facebook', :uid => '2')
 @users << @ben
+print '.'
+
+@brad  = FactoryGirl.create(:user, :name => 'Brad Chase')
+FactoryGirl.create(:authorization, :user_id => @brad.id, :provider => 'facebook', :uid => '3')
 @users << @brad
+print '.'
 
 
 
@@ -63,12 +80,13 @@ puts '  ** Users'
 ################ Rounds ##################
 ##########################################
 
-puts '  ** Round'
+print "\n  ** Round "
 
 @rounds = []
 
-20.times do 
+10.times do 
   round = FactoryGirl.create(:round, :user_id => random_user().id)
+  print '.'
   @rounds << round
 end
 
@@ -78,13 +96,13 @@ end
 ################ Slides ##################
 ##########################################
 
-puts '    ** Slides'
+print "\n    ** Slides "
 
 @rounds.each do |round|
   @round = round
-  (rand(10)+1).times do |i|
-    # puts "Round #{round.id} Slide #{i} odd? #{i.odd?}"
+  (rand(7)+1).times do |i|
     i.odd? ? make_sentence : make_picture 
+    print '.'
   end
   @round.save
 end
@@ -95,7 +113,7 @@ end
 ############### Comments #################
 ##########################################
 
-puts '      ** Comments'
+print "\n      ** Comments "
 
 @rounds.each do |round|
   round.slides.each do |slide|
@@ -110,7 +128,7 @@ end
 ############### Ballots ##################
 ##########################################
 
-puts '      ** Ballots'
+print "\n      ** Ballots "
 
 @rounds.each do |round|
   round.slides.each do |slide|
@@ -121,4 +139,4 @@ end
 
 
 
-puts "** Done seeding"
+puts "\n** Done seeding"
