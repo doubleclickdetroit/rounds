@@ -1,12 +1,21 @@
 require "spec_helper"
 
 describe CommentsController do
-  describe "routing" do
   
+  describe 'feed routing' do
+
     it "routes to #index" do
       get("/api/comments").should route_to("comments#index")
     end
 
+    it "routes to #index with :user_id" do
+      get("/api/providers/facebook/users/525/comments").should route_to("comments#index", :provider => 'facebook', :uid => '525')
+    end
+
+  end
+
+  describe "routing" do
+  
     it "routes to #create" do
       post("/api/comments").should route_to("comments#create")
     end
@@ -41,4 +50,5 @@ describe CommentsController do
     end
 
   end
+
 end

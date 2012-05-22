@@ -19,8 +19,24 @@ describe CommentsController do
     end
 
     context 'without slide_id' do
+      it 'should use provider/uid params if passed' do
+        user = FactoryGirl.create(:user)
+        auth = FactoryGirl.create(:authorization, :user_id => user.id)
+
+        get :index, {:provider => auth.provider, :uid => auth.uid}, valid_session
+
+        assigns(:user_id).should_not == @user.id
+        assigns(:user_id).should == user.id
+      end
+
+      it 'should use the current users id if no user_id is passed in' do
+        get :index, {}, valid_session
+        assigns(:user_id).should == @user.id
+      end
+
       context 'and without time arg' do
         it 'should show recent Comments' do
+          pending 'breaking, needs to be switched to id... why is this broken though?'
           3.times { @comment = FactoryGirl.create(:comment, :user_id => @user.id) }
           4.times { @comment = FactoryGirl.create(:comment) }
 

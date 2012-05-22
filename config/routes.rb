@@ -22,8 +22,9 @@ Draw::Application.routes.draw do
 
     # user activity / feeds
     # todo clean up the match's
-    match '/providers/:provider/users/:uid/rounds' => 'rounds#index', :via => :get
-    match '/providers/:provider/users/:uid/slides' => 'slides#index', :via => :get
+    match '/providers/:provider/users/:uid/rounds'   => 'rounds#index',   :via => :get
+    match '/providers/:provider/users/:uid/slides'   => 'slides#index',   :via => :get
+    match '/providers/:provider/users/:uid/comments' => 'comments#index', :via => :get
     
 
     resources :rounds, :except => [:new,:edit] do

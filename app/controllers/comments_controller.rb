@@ -8,6 +8,9 @@ class CommentsController < ApplicationController
     if slide_id = params[:slide_id]
       @comments = Slide.find(slide_id).comments
     else
+      provider, uid = params[:provider], params[:uid]
+      @user_id = uid ? User.find_by_auth_provider_and_uid(provider, uid).try(:id) : current_user.id
+
       @comments = Comment.where(:user_id => current_user.id)
       if time = params[:time]
         time = Time.parse params[:time]

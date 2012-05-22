@@ -8,6 +8,7 @@ class SlidesController < ApplicationController
 
 
   # todo refactor
+  # todo DRY up, repeated in rounds/comments
   def index
     if round_id = params[:round_id]
       @slides = Round.find(round_id).slides
