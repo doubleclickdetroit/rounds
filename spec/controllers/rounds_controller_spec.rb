@@ -108,7 +108,7 @@ describe RoundsController do
   end
 
   describe 'DELETE destroy' do
-    it 'should destroy the Round whose id was passed in' do
+    it 'should destroy the (empty) Round whose id was passed in' do
       @round = FactoryGirl.create(:round)
       params = { :id => @round.to_param }
 
@@ -116,6 +116,19 @@ describe RoundsController do
         delete :destroy, params, valid_session
       }.to change(Round, :count).by(-1)
     end
+
+    it 'should not destroy the Round if has any slides' do
+      @round = FactoryGirl.create(:round)
+      FactoryGirl.create(:slide, :round_id => @round.id)
+
+      params = { :id => @round.to_param }
+
+      expect {
+        delete :destroy, params, valid_session
+      }.to change(Round, :count).by(0)
+    end
+
+    it 'should respond with a ... if the Round if has any slides'
   end
 
 end

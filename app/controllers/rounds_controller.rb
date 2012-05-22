@@ -31,7 +31,9 @@ class RoundsController < ApplicationController
   # end
 
   def destroy
-    respond_with Round.destroy(params[:id]).to_json
+    @round = Round.find(params[:id])
+    # todo not 401
+    @round.slides.empty? ? respond_with(@round.destroy) : head(401)
   end
 
 end
