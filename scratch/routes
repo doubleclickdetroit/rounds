@@ -90,18 +90,12 @@ IMPLEMENTED
       Ballots, :vote must be an integer between 1 and 5
         C POST    /api/slides/:slide_id/votes/:vote
 
-WORKING ON THE FOLLOWING
-
-  Invitations - THESE ROUTES MAY BE CHANGING
-    C POST    /api/rounds/:round_id/invitations/?provider=...&uid=...
-  # R GET     /api/rounds/:round_id/invitations/
-  # U PUT     /api/rounds/:round_id/invitations/
-    D DELETE  /api/rounds/:round_id/invitations/:id
-    I GET     /api/rounds/:round_id/invitations/
-      
   BlacklistEntries (current user is derived from session)
     C POST    /api/providers/:provider/users/:uid/block/
     D DELETE  /api/providers/:provider/users/:uid/block/
+
+
+WORKING ON THE FOLLOWING
 
   Resources belonging to the current user:
     NOTE: these return the 8 most recent, client can request older and new by id # unimplemented
@@ -129,6 +123,13 @@ WORKING ON THE FOLLOWING
     Invitations
       I GET     /api/providers/:provider/users/:uid/invitations/
 
+  Invitations - THESE ROUTES MAY BE CHANGING
+    C POST    /api/rounds/:round_id/invitations/?provider=...&uid=...
+  # R GET     /api/rounds/:round_id/invitations/
+  # U PUT     /api/rounds/:round_id/invitations/
+    D DELETE  /api/rounds/:round_id/invitations/:id
+    I GET     /api/rounds/:round_id/invitations/
+      
 UNIMPLEMENTED
 
   Users

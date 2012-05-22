@@ -1,4 +1,5 @@
 class SlidesController < ApplicationController
+
   before_filter :check_for_round_id, :only => :create # [:index,:create]
   before_filter :check_for_type, :only => [:create,:feed,:community,:friends]
   before_filter :force_current_user_id, :only => :create
