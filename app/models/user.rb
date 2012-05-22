@@ -22,8 +22,8 @@ class User < ActiveRecord::Base
       @auth.user = @user
 
       # todo nested attributes?
-      @user.save
       @auth.save
+      @user.save
     else
       @user = @auth.user
     end
