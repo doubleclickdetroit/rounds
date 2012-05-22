@@ -94,9 +94,6 @@ IMPLEMENTED
     C POST    /api/providers/:provider/users/:uid/block/
     D DELETE  /api/providers/:provider/users/:uid/block/
 
-
-WORKING ON THE FOLLOWING
-
   Resources belonging to the current user:
     NOTE: these return the 8 most recent, client can request older and new by id # unimplemented
     Rounds 
@@ -105,10 +102,6 @@ WORKING ON THE FOLLOWING
       I GET     /api/slides/
     Comments
       I GET     /api/comments/
-    Watchings
-      I GET     /api/watching
-    Invitations
-      I GET     /api/invitations/
 
   Resources belonging to user identified by provider/uid (e.g. provider='facebook'):
     NOTE: these return the 8 most recent, client can request older and new by id # unimplemented
@@ -118,6 +111,23 @@ WORKING ON THE FOLLOWING
       I GET     /api/providers/:provider/users/:uid/slides/
     Comments
       I GET     /api/providers/:provider/users/:uid/comments/
+
+
+WORKING ON THE FOLLOWING
+
+  Resources belonging to the current user:
+    NOTE: these return the 8 most recent, client can request older and new by id # unimplemented
+    ALL
+      I GET     /api/me
+    Watchings
+      I GET     /api/watching
+    Invitations
+      I GET     /api/invitations/
+
+  Resources belonging to user identified by provider/uid (e.g. provider='facebook'):
+    NOTE: these return the 8 most recent, client can request older and new by id # unimplemented
+    ALL
+      I GET     /api/providers/:provider/users/:uid/ # ???
     Watchings
       I GET     /api/providers/:provider/users/:uid/watching
     Invitations
