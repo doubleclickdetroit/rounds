@@ -64,6 +64,26 @@ describe User do
     end
   end
 
+  describe '#find_by_auth_provider_and_uid' do
+    before(:each) do
+      @auth_hash = {
+        'provider' => 'facebook',
+        'uid' => '1337',
+        'info' => {
+          'name' => 'Fox McCloud'
+        }
+      }
+      @user = FactoryGirl.create(:user, :name => @auth_hash['info']['name'])
+      @auth = FactoryGirl.create(:authorization, :user_id => @user.id, :provider => @auth_hash['provider'], :uid => @auth_hash['uid'])
+    end
+
+    it 'should return the associated User' do
+      provider, uid = @auth_hash['provider'], @auth_hash['uid']
+
+      User.find_by_auth_provider_and_uid(provider, uid).should == @user
+    end
+  end
+
   describe '.authorizations' do
     it 'should have many Authorizations' do
       @authorization = FactoryGirl.create(:authorization)

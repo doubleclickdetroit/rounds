@@ -20,10 +20,9 @@ private
   def check_for_user_ids
     # todo cleanup
     unless @blocked_user_id = params[:blocked_user_id]
-      blocked_uid = params[:blocked_uid]
-      provider    = params[:provider]
-      auth      ||= Authorization.find_by_provider_and_uid(provider, blocked_uid)
-      user = auth.try(:user)
+      blocked_uid, provider = params[:blocked_uid], params[:provider]
+      user = User.find_by_auth_provider_and_uid(provider, blocked_uid)
+
       if user.nil?
         respond_with :not_found
       else
