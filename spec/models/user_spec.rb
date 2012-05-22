@@ -5,8 +5,6 @@ describe User do
     @user = FactoryGirl.create(:user)
   end
 
-  it 'should have many Authorizations'
-
   describe '#via_auth' do
     before(:each) do
       @user.destroy
@@ -19,7 +17,7 @@ describe User do
       }
     end
 
-    context 'where User exists', :focus do
+    context 'where User exists' do
       context 'and where Authorization exists' do
         before(:each) do
           @user = FactoryGirl.create(:user, :name => @auth_hash['info']['name'])
@@ -66,14 +64,21 @@ describe User do
     end
   end
 
+  describe '.authorizations' do
+    it 'should have many Authorizations' do
+      @authorization = FactoryGirl.create(:authorization)
+      @user.authorizations << @authorization
+      @user.save
+      @user.reload.authorizations.should == [@authorization]
+    end
+  end
+
   describe '.rounds' do
     it 'should return an array of Rounds' do
       @round = FactoryGirl.create(:round)
       @user.rounds << @round
       @user.rounds.should == [@round]
     end
-
-    it 'should be able to limit the number of Rounds returned'
   end
 
   describe '.slides' do
@@ -82,8 +87,6 @@ describe User do
       @user.slides << @slide
       @user.slides.should == [@slide]
     end
-
-    it 'should be able to limit the number of Slides returned'
   end
 
   describe '.comments' do
@@ -92,8 +95,6 @@ describe User do
       @user.comments << @comment
       @user.comments.should == [@comment]
     end
-
-    it 'should be able to limit the number of Comments returned'
   end
 
   describe '.watchings' do
@@ -102,8 +103,6 @@ describe User do
       @user.watchings << @watching
       @user.watchings.should == [@watching]
     end
-
-    it 'should be able to limit the number of Watchings returned'
   end
 
   describe 'blocking functionality' do
