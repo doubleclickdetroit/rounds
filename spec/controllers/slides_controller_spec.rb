@@ -7,8 +7,6 @@ describe SlidesController do
 
   before(:each) { Slide.any_instance.stub(:content).and_return('') }
 
-  it 'should authenticate the user'
-
   describe 'GET index' do
     context 'with round_id' do
       it 'should show Slides for a Round' do

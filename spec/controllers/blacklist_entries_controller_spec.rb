@@ -9,8 +9,6 @@ describe BlacklistEntriesController do
     @blocked_user = Factory(:user)
   end
 
-  it 'should authenticate the user'
-
   describe "POST 'create'" do
 
     it 'should throw a 406 if there is no equivalent to blocked_user_id' do

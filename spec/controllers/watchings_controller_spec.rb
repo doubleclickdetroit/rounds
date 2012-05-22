@@ -5,8 +5,6 @@ describe WatchingsController do
 
   login_user()
 
-  it 'should authenticate the user'
-
   pending 'needs to use current_user.id'
 
   describe 'POST create' do

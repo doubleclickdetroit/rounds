@@ -5,8 +5,6 @@ describe CommentsController do
 
   login_user()
 
-  it 'should authenticate the user'
-
   describe 'GET index' do
     context 'with slide_id' do
       it 'should show Comments for a Slide' do

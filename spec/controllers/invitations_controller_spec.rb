@@ -7,8 +7,6 @@ describe InvitationsController do
 
   before(:each) { Invitation.any_instance.stub(:content).and_return('') }
 
-  it 'should authenticate the user'
-
   describe 'GET index' do
     it 'should throw a 406 if there is no round_id' do
       get :index, {}, valid_session 

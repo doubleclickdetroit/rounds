@@ -5,8 +5,6 @@ describe RoundsController do
 
   login_user()
 
-  it 'should authenticate the user'
-
   describe 'GET index' do
     context 'with no time arg' do
       it 'should show Rounds created by the current_user' do

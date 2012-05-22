@@ -5,8 +5,6 @@ describe RoundLocksController do
 
   login_user()
 
-  it 'should authenticate the user'
-
   describe 'GET show' do
     it 'should return a given RoundLock' do
       @round      = FactoryGirl.create(:round)

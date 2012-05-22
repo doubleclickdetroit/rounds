@@ -2,8 +2,6 @@ require 'spec_helper'
 
 describe FeedsController do
 
-  it 'should authenticate the user'
-
   describe "GET 'activity'" do
     it "returns http success" do
       get 'activity'

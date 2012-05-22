@@ -6,8 +6,6 @@ describe BallotsController do
 
   login_user()
 
-  it 'should authenticate the user'
-
   describe 'POST create' do
     it 'should throw a 406 if there is no :vote'
     it 'should throw a 406 if there is no slide_id' do
