@@ -6,7 +6,7 @@ describe BlacklistEntriesController do
   login_user()
 
   before(:each) do
-    @blocked_user = Factory(:user)
+    @blocked_user = FactoryGirl.create(:user)
   end
 
   describe "POST 'create'" do

@@ -5,7 +5,6 @@ class BlacklistEntriesController < ApplicationController
   respond_to :json
 
   def create
-    puts "####################{@blocked_user_id}"
     block = BlacklistEntry.find_or_create_by_user_id_and_blocked_user_id current_user.id, @blocked_user_id
 
     respond_with block.to_json

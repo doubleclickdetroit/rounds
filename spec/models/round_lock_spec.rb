@@ -10,7 +10,7 @@ describe RoundLock do
 
   describe '.creator' do
     it 'should return a User' do
-      user = Factory(:user)
+      user = FactoryGirl.create(:user)
       @lock.user = user
       @lock.save
       @lock.reload.creator.should == user
