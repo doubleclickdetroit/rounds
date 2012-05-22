@@ -4,10 +4,6 @@ describe SessionsController do
   pending "this really needs spec'd"
 
   describe 'POST create' do
-    before(:each) do
-      # Authorization.Factory(:provider)
-    end
-
     context 'provider success' do
       it 'should set the user_id in session' do
         request.env["omniauth.auth"] = OmniAuth.config.mock_auth[:facebook]

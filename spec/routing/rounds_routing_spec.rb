@@ -7,6 +7,10 @@ describe RoundsController do
       get("/api/rounds").should route_to("rounds#index")
     end
 
+    it "routes to #index with :user_id" do
+      get("/api/providers/facebook/users/525/rounds").should route_to("rounds#index", :provider => 'facebook', :uid => '525')
+    end
+
     it "routes to #show" do
       get("/api/rounds/2").should route_to("rounds#show", :id => "2")
     end

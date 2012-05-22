@@ -15,8 +15,10 @@ Draw::Application.routes.draw do
     # blocking by provider
     match '/providers/:provider/users/:blocked_uid/block' => 'blacklist_entries#create', :via => :post
     match '/providers/:provider/users/:blocked_uid/block' => 'blacklist_entries#destroy', :via => :delete
+    # todo clean up the match's above and below
 
-    # activity
+    # user activity
+    match '/providers/:provider/users/:uid/rounds' => 'rounds#index', :via => :get
     
     resources :rounds, :except => [:new,:edit] do
       # todo DRY?
