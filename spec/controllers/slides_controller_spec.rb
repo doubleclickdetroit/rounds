@@ -73,7 +73,7 @@ describe SlidesController do
   describe 'GET show' do
     it 'should not throw a 406 if there is no slide_id' do
       pending 'no idea, try after you have more implemented'
-      put :update, { :slide => Factory.build(:slide) }, valid_session 
+      put :update, { :slide => FactoryGirl.build(:slide) }, valid_session 
       response.status.should_not == 406
     end
 
@@ -110,7 +110,7 @@ describe SlidesController do
         @round = FactoryGirl.create(:round)
         FactoryGirl.create(:picture, :round_id => @round.id)
         FactoryGirl.create(:round_lock, :round_id => @round.id)
-        slide  = Factory.build(:sentence).attributes
+        slide  = FactoryGirl.build(:sentence).attributes
         params = { :round_id => @round.to_param, :slide => slide }
 
         expect {
@@ -123,7 +123,7 @@ describe SlidesController do
         @round = FactoryGirl.create(:round)
         FactoryGirl.create(:sentence, :round_id => @round.id)
         FactoryGirl.create(:round_lock, :round_id => @round.id)
-        slide  = Factory.build(:picture).attributes
+        slide  = FactoryGirl.build(:picture).attributes
         params = { :round_id => @round.to_param, :slide => slide }
 
         expect {
@@ -138,7 +138,7 @@ describe SlidesController do
         @lock  = FactoryGirl.create(:round_lock, :round_id => @round.id, :user_id => @user.id)
         FactoryGirl.create(:picture, :round_id => @round.id)
         FactoryGirl.create(:round_lock, :round_id => @round.id)
-        slide  = Factory.build(:sentence).attributes
+        slide  = FactoryGirl.build(:sentence).attributes
         params = { :round_id => @round.to_param, :slide => slide }
 
         expect {
@@ -151,7 +151,7 @@ describe SlidesController do
         @lock  = FactoryGirl.create(:round_lock, :round_id => @round.id, :user_id => @user.id)
         FactoryGirl.create(:sentence, :round_id => @round.id)
         FactoryGirl.create(:round_lock, :round_id => @round.id)
-        slide  = Factory.build(:picture).attributes
+        slide  = FactoryGirl.build(:picture).attributes
         params = { :round_id => @round.to_param, :slide => slide }
 
         expect {
@@ -164,7 +164,7 @@ describe SlidesController do
         @lock  = FactoryGirl.create(:round_lock, :round_id => @round.id, :user_id => @user.id)
         FactoryGirl.create(:picture, :round_id => @round.id)
         FactoryGirl.create(:round_lock, :round_id => @round.id)
-        slide  = Factory.build(:sentence).attributes
+        slide  = FactoryGirl.build(:sentence).attributes
         params = { :round_id => @round.to_param, :slide => slide }
 
         post :create, params, valid_session
@@ -177,7 +177,7 @@ describe SlidesController do
   describe 'PUT update' do
     it 'should not throw a 406 if there is no slide_id' do
       pending 'no idea, try after you have more implemented'
-      put :update, { :slide => Factory.build(:slide) }, valid_session 
+      put :update, { :slide => FactoryGirl.build(:slide) }, valid_session 
       response.status.should_not == 406
     end
 

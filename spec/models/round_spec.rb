@@ -3,8 +3,8 @@ require 'spec_helper'
 describe Round do
   before(:each) do
     @round = FactoryGirl.create(:round)
-    @round.slides << Factory.build(:sentence)
-    @round.slides << Factory.build(:picture)
+    @round.slides << FactoryGirl.build(:sentence)
+    @round.slides << FactoryGirl.build(:picture)
   end
 
   it 'should have many Slides' do

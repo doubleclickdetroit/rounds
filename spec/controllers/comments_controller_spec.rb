@@ -86,7 +86,7 @@ describe CommentsController do
   describe 'PUT update' do
     it 'should not throw a 406 if there is no slide_id' do
       pending 'no idea, try after you have more implemented'
-      put :update, { :comment => Factory.build(:comment) }, valid_session
+      put :update, { :comment => FactoryGirl.build(:comment) }, valid_session
       response.status.should_not == 406
     end
 

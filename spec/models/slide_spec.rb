@@ -48,8 +48,8 @@ describe Slide do
     context 'sentence' do
       before(:each) do
         FactoryGirl.create(:picture, :round_id => @round.id)
-        @sentence = Factory.build(:sentence, :round_id => @round.id, :user_id => @user.id).attributes
-        @picture  = Factory.build(:picture, :round_id => @round.id, :user_id => @user.id).attributes
+        @sentence = FactoryGirl.build(:sentence, :round_id => @round.id, :user_id => @user.id).attributes
+        @picture  = FactoryGirl.build(:picture, :round_id => @round.id, :user_id => @user.id).attributes
       end
 
       it 'should allow a Sentence added after a Picture' do
@@ -68,8 +68,8 @@ describe Slide do
     context 'picture' do
       before(:each) do
         FactoryGirl.create(:sentence, :round_id => @round.id)
-        @picture  = Factory.build(:picture, :round_id => @round.id, :user_id => @user.id).attributes
-        @sentence = Factory.build(:sentence, :round_id => @round.id, :user_id => @user.id).attributes
+        @picture  = FactoryGirl.build(:picture, :round_id => @round.id, :user_id => @user.id).attributes
+        @sentence = FactoryGirl.build(:sentence, :round_id => @round.id, :user_id => @user.id).attributes
       end
 
       it 'should allow a Picture added after a Sentence' do
@@ -86,7 +86,7 @@ describe Slide do
     end
 
     it 'should raise without a proper slide[:type]' do
-      slide = Factory.build(:sentence, :round_id => @round.id, :type => 'Foobar').attributes
+      slide = FactoryGirl.build(:sentence, :round_id => @round.id, :type => 'Foobar').attributes
 
       expect {
         Slide.create_next(slide)
@@ -96,7 +96,7 @@ describe Slide do
 
     it 'should raise without a lock' do
       FactoryGirl.create(:sentence, :round_id => @round.id)
-      slide = Factory.build(:picture, :round_id => @round.id).attributes
+      slide = FactoryGirl.build(:picture, :round_id => @round.id).attributes
       @lock.destroy 
 
       expect {
@@ -111,7 +111,7 @@ describe Slide do
       @lock.save
 
       FactoryGirl.create(:sentence, :round_id => @round.id)
-      slide = Factory.build(:picture, :round_id => @round.id).attributes
+      slide = FactoryGirl.build(:picture, :round_id => @round.id).attributes
       expect {
         Slide.create_next(slide)
       }.to raise_error('User does not have the round locked')
@@ -122,7 +122,7 @@ describe Slide do
 
     it 'should destroy the lock upon successful slide creation' do
       FactoryGirl.create(:sentence, :round_id => @round.id)
-      slide = Factory.build(:picture, :round_id => @round.id, :user_id => @user.id).attributes
+      slide = FactoryGirl.build(:picture, :round_id => @round.id, :user_id => @user.id).attributes
 
       RoundLock.count.should == 1
       expect {
