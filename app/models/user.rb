@@ -19,11 +19,11 @@ class User < ActiveRecord::Base
 
     if @auth.new_record?
       @user = User.create(:name => auth_hash['info']['name'])
-      @auth.user = @user
 
-      # todo nested attributes?
+      # todo this sucks, fix it
+      @auth.user = @user
       @auth.save
-      @user.save
+      @user
     else
       @user = @auth.user
     end
