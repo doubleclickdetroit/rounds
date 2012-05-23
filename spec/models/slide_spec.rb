@@ -139,6 +139,8 @@ describe Slide do
 
   it_should_scope_friends(klass)
 
+  it_should_scope_before_and_after(klass)
+
   describe '.of_type' do
     before(:each) do
       # todo wasteful, 43 created before
@@ -157,23 +159,6 @@ describe Slide do
       Slide.count.should == 2
       Slide.of_type('Picture').count.should == 1
     end
-  end
-
-  describe '.before' do
-    it 'should only return Slides created before a specific Time' do
-      time = Time.now
-
-      # todo wasteful
-      Slide.destroy_all
-
-      slide1 = FactoryGirl.create(:slide, :created_at => time-1)
-      slide2 = FactoryGirl.create(:slide, :created_at => time+1)
-
-      Slide.count.should == 2
-      Slide.before(time).count.should == 1
- 
-    end
-    pending 'actual test of time'
   end
 
   describe '.friends_recent' do

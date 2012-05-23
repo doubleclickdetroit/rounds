@@ -20,9 +20,7 @@ describe Comment do
 
   it_should_scope_friends(klass)
 
-  describe '.before' do
-    pending
-  end
+  it_should_scope_before_and_after(klass)
 
   describe '.friends_recent' do
     before(:each) do
