@@ -7,8 +7,8 @@ module ControllerMacros
     end
   end
 
-  def it_should_handle_index_by_parent_id_or_by_user(klass, parent_klass)
-    # todo factory :with_parent ?
+  def it_should_handle_index_by_parent_id(klass, parent_klass)
+    # todo factory :with_parent ? REFACTOR
     
     describe 'shared index functionality' do
       before(:each) do
@@ -21,7 +21,6 @@ module ControllerMacros
         @parent_id_sym = "#{parent_str}_id".intern
       end
 
-      # by parent
       context "with #{@parent_id_sym}" do
         it "should show #{klass.to_s.pluralize} for a #{parent_klass.to_s}" do
           @parent   = FactoryGirl.create(@parent_sym)
@@ -33,28 +32,11 @@ module ControllerMacros
           assigns(@sym_plural).should == [@instance]
         end
       end
-
-      #todo call by user
-      it_should_handle_index_by_user(klass)
     end
   end
 
-  def it_should_handle_index_by_user(klass)
-    context "without #{@parent_id_sym} and with user id" do
-      before(:each) do
-        klass.destroy_all
-
-        # noise before
-        4.times { FactoryGirl.create(@sym) }
-
-        @first  = FactoryGirl.create(@sym, :user_id => @user.id)
-        @second = FactoryGirl.create(@sym, :user_id => @user.id)
-        @third  = FactoryGirl.create(@sym, :user_id => @user.id)
-
-        # noise after
-        4.times { FactoryGirl.create(@sym) }
-      end
-
+  def it_should_handle_index_by_user(klass, parent_klass)
+    context "without #{parent_klass.to_s.downcase} and with user id" do
       it 'should use provider/uid params if passed' do
         user = FactoryGirl.create(:user)
         auth = FactoryGirl.create(:authorization, :user_id => user.id)
@@ -70,7 +52,36 @@ module ControllerMacros
         assigns(:user).should == @user
       end
 
-      context 'and without :before/:after' do
+    end
+  end
+
+  def it_should_handle_before_and_after(klass)
+    context 'before_or_after handling' do
+      before(:each) do
+        klass.destroy_all
+
+        str         = klass.to_s.downcase
+        @sym        = str.intern 
+        @sym_plural = str.pluralize.intern 
+
+        # noise before
+        4.times { FactoryGirl.create(@sym) }
+
+        @first  = FactoryGirl.create(@sym, :user_id => @user.id)
+        @second = FactoryGirl.create(@sym, :user_id => @user.id)
+        @third  = FactoryGirl.create(@sym, :user_id => @user.id)
+
+        # noise after
+        4.times { FactoryGirl.create(@sym) }
+      end
+
+      it 'should call recent (limit/sort/blocked)' do
+        pending 'not sure this is right'
+        klass.should_receive :recent
+        get :index, {}, valid_session
+      end
+
+      context 'without :before/:after' do
         it "should show recent #{klass.to_s.pluralize}" do
           get :index, {}, valid_session
           assigns(@sym_plural).count.should == 3
