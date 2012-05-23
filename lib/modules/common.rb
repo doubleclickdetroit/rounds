@@ -1,28 +1,37 @@
 module Common
   module Scopes
-    module FriendsAndRecent
-      module ClassMethods
-        def friends_recent(user_id_arr)
-          friends(user_id_arr).recent
-        end
-      end
+    module Recent
+      # module ClassMethods
+      #   # friends_recent was here
+      # end
 
       def self.included(base)
-        base.extend(ClassMethods)
+        # base.extend(ClassMethods)
 
-        module_name = self.to_s
+        # module_name = self.to_s
         base.class_eval do
           # todo breaking heroku...
           # raise "#{self.to_s} must have an attribute 'id' to include #{module_name}" unless self.new.respond_to?(:id)
 
-          # todo not really FriendsAndRecent...
+          # todo remove
           scope :of_type, lambda {|type| where :type => type}
 
-          scope :before, lambda {|time| where(["created_at < ?", time])}
-
           scope :recent, :order => 'created_at desc', :limit => 8
+        end
+      end
+    end
 
-          scope :friends, lambda {|user_id_arr|
+    module Friends
+      def self.included(base)
+        # module_name = self.to_s
+        base.class_eval do
+          # todo breaking heroku...
+          # raise "#{self.to_s} must have an attribute 'id' to include #{module_name}" unless self.new.respond_to?(:id)
+
+          scope :by_friends_for_user, lambda {|user|
+            user_id_arr = user.friend_ids
+
+            # todo cleaner?
             return where('1 = 0') if user_id_arr.empty?
 
             cond_str = user_id_arr.inject('') do |str,user_id|
@@ -32,6 +41,18 @@ module Common
 
             where(cond_str)
           }
+        end
+      end
+    end
+
+    module BeforeAndAfter
+      def self.included(base)
+        # module_name = self.to_s
+        base.class_eval do
+          # todo breaking heroku...
+          # raise "#{self.to_s} must have an attribute 'id' to include #{module_name}" unless self.new.respond_to?(:id)
+
+          scope :before, lambda {|time| where(["created_at < ?", time])}
         end
       end
     end

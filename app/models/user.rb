@@ -42,13 +42,13 @@ class User < ActiveRecord::Base
     reject_blocked Round.recent
   end
 
-  def friends_user_ids
+  def friend_ids
     # todo
     []
   end
 
   def friends_feed
-    filtered_friends_user_ids = remove_blocked_user_ids_from(friends_user_ids)
+    filtered_friends_user_ids = remove_blocked_user_ids_from(friend_ids)
     Round.friends_recent(filtered_friends_user_ids)
   end
 

@@ -12,36 +12,16 @@ describe Comment do
     @comment.slide.should == @slide
   end
 
-  it_should_have_a_creator(Comment)
+  klass = Comment
 
-  describe '.recent' do
-    before(:each) do
-      9.times { FactoryGirl.create(:comment) }
-    end
+  it_should_have_a_creator(klass)
 
-    pending 'test recent? not just limit 8?'
-    it 'should return the 8 most recent Comments' do
-      Comment.recent.count.should == 8
-    end
-  end
+  it_should_scope_recent(klass)
+
+  it_should_scope_friends(klass)
 
   describe '.before' do
     pending
-  end
-
-  describe '.friends' do
-    before(:each) do
-      8.times { FactoryGirl.create(:comment) }
-      friend1 = FactoryGirl.create(:user)
-      friend2 = FactoryGirl.create(:user)
-      FactoryGirl.create(:comment, :user_id => friend1.id)
-      FactoryGirl.create(:comment, :user_id => friend2.id)
-      @user_ids = [friend1.id, friend2.id]
-    end
-
-    it 'should only return Comments made by friends' do
-      Comment.friends(@user_ids).count.should == 2
-    end
   end
 
   describe '.friends_recent' do

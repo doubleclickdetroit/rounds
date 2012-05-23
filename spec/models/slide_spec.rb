@@ -131,7 +131,13 @@ describe Slide do
     end
   end
 
-  it_should_have_a_creator(Slide)
+  klass = Slide
+
+  it_should_have_a_creator(klass)
+
+  it_should_scope_recent(klass)
+
+  it_should_scope_friends(klass)
 
   describe '.of_type' do
     before(:each) do
@@ -153,17 +159,6 @@ describe Slide do
     end
   end
 
-  describe '.recent' do
-    before(:each) do
-      9.times { FactoryGirl.create(:slide) }
-    end
-
-    pending 'test recent (by date)? not just limit 8?'
-    it 'should return the 8 most recent Slides' do
-      Slide.recent.count.should == 8
-    end
-  end
-
   describe '.before' do
     it 'should only return Slides created before a specific Time' do
       time = Time.now
@@ -179,21 +174,6 @@ describe Slide do
  
     end
     pending 'actual test of time'
-  end
-
-  describe '.friends' do
-    before(:each) do
-      8.times { FactoryGirl.create(:slide) }
-      friend1 = FactoryGirl.create(:user)
-      friend2 = FactoryGirl.create(:user)
-      FactoryGirl.create(:slide, :user_id => friend1.id)
-      FactoryGirl.create(:slide, :user_id => friend2.id)
-      @user_ids = [friend1.id, friend2.id]
-    end
-
-    it 'should only return Slides made by friends' do
-      Slide.friends(@user_ids).count.should == 2
-    end
   end
 
   describe '.friends_recent' do

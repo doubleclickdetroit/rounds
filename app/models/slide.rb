@@ -1,12 +1,16 @@
 require Rails.root.join('lib/modules/common.rb')
 
 class Slide < ActiveRecord::Base
-  include Common::Scopes::FriendsAndRecent
+  include Common::Scopes::Recent
+  include Common::Scopes::Friends
+  include Common::Scopes::BeforeAndAfter
+
   include Common::Associations::HasCreator
-  # todo move to common?
-  def self.friends_recent_for(user)
-    friends_recent(user.friends_user_ids)
-  end
+
+  # # todo move to common?
+  # def self.friends_recent_for(user)
+  #   friends_recent(user.friends_user_ids)
+  # end
 
   belongs_to :round
 
