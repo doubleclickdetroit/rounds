@@ -38,45 +38,6 @@ describe Slide do
     end.should be_true
   end
 
-  pending '.community_feed spec for Sentence/Picture and not just Slide?'
-
-  describe '.community_feed' do
-    before(:each) do 
-      Slide.destroy_all
-
-      @user = FactoryGirl.create(:user)
-
-      @first  = FactoryGirl.create(:slide)
-      @second = FactoryGirl.create(:slide)
-      @third  = FactoryGirl.create(:slide)
-    end
-
-    it 'should call .recent (limit 8, order, blocked users filtered)' do
-      Slide.should_receive :recent
-      Slide.community_feed(@user)
-    end
-
-    context 'with no time arg' do
-      it "should return only the proper number of #{Slide.to_s.pluralize}" do 
-        Slide.community_feed(@user).count.should == 3
-      end
-    end
-
-    context 'with time arg' do
-      context 'for before' do
-        it "should assign only proper number of #{Slide.to_s.pluralize} to @slides" do 
-          Slide.community_feed(@user, :before => @second.id).should == [@first]
-        end
-      end
-
-      context 'for after' do
-        it "should assign only proper number of #{Slide.to_s.pluralize} to @slides" do 
-          Slide.community_feed(@user, :after => @second.id).should == [@third]
-        end
-      end
-    end
-  end
-
   describe '.create_next' do
     before(:each) do
       @user  = FactoryGirl.create(:user)

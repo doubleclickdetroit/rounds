@@ -1,4 +1,5 @@
 module Common
+
   module Scopes
     module Recent
       module ClassMethods
@@ -45,6 +46,18 @@ module Common
         base.class_eval do
           scope :before, lambda {|id| where(["id < ?", id])}
           scope :after,  lambda {|id| where(["id > ?", id])}
+
+          scope :before_or_after, lambda {|params|
+            offset = nil
+            if val = params[:before] 
+              offset = [:before, val]
+            elsif val = params[:after]
+              offset = [:after, val]
+            end
+            
+            # todo                                     kludgey
+            offset.is_a?(Array) ? self.send(*offset) : where('1 = 1')
+          }
         end
       end
     end
@@ -80,6 +93,43 @@ module Common
     end
   end
 
+  module Finders
+    module ClassMethods
+      # the firehose, but with :limit => 8,
+      # sorted, with users blocked as needed, 
+      # and with before/after taken care of.
+      def community_feed(*args)
+        # todo make this more readable?
+        user = args.shift
+        args = args.extract_options!
+
+        if val = args[:before] 
+          @offset = [:before, val]
+        elsif val = args[:after]
+          @offset = [:after, val]
+        end
+
+        # send performs before/after if there is an offset
+        slides = (@offset ? self.send(*@offset) : self).recent(user)
+      end
+
+      # todo ensure this ActiveRelation is performant 
+      def feed_by_user_and_pagination(user, params)
+        # the firehose, but already with :limit => 8,
+        # sorted, with users blocked as needed, and
+        # with before/after taken care of.
+        #
+        # a .where is chained to only return records
+        # created by the User record passed in.
+        community_feed(user, params).where(:user_id => user.id)
+      end
+    end
+
+    def self.included(base)
+      base.extend ClassMethods
+    end
+  end
+
   module Helpers
     # def remove_blocked_user_ids_from(user_ids_arr)
     #   (Set.new(user_ids_arr) ^ blocked_user_ids).to_a
@@ -93,4 +143,5 @@ module Common
     #   end
     # end
   end
+
 end
