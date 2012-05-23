@@ -17,6 +17,21 @@ module Common
             # todo cleaner?
             return where('1 = 0') if user_id_arr.empty?
 
+            where(['user_id IN (?)', user_id_arr])
+          }
+        end
+      end
+    end
+
+    module Unfriends
+      def self.included(base)
+        base.class_eval do
+          scope :by_friends_for_user, lambda {|user|
+            user_id_arr = user.friend_ids
+
+            # todo cleaner?
+            return where('1 = 0') if user_id_arr.empty?
+
             friends_id_str = user_id_arr.inject('') do |str,user_id|
               str << " OR " unless str.empty?
               str << "user_id = #{user_id}"
