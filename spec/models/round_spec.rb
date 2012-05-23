@@ -33,21 +33,7 @@ describe Round do
 
   it 'should return .slides in order of their created_by'
 
-  describe '.created_by' do
-    pending 'do i need to check this more thoroughly here or just in the controller spec?'
-
-    it 'should return a User' do
-      @round.created_by = FactoryGirl.create(:user)
-      @round.created_by.should be_an_instance_of(User)
-    end
-  end
-
-  describe '.creator' do
-    it 'should simply call .created_by' do
-      @round.should_receive :created_by
-      @round.creator
-    end
-  end
+  it_should_have_a_creator(Round)
 
   describe '.recent' do
     before(:each) do

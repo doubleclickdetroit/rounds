@@ -35,7 +35,6 @@ module Common
         end
       end
     end
-
   end
 
   module Associations
@@ -50,6 +49,8 @@ module Common
         end
       end
 
+      # todo clean up what follows
+
       # todo by alias
       def created_by
         user
@@ -62,6 +63,10 @@ module Common
       # todo by alias
       def creator
         created_by
+      end
+
+      def creator=(user)
+        self.created_by = user
       end
     end
   end

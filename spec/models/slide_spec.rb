@@ -131,21 +131,7 @@ describe Slide do
     end
   end
 
-  describe '.created_by' do
-    pending 'do i need to check this more thoroughly here or just in the controller spec?'
-
-    it 'should return a User' do
-      @slide.created_by = FactoryGirl.create(:user)
-      @slide.created_by.should be_an_instance_of(User)
-    end
-  end
-
-  describe '.creator' do
-    it 'should simply call .created_by' do
-      @slide.should_receive :created_by
-      @slide.creator
-    end
-  end
+  it_should_have_a_creator(Slide)
 
   describe '.of_type' do
     before(:each) do
