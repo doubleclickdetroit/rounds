@@ -14,9 +14,32 @@ class Slide < ActiveRecord::Base
   has_many :ballots
 
 
-  def self.community_feed(user, time=nil)
-    time   = Time.parse time if time 
-    slides = (time ? self.before(time) : self).recent(user)
+  # the firehose, but with :limit => 8,
+  # sorted, with users blocked as needed, 
+  # and with before/after taken care of.
+  def self.community_feed(*args)
+    # todo make this more readable?
+    user = args.shift
+    args = args.extract_options!
+
+    if val = args[:before] 
+      @offset = [:before, val]
+    elsif val = args[:after]
+      @offset = [:after, val]
+    end
+
+    slides = (@offset ? self.send(*@offset) : self).recent(user)
+  end
+
+  # todo ensure ActiveRelation handles this well (performance)
+  def self.feed_by_user_and_time(user, params)
+    # the firehose, but already with :limit => 8,
+    # sorted, with users blocked as needed, and
+    # with before/after taken care of.
+    #
+    # a .where is chained to only return records
+    # created by the User record passed in.
+    community_feed(params[:user_id]).where(:user_id => user.id)
   end
 
   # Slide.create_next(slide, :for => round, :with_lock => round_lock)
