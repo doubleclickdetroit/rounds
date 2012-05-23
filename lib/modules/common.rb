@@ -17,7 +17,7 @@ module Common
             # todo cleaner?
             return where('1 = 0') if user_id_arr.empty?
 
-            cond_str = user_id_arr.inject('') do |str,user_id|
+            friends_id_str = user_id_arr.inject('') do |str,user_id|
               str << " OR " unless str.empty?
               str << "user_id = #{user_id}"
             end
@@ -65,5 +65,19 @@ module Common
         self.created_by = user
       end
     end
+  end
+
+  module Helpers
+    # def remove_blocked_user_ids_from(user_ids_arr)
+    #   (Set.new(user_ids_arr) ^ blocked_user_ids).to_a
+    # end
+
+    # # todo maybe not the most effecient
+    # def reject_blocked(items)
+    #   user_ids = blocked_user_ids
+    #   items.reject do |item|
+    #     user_ids.include? item.user_id
+    #   end
+    # end
   end
 end

@@ -43,17 +43,4 @@ class User < ActiveRecord::Base
     blacklist_entries.map {|ble| ble.blocked_user_id}
   end
 
-private
-  def remove_blocked_user_ids_from(user_ids_arr)
-    (Set.new(user_ids_arr) ^ blocked_user_ids).to_a
-  end
-
-  # todo maybe not the most effecient
-  def reject_blocked(items)
-    user_ids = blocked_user_ids
-    items.reject do |item|
-      user_ids.include? item.user_id
-    end
-  end
-
 end
