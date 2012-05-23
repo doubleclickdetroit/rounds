@@ -17,8 +17,6 @@ module Common
             # todo cleaner? awful?
             return where('1 = 1') if user_id_arr.empty?
 
-            puts where(['user_id NOT IN (?)', user_id_arr]).to_sql
-
             where(['user_id NOT IN (?)', user_id_arr])
           }
 
