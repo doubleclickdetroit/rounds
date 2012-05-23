@@ -7,8 +7,6 @@ class Slide < ActiveRecord::Base
 
   include Common::Associations::HasCreator
 
-  include Common::Finders
-
 
   belongs_to :round
 

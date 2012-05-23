@@ -129,11 +129,11 @@ describe User do
     end
 
     context 'where no user exists' do
-      pending "not sure if this is it, but theres another case im not handling..."
+      pending "not sure if this is it, but theres another case im not spec'ing..."
     end
   end
 
-  describe '#find_by_auth_provider_and_uid' do
+  describe '#find_by_auth_hash' do
     before(:each) do
       @auth_hash = {
         'provider' => 'facebook',
@@ -147,9 +147,7 @@ describe User do
     end
 
     it 'should return the associated User' do
-      provider, uid = @auth_hash['provider'], @auth_hash['uid']
-
-      User.find_by_auth_provider_and_uid(provider, uid).should == @user
+      User.find_by_auth_hash(@auth_hash).should == @user
     end
   end
 

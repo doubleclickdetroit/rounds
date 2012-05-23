@@ -29,8 +29,8 @@ class User < ActiveRecord::Base
     end
   end
 
-  def self.find_by_auth_provider_and_uid(provider, uid)
-    auth = Authorization.find_by_provider_and_uid(provider, uid)
+  def self.find_by_auth_hash(hash)
+    auth = Authorization.find_by_provider_and_uid(hash['provider'], hash['uid'])
     auth.try(:user)
   end
 
