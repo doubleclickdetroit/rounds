@@ -42,7 +42,7 @@ class SlidesController < ApplicationController
   def feed
     # todo dangerous?
     @community_slides = @type.constantize.recent(current_user)
-    @friends_slides   = [] # @type.constantize.friends(current_user.friends_user_ids).recent(current_user)
+    @friends_slides   = [] 
     # todo unnecessary
     respond_with @type
   end

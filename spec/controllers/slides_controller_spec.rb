@@ -8,67 +8,7 @@ describe SlidesController do
   before(:each) { Slide.any_instance.stub(:content).and_return('') }
 
   describe 'GET index' do
-    context 'with round_id' do
-      it 'should show Slides for a Round' do
-        @round = FactoryGirl.create(:round)
-        @slide = FactoryGirl.create(:slide, :round_id => @round.id)
-        FactoryGirl.create(:slide, :round_id => @round.id + 1)
-        params = { :round_id => @round.to_param }
-
-        get :index, params, valid_session
-        assigns(:slides).should == [@slide]
-      end
-    end
-
-    context 'without round_id and with user id' do
-      before(:each) do
-        Slide.destroy_all
-
-        # noise before
-        4.times { FactoryGirl.create(:slide) }
-
-        @first  = FactoryGirl.create(:slide, :user_id => @user.id)
-        @second = FactoryGirl.create(:slide, :user_id => @user.id)
-        @third  = FactoryGirl.create(:slide, :user_id => @user.id)
-
-        # noise after
-        4.times { FactoryGirl.create(:slide) }
-      end
-
-      it 'should use provider/uid params if passed' do
-        user = FactoryGirl.create(:user)
-        auth = FactoryGirl.create(:authorization, :user_id => user.id)
-
-        get :index, {:provider => auth.provider, :uid => auth.uid}, valid_session
-
-        assigns(:user).should_not == @user
-        assigns(:user).should == user
-      end
-
-      it 'should use the current users id if no user_id is passed in' do
-        get :index, {}, valid_session
-        assigns(:user).should == @user
-      end
-
-      context 'and without :before/:after' do
-        it 'should show recent Slides' do
-          get :index, {}, valid_session
-          assigns(:slides).count.should == 3
-        end
-      end
-
-      context 'with :before/:after' do
-        it 'should return Slides :before => id' do
-          get :index, {:before => @second.id}, valid_session
-          assigns(:slides).should == [@first]
-        end
-
-        it 'should return Slides :after => id' do
-          get :index, {:after => @second.id}, valid_session
-          assigns(:slides).should == [@third]
-        end
-      end
-    end
+    it_should_handle_index_by_parent_id_or_by_user(Slide, Round)
   end
 
   describe 'GET show' do
