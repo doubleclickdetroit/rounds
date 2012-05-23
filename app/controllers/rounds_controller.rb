@@ -10,7 +10,7 @@ class RoundsController < ApplicationController
 
     @rounds  = Round.where(:user_id => @user_id)
     # todo slow! chain these somehow
-    @rounds  = time ? @rounds.before(time).recent : @rounds.recent
+    @rounds  = time ? @rounds.before(time).recent(current_user) : @rounds.recent(current_user)
 
     respond_with @rounds.to_json
   end

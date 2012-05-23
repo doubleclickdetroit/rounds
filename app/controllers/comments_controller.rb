@@ -14,9 +14,9 @@ class CommentsController < ApplicationController
       @comments = Comment.where(:user_id => current_user.id)
       if time = params[:time]
         time = Time.parse params[:time]
-        @comments = @comments.before(time).recent
+        @comments = @comments.before(time).recent(current_user)
       else
-        @comments = @comments.recent
+        @comments = @comments.recent(current_user)
       end
     end
     respond_with @comments.to_json

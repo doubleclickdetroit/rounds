@@ -28,6 +28,7 @@ module ModelMacros
   def it_should_scope_recent(klass)
     context 'recent scoping' do
       before(:each) do
+        @user = FactoryGirl.create(:user)
         9.times { FactoryGirl.create(klass.to_s.downcase.intern) }
       end
 
@@ -35,7 +36,7 @@ module ModelMacros
         pending 'test recent? not just limit 8?'
 
         it 'should return the 8 most recent Rounds' do
-          klass.recent.count.should == 8
+          klass.recent(@user).count.should == 8
         end
       end
     end

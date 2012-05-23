@@ -19,9 +19,9 @@ class SlidesController < ApplicationController
       @slides = Slide.where(:user_id => @user_id)
       if time = params[:time]
         time = Time.parse params[:time]
-        @slides = @slides.before(time).recent
+        @slides = @slides.before(time).recent(current_user)
       else
-        @slides = @slides.recent
+        @slides = @slides.recent(current_user)
       end
     end
     respond_with @slides
@@ -49,8 +49,8 @@ class SlidesController < ApplicationController
   # RESTless
   def feed
     # todo dangerous?
-    @community_slides = @type.constantize.recent
-    @friends_slides   = [] # @type.constantize.friends(current_user.friends_user_ids).recent
+    @community_slides = @type.constantize.recent(current_user)
+    @friends_slides   = [] # @type.constantize.friends(current_user.friends_user_ids).recent(current_user)
     respond_with @type
   end
 
@@ -58,7 +58,7 @@ class SlidesController < ApplicationController
     # todo refactor?
     time    = Time.parse params[:time] rescue nil
     klass   = @type.constantize
-    @slides = time ? klass.before(time).recent : klass.recent 
+    @slides = time ? klass.before(time).recent(current_user) : klass.recent(current_user)
     respond_with @slides
   end
 

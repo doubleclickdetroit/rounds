@@ -1,9 +1,26 @@
 module Common
   module Scopes
     module Recent
+      module ClassMethods
+        def recent(user)
+          filter_blocked_for(user).eight_most_recent
+        end
+      end
+
       def self.included(base)
+        base.extend ClassMethods
+
         base.class_eval do
-          scope :recent, :order => 'created_at desc', :limit => 8
+          scope :filter_blocked_for, lambda {|user|
+            user_id_arr = user.blocked_user_ids
+
+            # todo cleaner? awful?
+            return where('1 = 1') if user_id_arr.empty?
+
+            where(['user_id NOT IN (?)', user_id_arr])
+          }
+
+          scope :eight_most_recent, :order => 'created_at desc', :limit => 8
         end
       end
     end
@@ -18,26 +35,6 @@ module Common
             return where('1 = 0') if user_id_arr.empty?
 
             where(['user_id IN (?)', user_id_arr])
-          }
-        end
-      end
-    end
-
-    module Unfriends
-      def self.included(base)
-        base.class_eval do
-          scope :by_friends_for_user, lambda {|user|
-            user_id_arr = user.friend_ids
-
-            # todo cleaner?
-            return where('1 = 0') if user_id_arr.empty?
-
-            friends_id_str = user_id_arr.inject('') do |str,user_id|
-              str << " OR " unless str.empty?
-              str << "user_id = #{user_id}"
-            end
-
-            where(cond_str)
           }
         end
       end
