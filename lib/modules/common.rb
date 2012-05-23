@@ -44,6 +44,7 @@ module Common
       def self.included(base)
         base.class_eval do
           scope :before, lambda {|id| where(["id < ?", id])}
+          scope :after,  lambda {|id| where(["id > ?", id])}
         end
       end
     end

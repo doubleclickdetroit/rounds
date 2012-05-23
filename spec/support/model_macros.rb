@@ -105,8 +105,7 @@ module ModelMacros
 
       describe '.after' do
         it "should only return #{klass.to_s.pluralize} after the passed id" do
-          pending
-          klass.before(@second.id).should == [@third]
+          klass.after(@second.id).should == [@third]
         end
       end
     end
