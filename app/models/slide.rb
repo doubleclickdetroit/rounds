@@ -7,15 +7,12 @@ class Slide < ActiveRecord::Base
 
   include Common::Associations::HasCreator
 
-  # # todo move to common?
-  # def self.friends_recent_for(user)
-  #   friends_recent(user.friends_user_ids)
-  # end
 
   belongs_to :round
 
   has_many :comments
   has_many :ballots
+
 
   # Slide.create_next(slide, :for => round, :with_lock => round_lock)
   def self.create_next(slide_hash)

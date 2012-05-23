@@ -141,32 +141,4 @@ describe Slide do
 
   it_should_scope_before_and_after(klass)
 
-  describe '.friends_recent' do
-    before(:each) do
-      8.times { FactoryGirl.create(:slide) }
-      friend1 = FactoryGirl.create(:user)
-      friend2 = FactoryGirl.create(:user)
-      4.times { FactoryGirl.create(:slide, :user_id => friend1.id) }
-      5.times { FactoryGirl.create(:slide, :user_id => friend2.id) }
-      @user_ids = [friend1.id, friend2.id]
-    end
-
-    it 'should only return 8 Slides at most' do
-      Slide.friends_recent(@user_ids).count.should == 8
-    end
-  end
-
-  describe '.friends_recent_for' do
-    before(:each) do
-      @user  = FactoryGirl.create(:user)
-      friend = FactoryGirl.create(:user)
-      9.times { FactoryGirl.create(:slide, :user_id => friend.id) }
-      @user.stub(:friends_user_ids).and_return([friend.id])
-    end
-
-    it 'should only return 8 Slides at most' do
-      Slide.friends_recent_for(@user).count.should == 8
-    end
-  end
-
 end

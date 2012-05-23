@@ -34,24 +34,14 @@ class User < ActiveRecord::Base
     auth.try(:user)
   end
 
-  def blocked_user_ids
-    blacklist_entries.map {|ble| ble.blocked_user_id}
-  end
-
-  def new_feed
-    reject_blocked Round.recent
-  end
-
   def friend_ids
     # todo
     []
   end
 
-  def friends_feed
-    filtered_friends_user_ids = remove_blocked_user_ids_from(friend_ids)
-    Round.friends_recent(filtered_friends_user_ids)
+  def blocked_user_ids
+    blacklist_entries.map {|ble| ble.blocked_user_id}
   end
-
 
 private
   def remove_blocked_user_ids_from(user_ids_arr)

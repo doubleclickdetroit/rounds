@@ -43,16 +43,4 @@ describe Round do
 
   it_should_scope_before_and_after(klass)
 
-  describe '.friends_recent' do
-    before(:each) do
-      friend = FactoryGirl.create(:user)
-      9.times { FactoryGirl.create(:round, :user_id => friend.id) }
-      @user_ids = [friend.id]
-    end
-
-    it 'should only return 8 Rounds at most' do
-      Round.friends_recent(@user_ids).count.should == 8
-    end
-  end
-
 end

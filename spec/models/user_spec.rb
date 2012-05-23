@@ -70,52 +70,8 @@ describe User do
     end
   end
 
-  describe '.new_feed' do
-    it 'should simply call Round.recent' do
-      @user.stub(:reject_blocked).and_return([])
-      Round.should_receive :recent
-      @user.new_feed
-    end
-
-    it 'should also aggregate Slides (maybe Comments too)'
-
-    pending 'ensure this tests Slides/Comments as well eventually'
-    it 'should not return anything by a blocked User' do
-      blocked_user = FactoryGirl.create(:user)
-      FactoryGirl.create(:blacklist_entry, :user_id => @user.id, :blocked_user_id => blocked_user.id)
-      6.times { FactoryGirl.create(:round, :user_id => blocked_user.id) }
-      5.times { FactoryGirl.create(:round, :user_id => "#{blocked_user.id.to_i+1}") }
-
-      @user.new_feed.count.should == 5
-    end
-  end
-
-  describe '.friends_ids' do
+  describe '.friend_ids' do
     pending 'auth needs fleshed out first'
-  end
-
-  describe '.friends_feed' do
-    it 'should simply call Round.friends_recent' do
-      @user.stub(:friend_ids).and_return([1])
-      Round.should_receive(:friends_recent).with(@user.friend_ids)
-      @user.friends_feed
-    end
-
-    it 'should also aggregate Slides (maybe Comments too)'
-
-    pending 'ensure this tests Slides/Comments as well eventually'
-    it 'should not return anything by a blocked User' do
-      blocked_user = FactoryGirl.create(:user)
-      friend_user  = FactoryGirl.create(:user)
-      FactoryGirl.create(:blacklist_entry, :user_id => @user.id, :blocked_user_id => blocked_user.id)
-      6.times { FactoryGirl.create(:round, :user_id => blocked_user.id) }
-      5.times { FactoryGirl.create(:round, :user_id => friend_user.id) }
-      4.times { FactoryGirl.create(:round, :user_id => "#{friend_user.id.to_i+1}") }
-
-      @user.stub(:friend_ids).and_return([friend_user.id, blocked_user.id])
-      feed = @user.friends_feed
-      feed.count.should == 5
-    end
   end
 
   describe '#via_auth' do
