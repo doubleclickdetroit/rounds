@@ -38,6 +38,48 @@ describe Slide do
     end.should be_true
   end
 
+  describe '.community_feed' do
+    before(:each) do 
+      @user = FactoryGirl.create(:user)
+
+      @time = Time.now
+      3.times { FactoryGirl.create(:sentence, :created_at => @time) }
+      3.times { FactoryGirl.create(:picture, :created_at => @time) }
+      @time += 30 # arbitrary
+      2.times { FactoryGirl.create(:sentence, :created_at => @time) }
+      2.times { FactoryGirl.create(:picture, :created_at => @time) }
+
+      @time = @time.to_s
+    end
+
+    context 'with no time arg' do
+      [Sentence,Picture].each do |klass|
+        context klass.to_s do
+          it "should return only the proper number of #{klass.to_s.pluralize}" do 
+            pending 'moving before/after stlye and to id instead of time'
+            klass.community_feed(@user, @time).count.should == 5
+            klass.community_feed(@user, @time).all?{|s|s.instance_of?(klass)}.should be_true
+          end
+        end
+      end
+    end
+    
+    context 'with time arg' do
+      [Sentence,Picture].each do |klass|
+        context klass.to_s do
+          it "should assign only proper number of #{klass.to_s.pluralize} to @slides" do 
+            pending
+            get :community, {:type => klass.to_s, :time => @time}, valid_session
+
+            assigns(:slides).count.should == 3
+            assigns(:slides).all?{|s|s.instance_of?(klass)}.should be_true
+          end
+        end
+      end
+    end
+
+  end
+
   describe '.create_next' do
     before(:each) do
       @user  = FactoryGirl.create(:user)

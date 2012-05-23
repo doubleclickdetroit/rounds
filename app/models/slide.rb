@@ -14,6 +14,11 @@ class Slide < ActiveRecord::Base
   has_many :ballots
 
 
+  def self.community_feed(user, time=nil)
+    time   = Time.parse time if time 
+    slides = (time ? self.before(time) : self).recent(user)
+  end
+
   # Slide.create_next(slide, :for => round, :with_lock => round_lock)
   def self.create_next(slide_hash)
     # REFACTOR THIS FFS
