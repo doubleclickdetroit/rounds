@@ -6,11 +6,15 @@ class RoundsController < ApplicationController
   def index
     provider, uid = params[:provider], params[:uid]
     @user_id = uid ? User.find_by_auth_provider_and_uid(provider, uid).try(:id) : current_user.id
-    time     = params[:time] ? Time.parse(params[:time]) : nil
+    if params[:before]
+      @id = params[:before]
+    # elsif params[:after]
+    #   @id = params[:after]
+    end
 
     @rounds  = Round.where(:user_id => @user_id)
     # todo slow! chain these somehow
-    @rounds  = time ? @rounds.before(time).recent(current_user) : @rounds.recent(current_user)
+    @rounds  = time ? @rounds.before(@id).recent(current_user) : @rounds.recent(current_user)
 
     respond_with @rounds.to_json
   end

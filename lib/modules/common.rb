@@ -43,7 +43,7 @@ module Common
     module BeforeAndAfter
       def self.included(base)
         base.class_eval do
-          scope :before, lambda {|time| where(["created_at < ?", time])}
+          scope :before, lambda {|id| where(["id < ?", id])}
         end
       end
     end

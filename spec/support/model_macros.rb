@@ -41,7 +41,7 @@ module ModelMacros
       describe '.recent' do
         pending 'test recent (order)? not just limit 8?'
 
-        it 'should return the 8 most recent Rounds' do
+        it "should return the 8 most recent #{klass.to_s.pluralize}" do
           klass.recent(@user).count.should == 8
         end
 
@@ -78,7 +78,7 @@ module ModelMacros
       end
 
       describe '.by_friends_for_user' do
-        it 'should only return Rounds made by friends' do
+        it "should only return #{klass.to_s.pluralize} made by friends" do
           klass.by_friends_for_user(@user).count.should == 2
         end
       end
@@ -91,31 +91,23 @@ module ModelMacros
         klass.destroy_all
 
         sym = klass.to_s.downcase.intern
+
+        @first  = FactoryGirl.create(sym)
+        @second = FactoryGirl.create(sym)
+        @third  = FactoryGirl.create(sym)
       end
 
       describe '.before' do
-        it 'should spec before'
-
-        # describe '.before' do
-        #   it 'should only return Slides created before a specific Time' do
-        #     time = Time.now
-
-        #     # todo wasteful
-        #     Slide.destroy_all
-
-        #     slide1 = FactoryGirl.create(:slide, :created_at => time-1)
-        #     slide2 = FactoryGirl.create(:slide, :created_at => time+1)
-
-        #     Slide.count.should == 2
-        #     Slide.before(time).count.should == 1
-
-        #   end
-        #   pending 'actual test of time'
-        # end
+        it "should only return #{klass.to_s.pluralize} before the passed id" do
+          klass.before(@second.id).should == [@first]
+        end
       end
 
       describe '.after' do
-        it 'should spec after'
+        it "should only return #{klass.to_s.pluralize} after the passed id" do
+          pending
+          klass.before(@second.id).should == [@third]
+        end
       end
     end
   end
