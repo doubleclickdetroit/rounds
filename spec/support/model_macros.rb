@@ -1,15 +1,15 @@
 module ModelMacros
   def it_should_have_a_creator(klass)
-    before(:each) do
-      user = FactoryGirl.create(:user)
-
-      @instance = FactoryGirl.create(klass.to_s.downcase.intern) 
-      @instance.user = user
-      @instance.save
-      @instance.reload
-    end
-
     context 'belongs to a User' do
+      before(:each) do
+        user = FactoryGirl.create(:user)
+
+        @instance = FactoryGirl.create(klass.to_s.downcase.intern) 
+        @instance.user = user
+        @instance.save
+        @instance.reload
+      end
+
       describe '.created_by' do
         it 'should return a User' do
           @instance.created_by.should be_an_instance_of(User)

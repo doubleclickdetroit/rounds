@@ -17,13 +17,6 @@ class Slide < ActiveRecord::Base
   has_many :comments
   has_many :ballots
 
-  def self.of_type_and_before(type, time=nil)
-    time   = Time.parse time rescue nil
-    slides = self.of_type(type)
-    slides = slides.before(time) if time
-    slides.recent
-  end
-
   # Slide.create_next(slide, :for => round, :with_lock => round_lock)
   def self.create_next(slide_hash)
     # REFACTOR THIS FFS

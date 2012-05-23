@@ -141,26 +141,6 @@ describe Slide do
 
   it_should_scope_before_and_after(klass)
 
-  describe '.of_type' do
-    before(:each) do
-      # todo wasteful, 43 created before
-      Slide.destroy_all
-
-      FactoryGirl.create(:slide, :type => 'Sentence') 
-      FactoryGirl.create(:slide, :type => 'Picture') 
-    end
-
-    it 'should only return Sentences when passed that type' do
-      Slide.count.should == 2
-      Slide.of_type('Sentence').count.should == 1
-    end
-
-    it 'should only return Pictures when passed that type' do
-      Slide.count.should == 2
-      Slide.of_type('Picture').count.should == 1
-    end
-  end
-
   describe '.friends_recent' do
     before(:each) do
       8.times { FactoryGirl.create(:slide) }
@@ -186,31 +166,6 @@ describe Slide do
 
     it 'should only return 8 Slides at most' do
       Slide.friends_recent_for(@user).count.should == 8
-    end
-  end
-
-  describe ".of_type_and_before" do
-    before(:each) do
-      @time = Time.now
-      5.times { FactoryGirl.create(:sentence, :created_at => @time) }
-      5.times { FactoryGirl.create(:picture, :created_at => @time) }
-      @time += 30 # arbitrary
-      4.times { FactoryGirl.create(:sentence, :created_at => @time) }
-      4.times { FactoryGirl.create(:picture, :created_at => @time) }
-    end
-
-    [Sentence,Picture].each do |klass|
-      it "should return the 8 most recent slides of the proper type (#{klass.to_s}) with no time arg" do
-        slides = Slide.of_type_and_before(klass.to_s)
-        slides.count.should == 8 # todo spec most recent instead
-        slides.all?{|s|s.instance_of?(klass)}.should be_true
-      end
-
-      it "should return the slides before the proper time and of the proper type (#{klass.to_s})" do
-        slides = Slide.of_type_and_before(klass.to_s, @time)
-        slides.count.should == 5 
-        slides.all?{|s|s.instance_of?(klass)}.should be_true
-      end
     end
   end
 

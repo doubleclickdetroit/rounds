@@ -1,21 +1,8 @@
 module Common
   module Scopes
     module Recent
-      # module ClassMethods
-      #   # friends_recent was here
-      # end
-
       def self.included(base)
-        # base.extend(ClassMethods)
-
-        # module_name = self.to_s
         base.class_eval do
-          # todo breaking heroku...
-          # raise "#{self.to_s} must have an attribute 'id' to include #{module_name}" unless self.new.respond_to?(:id)
-
-          # todo remove
-          scope :of_type, lambda {|type| where :type => type}
-
           scope :recent, :order => 'created_at desc', :limit => 8
         end
       end
@@ -23,11 +10,7 @@ module Common
 
     module Friends
       def self.included(base)
-        # module_name = self.to_s
         base.class_eval do
-          # todo breaking heroku...
-          # raise "#{self.to_s} must have an attribute 'id' to include #{module_name}" unless self.new.respond_to?(:id)
-
           scope :by_friends_for_user, lambda {|user|
             user_id_arr = user.friend_ids
 
@@ -47,11 +30,7 @@ module Common
 
     module BeforeAndAfter
       def self.included(base)
-        # module_name = self.to_s
         base.class_eval do
-          # todo breaking heroku...
-          # raise "#{self.to_s} must have an attribute 'id' to include #{module_name}" unless self.new.respond_to?(:id)
-
           scope :before, lambda {|time| where(["created_at < ?", time])}
         end
       end
@@ -61,11 +40,7 @@ module Common
   module Associations
     module HasCreator
       def self.included(base)
-        module_name = self.to_s
         base.class_eval do
-          # todo breaking heroku...
-          # raise "#{self.to_s} must have an attribute 'id' to include #{module_name}" unless self.new.respond_to?(:id)
-
           belongs_to :user
         end
       end

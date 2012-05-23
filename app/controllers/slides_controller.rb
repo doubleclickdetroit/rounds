@@ -55,12 +55,15 @@ class SlidesController < ApplicationController
   end
 
   def community
-    @slides = Slide.of_type_and_before(@type,params[:time])
+    # todo refactor?
+    time    = Time.parse params[:time] rescue nil
+    klass   = @type.constantize
+    @slides = time ? klass.before(time).recent : klass.recent 
     respond_with @slides
   end
 
   def friends
-    @slides = [] # Slide.friends(current_user.friends_user_ids).of_type_and_before(@type,params[:time])
+    @slides = [] 
     respond_with @slides
   end
 
