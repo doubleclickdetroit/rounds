@@ -20,60 +20,52 @@ describe SlidesController do
       end
     end
 
-    context 'without round_id' do
-      context 'with user ids' do
-        it 'should use provider/uid params if passed' do
-          user = FactoryGirl.create(:user)
-          auth = FactoryGirl.create(:authorization, :user_id => user.id)
+    context 'without round_id and with user id' do
+      before(:each) do
+        Slide.destroy_all
 
-          get :index, {:provider => auth.provider, :uid => auth.uid}, valid_session
+        # noise before
+        4.times { FactoryGirl.create(:slide) }
 
-          assigns(:user_id).should_not == @user.id
-          assigns(:user_id).should == user.id
-        end
+        @first  = FactoryGirl.create(:slide, :user_id => @user.id)
+        @second = FactoryGirl.create(:slide, :user_id => @user.id)
+        @third  = FactoryGirl.create(:slide, :user_id => @user.id)
 
-        it 'should use the current users id if no user_id is passed in' do
+        # noise after
+        4.times { FactoryGirl.create(:slide) }
+      end
+
+      it 'should use provider/uid params if passed' do
+        user = FactoryGirl.create(:user)
+        auth = FactoryGirl.create(:authorization, :user_id => user.id)
+
+        get :index, {:provider => auth.provider, :uid => auth.uid}, valid_session
+
+        assigns(:user).should_not == @user
+        assigns(:user).should == user
+      end
+
+      it 'should use the current users id if no user_id is passed in' do
+        get :index, {}, valid_session
+        assigns(:user).should == @user
+      end
+
+      context 'and without :before/:after' do
+        it 'should show recent Slides' do
           get :index, {}, valid_session
-          assigns(:user_id).should == @user.id
+          assigns(:slides).count.should == 3
         end
       end
 
-      context 'without user ids' do
-        pending 'not sure if this tests for Sentence/Picture well enough...'
-        context 'and without time arg' do
-          it 'should show recent Slides' do
-            pending 'breaking, but needs to be switched ton id anyway'
-            3.times { @slide = FactoryGirl.create(:slide, :user_id => @user.id) }
-            4.times { @slide = FactoryGirl.create(:slide) }
-
-            get :index, {}, valid_session
-            assigns(:slides).count.should == 3
-
-            # brings total by user to 9
-            6.times { @slide = FactoryGirl.create(:slide, :user_id => @user.id) }
-
-            get :index, {}, valid_session
-            assigns(:slides).count.should == 8
-          end
+      context 'with :before/:after' do
+        it 'should return Slides :before => id' do
+          get :index, {:before => @second.id}, valid_session
+          assigns(:slides).should == [@first]
         end
 
-        context 'with time arg' do
-          it 'should show Rounds created by the current_user' do
-            earlier_time = Time.now
-            3.times { @slide = FactoryGirl.create(:slide, :user_id => @user.id, :created_at => earlier_time) }
-            time = earlier_time + 3
-            4.times { @slide = FactoryGirl.create(:slide, :user_id => @user.id, :created_at => time) }
-
-            # get slides before time
-            get :index, {:time => time}, valid_session
-            assigns(:slides).count.should == 3
-
-            # brings total to 9
-            6.times { @slide = FactoryGirl.create(:slide, :user_id => @user.id, :created_at => earlier_time) }
-
-            get :index, {:time => time}, valid_session
-            assigns(:slides).count.should == 8
-          end
+        it 'should return Slides :after => id' do
+          get :index, {:after => @second.id}, valid_session
+          assigns(:slides).should == [@third]
         end
       end
     end

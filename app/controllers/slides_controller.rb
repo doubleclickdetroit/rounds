@@ -7,23 +7,15 @@ class SlidesController < ApplicationController
   respond_to :json
 
 
-  # todo refactor
-  # todo DRY up, repeated in rounds/comments
   def index
     if round_id = params[:round_id]
       @slides = Round.find(round_id).slides
     else
-      provider, uid = params[:provider], params[:uid]
-      @user = uid ? User.find_by_auth_provider_and_uid(provider, uid) : current_user.id
+      @user = params['uid'] ? User.find_by_auth_hash(params) : current_user
 
-      @slides = Slide.where(:user_id => @user_id)
-      if time = params[:time]
-        time = Time.parse params[:time]
-        @slides = @slides.before(time).recent(current_user)
-      else
-        @slides = @slides.recent(current_user)
-      end
+      @slides = @user.slides.before_or_after(params).recent(@user)
     end
+
     respond_with @slides
   end
 
@@ -56,10 +48,8 @@ class SlidesController < ApplicationController
   end
 
   def community
-    # todo refactor?
-    time    = Time.parse params[:time] rescue nil
-    klass   = @type.constantize
-    @slides = time ? klass.before(time).recent(current_user) : klass.recent(current_user)
+    @slides = @type.constantize.before_or_after(params).recent(current_user)
+
     respond_with @slides
   end
 
