@@ -2,6 +2,8 @@ module ModelMacros
   def it_should_have_a_creator(klass)
     context 'belongs to a User' do
       before(:each) do
+        klass.destroy_all
+
         user = FactoryGirl.create(:user)
 
         @instance = FactoryGirl.create(klass.to_s.downcase.intern) 
@@ -28,15 +30,28 @@ module ModelMacros
   def it_should_scope_recent(klass)
     context 'recent scoping' do
       before(:each) do
+        klass.destroy_all
+
         @user = FactoryGirl.create(:user)
-        9.times { FactoryGirl.create(klass.to_s.downcase.intern) }
+        4.times { FactoryGirl.create(klass.to_s.downcase.intern) }
+        @other_user = FactoryGirl.create(:user)
+        5.times { FactoryGirl.create(klass.to_s.downcase.intern, :user_id => @other_user.id) }
       end
 
       describe '.recent' do
-        pending 'test recent? not just limit 8?'
+        pending 'test recent (order)? not just limit 8?'
 
         it 'should return the 8 most recent Rounds' do
           klass.recent(@user).count.should == 8
+        end
+
+        it 'should not return anything by a blocked user' do
+          @blocked_user = @other_user
+          FactoryGirl.create(:blacklist_entry, :user_id => @user.id, :blocked_user_id => @blocked_user.id)
+
+          @user.blocked_user_ids.should == [@blocked_user.id]
+
+          klass.recent(@user).count.should == 4
         end
       end
     end
@@ -45,6 +60,8 @@ module ModelMacros
   def it_should_scope_friends(klass)
     context 'friend scoping' do
       before(:each) do
+        klass.destroy_all
+
         sym = klass.to_s.downcase.intern
 
         @user = FactoryGirl.create(:user)
@@ -71,6 +88,8 @@ module ModelMacros
   def it_should_scope_before_and_after(klass)
     context 'before/after scoping' do
       before(:each) do
+        klass.destroy_all
+
         sym = klass.to_s.downcase.intern
       end
 
