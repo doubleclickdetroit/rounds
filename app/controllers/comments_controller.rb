@@ -8,18 +8,12 @@ class CommentsController < ApplicationController
     if slide_id = params[:slide_id]
       @comments = Slide.find(slide_id).comments
     else
-      provider, uid = params[:provider], params[:uid]
-      @user_id = uid ? User.find_by_auth_provider_and_uid(provider, uid).try(:id) : current_user.id
+      @user = params['uid'] ? User.find_by_auth_hash(params) : current_user
 
-      @comments = Comment.where(:user_id => current_user.id)
-      if time = params[:time]
-        time = Time.parse params[:time]
-        @comments = @comments.before(time).recent(current_user)
-      else
-        @comments = @comments.recent(current_user)
-      end
+      @comments = @user.comments.before_or_after(params).recent(@user)
     end
-    respond_with @comments.to_json
+
+    respond_with @comments
   end
 
   def create
