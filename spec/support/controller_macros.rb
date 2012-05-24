@@ -89,20 +89,13 @@ module ControllerMacros
       @sym        = str.intern 
       @sym_plural = str.pluralize.intern 
 
-      # noise before
-      4.times { FactoryGirl.create(@sym) }
-
-      @first  = FactoryGirl.create(@sym, :user_id => @user.id)
-      @second = FactoryGirl.create(@sym, :user_id => @user.id)
-      @third  = FactoryGirl.create(@sym, :user_id => @user.id)
-
-      # noise after
-      4.times { FactoryGirl.create(@sym) }
+      @first  = FactoryGirl.create(@sym)
+      @second = FactoryGirl.create(@sym)
+      @third  = FactoryGirl.create(@sym)
     end if before_block_needed
 
     context 'handling' do
       it 'should call recent (limit/sort/blocked)' do
-        pending 'not sure this is right'
         klass.should_receive :recent
         get action, {}, valid_session
       end

@@ -169,9 +169,8 @@ describe SlidesController do
   describe 'GET community' do
     pending 'unhappy path'
 
-    context 'before_or_after handling' do
-      pending 'use macro'
-    end
+    pending 'sick of dealing with this right now'
+    # it_should_handle_before_and_after_for_action(Slide, :community)
   end
 
   describe 'GET friends' do
