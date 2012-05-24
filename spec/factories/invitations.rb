@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :invitation do
-    sequence(:user_id) {|n| n}
-    sequence(:invited_user_id) {|n| n}
+    user_id 0
+    invited_user_id 0 
     round { FactoryGirl.create(:round) }
     accepted false
   end

@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :blacklist_entry do
     user nil
-    sequence(:user_id) {|n| n}
-    sequence(:blocked_user_id) {|n| n+1}
+    user_id 0
+    blocked_user_id 0 
   end
 end

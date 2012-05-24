@@ -1,24 +1,18 @@
 require Rails.root.join('lib/modules/common.rb')
 
 class Slide < ActiveRecord::Base
-  include Common::Scopes::FriendsAndRecent
+  include Common::Scopes::Recent
+  include Common::Scopes::Friends
+  include Common::Scopes::BeforeAndAfter
+
   include Common::Associations::HasCreator
-  # todo move to common?
-  def self.friends_recent_for(user)
-    friends_recent(user.friends_user_ids)
-  end
+
 
   belongs_to :round
 
   has_many :comments
   has_many :ballots
 
-  def self.of_type_and_before(type, time=nil)
-    time   = Time.parse time rescue nil
-    slides = self.of_type(type)
-    slides = slides.before(time) if time
-    slides.recent
-  end
 
   # Slide.create_next(slide, :for => round, :with_lock => round_lock)
   def self.create_next(slide_hash)

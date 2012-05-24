@@ -8,71 +8,9 @@ describe SlidesController do
   before(:each) { Slide.any_instance.stub(:content).and_return('') }
 
   describe 'GET index' do
-    context 'with round_id' do
-      it 'should show Slides for a Round' do
-        @round = FactoryGirl.create(:round)
-        @slide = FactoryGirl.create(:slide, :round_id => @round.id)
-        FactoryGirl.create(:slide, :round_id => @round.id + 1)
-        params = { :round_id => @round.to_param }
-
-        get :index, params, valid_session
-        assigns(:slides).should == [@slide]
-      end
-    end
-
-    context 'without round_id' do
-      it 'should use provider/uid params if passed' do
-        user = FactoryGirl.create(:user)
-        auth = FactoryGirl.create(:authorization, :user_id => user.id)
-
-        get :index, {:provider => auth.provider, :uid => auth.uid}, valid_session
-
-        assigns(:user_id).should_not == @user.id
-        assigns(:user_id).should == user.id
-      end
-
-      it 'should use the current users id if no user_id is passed in' do
-        get :index, {}, valid_session
-        assigns(:user_id).should == @user.id
-      end
-
-      pending 'not sure if this tests for Sentence/Picture well enough...'
-      context 'and without time arg' do
-        it 'should show recent Slides' do
-          pending 'breaking, but needs to be switched ton id anyway'
-          3.times { @slide = FactoryGirl.create(:slide, :user_id => @user.id) }
-          4.times { @slide = FactoryGirl.create(:slide) }
-
-          get :index, {}, valid_session
-          assigns(:slides).count.should == 3
-
-          # brings total by user to 9
-          6.times { @slide = FactoryGirl.create(:slide, :user_id => @user.id) }
-
-          get :index, {}, valid_session
-          assigns(:slides).count.should == 8
-        end
-      end
-
-      context 'with time arg' do
-        it 'should show Rounds created by the current_user' do
-          earlier_time = Time.now
-          3.times { @slide = FactoryGirl.create(:slide, :user_id => @user.id, :created_at => earlier_time) }
-          time = earlier_time + 3
-          4.times { @slide = FactoryGirl.create(:slide, :user_id => @user.id, :created_at => time) }
-
-          # get slides before time
-          get :index, {:time => time}, valid_session
-          assigns(:slides).count.should == 3
-
-          # brings total to 9
-          6.times { @slide = FactoryGirl.create(:slide, :user_id => @user.id, :created_at => earlier_time) }
-
-          get :index, {:time => time}, valid_session
-          assigns(:slides).count.should == 8
-        end
-      end
-    end
+    it_should_handle_index_by_parent_id(Slide, Round)
+    it_should_handle_index_by_user(Slide)
+    it_should_handle_before_and_after_for_action_and_by_current_user(Slide, :index)
   end
 
   describe 'GET show' do
@@ -231,41 +169,8 @@ describe SlidesController do
   describe 'GET community' do
     pending 'unhappy path'
 
-    before(:each) do 
-      @time = Time.now
-      3.times { FactoryGirl.create(:sentence, :created_at => @time) }
-      3.times { FactoryGirl.create(:picture, :created_at => @time) }
-      @time += 30 # arbitrary
-      2.times { FactoryGirl.create(:sentence, :created_at => @time) }
-      2.times { FactoryGirl.create(:picture, :created_at => @time) }
-    end
-
-    context 'with no time arg' do
-      [Sentence,Picture].each do |klass|
-        context klass.to_s do
-          it "should assign only proper number of #{klass.to_s.pluralize} to @slides" do 
-            get :community, {:type => klass.to_s}, valid_session
-
-            assigns(:slides).count.should == 5
-            assigns(:slides).all?{|s|s.instance_of?(klass)}.should be_true
-          end
-        end
-      end
-    end
-    
-    context 'with time arg' do
-      [Sentence,Picture].each do |klass|
-        context klass.to_s do
-          it "should assign only proper number of #{klass.to_s.pluralize} to @slides" do 
-            get :community, {:type => klass.to_s, :time => @time}, valid_session
-
-            assigns(:slides).count.should == 3
-            assigns(:slides).all?{|s|s.instance_of?(klass)}.should be_true
-          end
-        end
-      end
-    end
-
+    pending 'sick of dealing with this right now'
+    # it_should_handle_before_and_after_for_action(Slide, :community)
   end
 
   describe 'GET friends' do

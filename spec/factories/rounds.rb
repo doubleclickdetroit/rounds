@@ -1,5 +1,5 @@
 FactoryGirl.define do
   factory :round do
-    sequence(:user_id) {|n| n}
+    user_id 0
   end
 end

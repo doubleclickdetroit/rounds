@@ -59,12 +59,13 @@ describe Ballot do
       end
     end
 
-    it 'should not allow a second Ballot to be created by the same user_id' do
+    it 'should not allow a second Ballot to be created by the same user_id for a Slide' do
       user_id = 1
-      FactoryGirl.create(:ballot, :user_id => user_id)
+      slide = FactoryGirl.create(:slide)
+      FactoryGirl.create(:ballot, :slide_id => slide.id, :user_id => user_id)
 
       expect {
-        FactoryGirl.create(:ballot, :user_id => user_id)
+        FactoryGirl.create(:ballot, :slide_id => slide.id, :user_id => user_id)
       }.to raise_error(ActiveRecord::RecordInvalid)
     end
   end

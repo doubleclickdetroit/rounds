@@ -6,70 +6,74 @@ describe CommentsController do
   login_user()
 
   describe 'GET index' do
-    context 'with slide_id' do
-      it 'should show Comments for a Slide' do
-        @slide = FactoryGirl.create(:slide)
-        @comment = FactoryGirl.create(:comment, :slide_id => @slide.id)
-        FactoryGirl.create(:comment, :slide_id => @slide.id + 1)
-        params = { :slide_id => @slide.to_param }
+    it_should_handle_index_by_parent_id(Comment, Slide)
+    it_should_handle_index_by_user(Comment)
+    it_should_handle_before_and_after_for_action_and_by_current_user(Comment, :index)
 
-        get :index, params, valid_session
-        assigns(:comments).should == [@comment]
-      end
-    end
+    # context 'with slide_id' do
+    #   it 'should show Comments for a Slide' do
+    #     @slide = FactoryGirl.create(:slide)
+    #     @comment = FactoryGirl.create(:comment, :slide_id => @slide.id)
+    #     FactoryGirl.create(:comment, :slide_id => @slide.id + 1)
+    #     params = { :slide_id => @slide.to_param }
 
-    context 'without slide_id' do
-      it 'should use provider/uid params if passed' do
-        user = FactoryGirl.create(:user)
-        auth = FactoryGirl.create(:authorization, :user_id => user.id)
+    #     get :index, params, valid_session
+    #     assigns(:comments).should == [@comment]
+    #   end
+    # end
 
-        get :index, {:provider => auth.provider, :uid => auth.uid}, valid_session
+    # context 'without slide_id' do
+    #   it 'should use provider/uid params if passed' do
+    #     user = FactoryGirl.create(:user)
+    #     auth = FactoryGirl.create(:authorization, :user_id => user.id)
 
-        assigns(:user_id).should_not == @user.id
-        assigns(:user_id).should == user.id
-      end
+    #     get :index, {:provider => auth.provider, :uid => auth.uid}, valid_session
 
-      it 'should use the current users id if no user_id is passed in' do
-        get :index, {}, valid_session
-        assigns(:user_id).should == @user.id
-      end
+    #     assigns(:user_id).should_not == @user.id
+    #     assigns(:user_id).should == user.id
+    #   end
 
-      context 'and without time arg' do
-        it 'should show recent Comments' do
-          pending 'breaking, needs to be switched to id... why is this broken though?'
-          3.times { @comment = FactoryGirl.create(:comment, :user_id => @user.id) }
-          4.times { @comment = FactoryGirl.create(:comment) }
+    #   it 'should use the current users id if no user_id is passed in' do
+    #     get :index, {}, valid_session
+    #     assigns(:user_id).should == @user.id
+    #   end
 
-          get :index, {}, valid_session
-          assigns(:comments).count.should == 3
+    #   context 'and without time arg' do
+    #     it 'should show recent Comments' do
+    #       pending 'breaking, needs to be switched to id... why is this broken though?'
+    #       3.times { @comment = FactoryGirl.create(:comment, :user_id => @user.id) }
+    #       4.times { @comment = FactoryGirl.create(:comment) }
 
-          # brings total by user to 9
-          6.times { @comment = FactoryGirl.create(:comment, :user_id => @user.id) }
+    #       get :index, {}, valid_session
+    #       assigns(:comments).count.should == 3
 
-          get :index, {}, valid_session
-          assigns(:comments).count.should == 8
-        end
-      end
+    #       # brings total by user to 9
+    #       6.times { @comment = FactoryGirl.create(:comment, :user_id => @user.id) }
 
-      context 'with time arg' do
-        it 'should show Slides created by the current_user' do
-          earlier_time = Time.now
-          3.times { @comment = FactoryGirl.create(:comment, :user_id => @user.id, :created_at => earlier_time) }
-          time = earlier_time + 3
-          4.times { @comment = FactoryGirl.create(:comment, :user_id => @user.id, :created_at => time) }
+    #       get :index, {}, valid_session
+    #       assigns(:comments).count.should == 8
+    #     end
+    #   end
 
-          # get comments before time
-          get :index, {:time => time}, valid_session
-          assigns(:comments).count.should == 3
+    #   context 'with time arg' do
+    #     it 'should show Slides created by the current_user' do
+    #       earlier_time = Time.now
+    #       3.times { @comment = FactoryGirl.create(:comment, :user_id => @user.id, :created_at => earlier_time) }
+    #       time = earlier_time + 3
+    #       4.times { @comment = FactoryGirl.create(:comment, :user_id => @user.id, :created_at => time) }
 
-          # brings total to 9
-          6.times { @comment = FactoryGirl.create(:comment, :user_id => @user.id, :created_at => earlier_time) }
+    #       # get comments before time
+    #       get :index, {:time => time}, valid_session
+    #       assigns(:comments).count.should == 3
 
-          get :index, {:time => time}, valid_session
-          assigns(:comments).count.should == 8
-        end
-      end
-    end
+    #       # brings total to 9
+    #       6.times { @comment = FactoryGirl.create(:comment, :user_id => @user.id, :created_at => earlier_time) }
+
+    #       get :index, {:time => time}, valid_session
+    #       assigns(:comments).count.should == 8
+    #     end
+    #   end
+    # end
   end
 
   describe 'POST create' do

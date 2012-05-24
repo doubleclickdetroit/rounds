@@ -33,62 +33,14 @@ describe Round do
 
   it 'should return .slides in order of their created_by'
 
-  describe '.created_by' do
-    pending 'do i need to check this more thoroughly here or just in the controller spec?'
+  klass = Round
 
-    it 'should return a User' do
-      @round.created_by = FactoryGirl.create(:user)
-      @round.created_by.should be_an_instance_of(User)
-    end
-  end
+  it_should_have_a_creator(klass)
 
-  describe '.creator' do
-    it 'should simply call .created_by' do
-      @round.should_receive :created_by
-      @round.creator
-    end
-  end
+  it_should_scope_recent(klass)
 
-  describe '.recent' do
-    before(:each) do
-      9.times { FactoryGirl.create(:round) }
-    end
+  it_should_scope_friends(klass)
 
-    pending 'test recent? not just limit 8?'
-    it 'should return the 8 most recent Rounds' do
-      Round.recent.count.should == 8
-    end
-  end
-
-  describe '.before' do
-    pending
-  end
-
-  describe '.friends' do
-    before(:each) do
-      8.times { FactoryGirl.create(:round) }
-      friend1 = FactoryGirl.create(:user)
-      friend2 = FactoryGirl.create(:user)
-      FactoryGirl.create(:round, :user_id => friend1.id)
-      FactoryGirl.create(:round, :user_id => friend2.id)
-      @user_ids = [friend1.id, friend2.id]
-    end
-
-    it 'should only return Rounds made by friends' do
-      Round.friends(@user_ids).count.should == 2
-    end
-  end
-
-  describe '.friends_recent' do
-    before(:each) do
-      friend = FactoryGirl.create(:user)
-      9.times { FactoryGirl.create(:round, :user_id => friend.id) }
-      @user_ids = [friend.id]
-    end
-
-    it 'should only return 8 Rounds at most' do
-      Round.friends_recent(@user_ids).count.should == 8
-    end
-  end
+  it_should_scope_before_and_after(klass)
 
 end

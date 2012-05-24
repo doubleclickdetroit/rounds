@@ -1,54 +1,77 @@
 module Common
+
   module Scopes
-    module FriendsAndRecent
+    module Recent
       module ClassMethods
-        def friends_recent(user_id_arr)
-          friends(user_id_arr).recent
+        def recent(user)
+          filter_blocked_for(user).eight_most_recent
         end
       end
 
       def self.included(base)
-        base.extend(ClassMethods)
+        base.extend ClassMethods
 
-        module_name = self.to_s
         base.class_eval do
-          # todo breaking heroku...
-          # raise "#{self.to_s} must have an attribute 'id' to include #{module_name}" unless self.new.respond_to?(:id)
+          scope :filter_blocked_for, lambda {|user|
+            user_id_arr = user.blocked_user_ids
 
-          # todo not really FriendsAndRecent...
-          scope :of_type, lambda {|type| where :type => type}
+            # todo cleaner? awful?
+            return where('1 = 1') if user_id_arr.empty?
 
-          scope :before, lambda {|time| where(["created_at < ?", time])}
+            where(['user_id NOT IN (?)', user_id_arr])
+          }
 
-          scope :recent, :order => 'created_at desc', :limit => 8
+          scope :eight_most_recent, :order => 'created_at desc', :limit => 8
+        end
+      end
+    end
 
-          scope :friends, lambda {|user_id_arr|
+    module Friends
+      def self.included(base)
+        base.class_eval do
+          scope :by_friends_for_user, lambda {|user|
+            user_id_arr = user.friend_ids
+
+            # todo cleaner?
             return where('1 = 0') if user_id_arr.empty?
 
-            cond_str = user_id_arr.inject('') do |str,user_id|
-              str << " OR " unless str.empty?
-              str << "user_id = #{user_id}"
-            end
-
-            where(cond_str)
+            where(['user_id IN (?)', user_id_arr])
           }
         end
       end
     end
 
+    module BeforeAndAfter
+      def self.included(base)
+        base.class_eval do
+          scope :before, lambda {|id| where(["id < ?", id])}
+          scope :after,  lambda {|id| where(["id > ?", id])}
+
+          scope :before_or_after, lambda {|params|
+            offset = nil
+            if val = params[:before] 
+              offset = [:before, val]
+            elsif val = params[:after]
+              offset = [:after, val]
+            end
+            
+            # todo                                     kludgey
+            offset.is_a?(Array) ? self.send(*offset) : where('1 = 1')
+          }
+        end
+      end
+    end
   end
 
   module Associations
     module HasCreator
       def self.included(base)
-        module_name = self.to_s
         base.class_eval do
-          # todo breaking heroku...
-          # raise "#{self.to_s} must have an attribute 'id' to include #{module_name}" unless self.new.respond_to?(:id)
-
           belongs_to :user
         end
       end
+
+      # todo clean up what follows
 
       # todo by alias
       def created_by
@@ -63,6 +86,62 @@ module Common
       def creator
         created_by
       end
+
+      def creator=(user)
+        self.created_by = user
+      end
     end
   end
+
+  module Finders
+    module ClassMethods
+      # the firehose, but with :limit => 8,
+      # sorted, with users blocked as needed, 
+      # and with before/after taken care of.
+      def community_feed(*args)
+        # todo make this more readable?
+        user = args.shift
+        args = args.extract_options!
+
+        if val = args[:before] 
+          @offset = [:before, val]
+        elsif val = args[:after]
+          @offset = [:after, val]
+        end
+
+        # send performs before/after if there is an offset
+        slides = (@offset ? self.send(*@offset) : self).recent(user)
+      end
+
+      # todo ensure this ActiveRelation is performant 
+      def feed_by_user_and_pagination(user, params)
+        # the firehose, but already with :limit => 8,
+        # sorted, with users blocked as needed, and
+        # with before/after taken care of.
+        #
+        # a .where is chained to only return records
+        # created by the User record passed in.
+        community_feed(user, params).where(:user_id => user.id)
+      end
+    end
+
+    def self.included(base)
+      base.extend ClassMethods
+    end
+  end
+
+  module Helpers
+    # def remove_blocked_user_ids_from(user_ids_arr)
+    #   (Set.new(user_ids_arr) ^ blocked_user_ids).to_a
+    # end
+
+    # # todo maybe not the most effecient
+    # def reject_blocked(items)
+    #   user_ids = blocked_user_ids
+    #   items.reject do |item|
+    #     user_ids.include? item.user_id
+    #   end
+    # end
+  end
+
 end

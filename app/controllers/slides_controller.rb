@@ -7,23 +7,15 @@ class SlidesController < ApplicationController
   respond_to :json
 
 
-  # todo refactor
-  # todo DRY up, repeated in rounds/comments
   def index
     if round_id = params[:round_id]
       @slides = Round.find(round_id).slides
     else
-      provider, uid = params[:provider], params[:uid]
-      @user_id = uid ? User.find_by_auth_provider_and_uid(provider, uid).try(:id) : current_user.id
+      @user = params['uid'] ? User.find_by_auth_hash(params) : current_user
 
-      @slides = Slide.where(:user_id => @user_id)
-      if time = params[:time]
-        time = Time.parse params[:time]
-        @slides = @slides.before(time).recent
-      else
-        @slides = @slides.recent
-      end
+      @slides = @user.slides.before_or_after(params).recent(@user)
     end
+
     respond_with @slides
   end
 
@@ -49,18 +41,20 @@ class SlidesController < ApplicationController
   # RESTless
   def feed
     # todo dangerous?
-    @community_slides = @type.constantize.recent
-    @friends_slides   = [] # @type.constantize.friends(current_user.friends_user_ids).recent
+    @community_slides = @type.constantize.recent(current_user)
+    @friends_slides   = [] 
+    # todo unnecessary
     respond_with @type
   end
 
   def community
-    @slides = Slide.of_type_and_before(@type,params[:time])
+    @slides = @type.constantize.before_or_after(params).recent(current_user)
+
     respond_with @slides
   end
 
   def friends
-    @slides = [] # Slide.friends(current_user.friends_user_ids).of_type_and_before(@type,params[:time])
+    @slides = [] 
     respond_with @slides
   end
 

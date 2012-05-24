@@ -29,41 +29,18 @@ class User < ActiveRecord::Base
     end
   end
 
-  def self.find_by_auth_provider_and_uid(provider, uid)
-    auth = Authorization.find_by_provider_and_uid(provider, uid)
+  def self.find_by_auth_hash(hash)
+    auth = Authorization.find_by_provider_and_uid(hash['provider'], hash['uid'])
     auth.try(:user)
   end
 
-  def blocked_user_ids
-    blacklist_entries.map {|ble| ble.blocked_user_id}
-  end
-
-  def new_feed
-    reject_blocked Round.recent
-  end
-
-  def friends_user_ids
+  def friend_ids
     # todo
     []
   end
 
-  def friends_feed
-    filtered_friends_user_ids = remove_blocked_user_ids_from(friends_user_ids)
-    Round.friends_recent(filtered_friends_user_ids)
-  end
-
-
-private
-  def remove_blocked_user_ids_from(user_ids_arr)
-    (Set.new(user_ids_arr) ^ blocked_user_ids).to_a
-  end
-
-  # todo maybe not the most effecient
-  def reject_blocked(items)
-    user_ids = blocked_user_ids
-    items.reject do |item|
-      user_ids.include? item.user_id
-    end
+  def blocked_user_ids
+    blacklist_entries.map {|ble| ble.blocked_user_id}
   end
 
 end

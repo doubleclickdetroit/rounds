@@ -51,6 +51,7 @@ Spork.prefork do
     config.infer_base_class_for_anonymous_controllers = false
 
     config.extend ControllerMacros, :type => :controller
+    config.extend ModelMacros, :type => :model
     # config.include Devise::TestHelpers, :type => :controller
     # config.extend ModelMacros # , :type => :controller
   end

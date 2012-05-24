@@ -1,16 +1,10 @@
 class RoundsController < ApplicationController
   respond_to :json
 
-  # todo refactor
-  # todo dup'd in slides/comments
   def index
-    provider, uid = params[:provider], params[:uid]
-    @user_id = uid ? User.find_by_auth_provider_and_uid(provider, uid).try(:id) : current_user.id
-    time     = params[:time] ? Time.parse(params[:time]) : nil
+    @user = params['uid'] ? User.find_by_auth_hash(params) : current_user
 
-    @rounds  = Round.where(:user_id => @user_id)
-    # todo slow! chain these somehow
-    @rounds  = time ? @rounds.before(time).recent : @rounds.recent
+    @rounds = @user.rounds.before_or_after(params).recent(@user)
 
     respond_with @rounds.to_json
   end
@@ -31,7 +25,9 @@ class RoundsController < ApplicationController
   # end
 
   def destroy
-    respond_with Round.destroy(params[:id]).to_json
+    @round = Round.find(params[:id])
+    # todo not 401
+    @round.slides.empty? ? respond_with(@round.destroy) : head(401)
   end
 
 end
