@@ -1,27 +1,61 @@
-Routes for API, comments (#) indicate that the HTTP verb is not used, (*) indicates something is unimplemented
-
-A couple caveats:
-  1 - feeds only pull in slides... i imagine this may need to change in the future
-  2 - *** Comments are marked inappropriate by comments#update {:inappropriate => true} and this needs to be changed ***
-  3 - not sure how images (SVG files) are uploaded (multi-part POST to SlidesController?)
+Routes for API
+  # action/HTTP verb is not used
+  * indicates something is unimplemented/being implemented
 
 
-Adding a Slide to a Round (first requires RoundLock)
-  POST /api/rounds/:round_id/round_lock # user derived from session
-  POST /api/rounds/:round_id/sentences {:sentence => {...}} 
-    OR
-  POST /api/rounds/:round_id/picuturs  {:picture => {...}} 
-
-Watching a Round that is locked
-  GET  /api/rounds/:round_id/round_lock # check for lock
-  POST /api/rounds/:round_id/round_lock/watchings 
 
 
-  ***** WHERE DO COMPLETED ROUND FEEDS GO? *****
-  ***** WHERE DO INVITATION FEEDS GO? *****
+
+BASIC STRUCTURE:
+
+  Rounds 
+    C POST    /api/rounds/
+    R GET     /api/rounds/:id
+  # U PUT     /api/rounds/:id
+    D DELETE  /api/rounds/:id 
+    I GET     /api/rounds/ # NOTE: this is for rounds for current user
+
+    Slides, round_id and type ('Sentence' or 'Picture') required for create and index
+      C POST    /api/rounds/:round_id/slides/?type=:type
+      R GET     /api/rounds/:round_id/slides/:id
+      U PUT     /api/rounds/:round_id/slides/:id
+      D DELETE  /api/rounds/:round_id/slides/:id
+      I GET     /api/rounds/:round_id/slides/?type=:type
+
+      Comments, slide_id required for create and index
+        C POST    /api/slides/:slide_id/comments/
+      # R GET     /api/slides/:slide_id/comments/:id
+        U PUT     /api/slides/:slide_id/comments/:id
+        D DELETE  /api/slides/:slide_id/comments/:id
+        I GET     /api/slides/:slide_id/comments/
+
+  ***** CLEANER SLIDE CREATION *****
+  Sentences
+    C POST    /api/rounds/:round_id/sentences/
+  Pictures
+    C POST    /api/rounds/:round_id/pictures/
+  ***** CLEANER SLIDE CREATION *****
 
 
-IMPLEMENTED
+
+
+
+SPECIAL CASES
+  Adding a Slide to a Round (first requires RoundLock)
+    POST /api/rounds/:round_id/round_lock # user derived from session
+    POST /api/rounds/:round_id/sentences {:sentence => {...}} 
+      OR
+    POST /api/rounds/:round_id/picuturs  {:picture => {...}} 
+
+  Watching a Round that is locked
+    GET  /api/rounds/:round_id/round_lock # check for lock
+    POST /api/rounds/:round_id/round_lock/watchings 
+
+
+
+
+
+COMPLETE LIST OF IMPLEMENTED ROUTES
 
   (Slide) Feeds, all can be passed ?time=[time] to fetch rows before that time
     GET /api/sentences
@@ -36,6 +70,12 @@ IMPLEMENTED
       GET /api/rounds
       GET /api/slides
       GET /api/comments
+
+    NOTE: these return the 8 most recent, client can request older and newer by id 
+          (does not apply to /api/sentences|pictures|me as these are 
+           convenience routes to be used only for the initial view load)
+      e.g. GET /api/slides/?before=1000 # returns 8 slides for current user with ids < 1000
+           GET /api/slides/?after=1000  # returns 8 slides for current user with ids > 1000
 
   Rounds 
     C POST    /api/rounds/
@@ -94,23 +134,29 @@ IMPLEMENTED
     C POST    /api/providers/:provider/users/:uid/block/
     D DELETE  /api/providers/:provider/users/:uid/block/
 
-  Resources belonging to the current user:
-    NOTE: these return the 8 most recent, client can request older and new by id # unimplemented
-    Rounds 
-      I GET     /api/rounds/
-    Slides
-      I GET     /api/slides/
-    Comments
-      I GET     /api/comments/
+  Resources 
+    NOTE: these return the 8 most recent, client can request older and newer by id 
+      e.g. GET /api/slides/?before=1000 # returns 8 slides for current user with ids < 1000
+           GET /api/slides/?after=1000  # returns 8 slides for current user with ids > 1000
 
-  Resources belonging to user identified by provider/uid (e.g. provider='facebook'):
-    NOTE: these return the 8 most recent, client can request older and new by id # unimplemented
-    Rounds 
-      I GET     /api/providers/:provider/users/:uid/rounds/
-    Slides
-      I GET     /api/providers/:provider/users/:uid/slides/
-    Comments
-      I GET     /api/providers/:provider/users/:uid/comments/
+    belonging to the current user:
+      Rounds 
+        I GET     /api/rounds/
+      Slides
+        I GET     /api/slides/
+      Comments
+        I GET     /api/comments/
+
+    belonging to user identified by provider/uid (e.g. provider='facebook'):
+      Rounds 
+        I GET     /api/providers/:provider/users/:uid/rounds/
+      Slides
+        I GET     /api/providers/:provider/users/:uid/slides/
+      Comments
+        I GET     /api/providers/:provider/users/:uid/comments/
+
+
+
 
 
 WORKING ON THE FOLLOWING
@@ -140,9 +186,16 @@ WORKING ON THE FOLLOWING
     D DELETE  /api/rounds/:round_id/invitations/:id
     I GET     /api/rounds/:round_id/invitations/
       
-UNIMPLEMENTED
 
-  Users
-    Feeds - optional param 'time' (otherwise returns most recent)
-      GET   /api/users/activity # only the activity for current_user
-      GET   /api/users/whats_hot
+
+
+
+
+
+A couple caveats:
+  1 - feeds only pull in slides... i imagine this may need to change in the future
+  2 - *** Comments are marked inappropriate by comments#update {:inappropriate => true} and this needs to be changed ***
+  3 - not sure how images (SVG files) are uploaded (multi-part POST to SlidesController?)
+
+***** WHERE DO COMPLETED ROUND FEEDS GO? *****
+***** WHERE DO INVITATION FEEDS GO? *****
