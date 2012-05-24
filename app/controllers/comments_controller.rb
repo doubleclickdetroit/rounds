@@ -3,7 +3,6 @@ class CommentsController < ApplicationController
 
   respond_to :json
 
-  # todo refactor
   def index
     if slide_id = params[:slide_id]
       @comments = Slide.find(slide_id).comments
