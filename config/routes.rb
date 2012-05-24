@@ -16,8 +16,8 @@ Draw::Application.routes.draw do
     end
     # blocking by provider
     # todo clean up the match's
-    match '/providers/:provider/users/:blocked_uid/block' => 'blacklist_entries#create', :via => :post
-    match '/providers/:provider/users/:blocked_uid/block' => 'blacklist_entries#destroy', :via => :delete
+    match '/providers/:provider/users/:uid/block' => 'blacklist_entries#create', :via => :post
+    match '/providers/:provider/users/:uid/block' => 'blacklist_entries#destroy', :via => :delete
 
 
     # user activity / feeds

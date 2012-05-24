@@ -1,6 +1,6 @@
 class BlacklistEntriesController < ApplicationController
 
-  before_filter :check_for_user_ids, :only => [:create,:destroy]
+  before_filter :check_for_user_ids
 
   respond_to :json
 
@@ -18,21 +18,14 @@ class BlacklistEntriesController < ApplicationController
 
 private
   def check_for_user_ids
-    # todo cleanup
     unless @blocked_user_id = params[:blocked_user_id]
-      blocked_uid, provider = params[:blocked_uid], params[:provider]
-      user = User.find_by_auth_provider_and_uid(provider, blocked_uid)
+      blocked_user = User.find_by_auth_hash(params)
 
-      if user.nil?
-        respond_with :not_found
+      if blocked_user.nil?
+        head :not_found
       else
-        @blocked_user_id = user.id
+        @blocked_user_id = blocked_user.id
       end
-    end
-
-
-    unless @blocked_user_id || (@blocked_uid && @provider) 
-      respond_with :bad_request
     end
   end
 end

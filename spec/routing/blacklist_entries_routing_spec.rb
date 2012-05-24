@@ -6,11 +6,11 @@ describe BlacklistEntriesController do
     context 'by provider' do
 
       it "routes to #create" do
-        post("/api/providers/facebook/users/1/block").should route_to("blacklist_entries#create", :provider => 'facebook', :blocked_uid => '1')
+        post("/api/providers/facebook/users/1/block").should route_to("blacklist_entries#create", :provider => 'facebook', :uid => '1')
       end
 
       it "routes to #destroy" do
-        delete("/api/providers/facebook/users/1/block").should route_to("blacklist_entries#destroy", :provider => 'facebook', :blocked_uid => '1')
+        delete("/api/providers/facebook/users/1/block").should route_to("blacklist_entries#destroy", :provider => 'facebook', :uid => '1')
       end
 
     end
