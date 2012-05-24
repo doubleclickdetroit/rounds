@@ -11,17 +11,19 @@ module ControllerMacros
     # todo factory :with_parent ? REFACTOR
     
     describe 'shared index functionality' do
+      parent_str     = parent_klass.to_s.downcase
+      parent_id_str = "#{parent_str}_id"
+
       before(:each) do
         str         = klass.to_s.downcase
         @sym        = str.intern 
         @sym_plural = str.pluralize.intern 
 
-        parent_str     = parent_klass.to_s.downcase
         @parent_sym    = parent_str.intern
-        @parent_id_sym = "#{parent_str}_id".intern
+        @parent_id_sym = parent_id_str.intern
       end
 
-      context "with #{@parent_id_sym}" do
+      context "with #{parent_id_str}" do
         it "should show #{klass.to_s.pluralize} for a #{parent_klass.to_s}" do
           @parent   = FactoryGirl.create(@parent_sym)
           @instance = FactoryGirl.create(@sym, @parent_id_sym => @parent.id)
@@ -35,8 +37,8 @@ module ControllerMacros
     end
   end
 
-  def it_should_handle_index_by_user(klass, parent_klass)
-    context "without #{parent_klass.to_s.downcase} and with user id" do
+  def it_should_handle_index_by_user(klass)
+    context "without parent_id and with auth" do
       it 'should use provider/uid params if passed' do
         user = FactoryGirl.create(:user)
         auth = FactoryGirl.create(:authorization, :user_id => user.id)
@@ -47,7 +49,7 @@ module ControllerMacros
         assigns(:user).should == user
       end
 
-      it 'should use the current users id if no user_id is passed in' do
+      it 'should use the current user if no provider/uid is passed in' do
         get :index, {}, valid_session
         assigns(:user).should == @user
       end
@@ -55,7 +57,7 @@ module ControllerMacros
     end
   end
 
-  def it_should_handle_before_and_after(klass)
+  def it_should_handle_before_and_after_for_action_and_by_current_user(klass, action)
     context 'before_or_after handling' do
       before(:each) do
         klass.destroy_all
@@ -78,27 +80,31 @@ module ControllerMacros
       it 'should call recent (limit/sort/blocked)' do
         pending 'not sure this is right'
         klass.should_receive :recent
-        get :index, {}, valid_session
+        get action, {}, valid_session
       end
 
       context 'without :before/:after' do
         it "should show recent #{klass.to_s.pluralize}" do
-          get :index, {}, valid_session
+          get action, {}, valid_session
           assigns(@sym_plural).count.should == 3
         end
       end
 
       context 'with :before/:after' do
         it "should return #{klass.to_s.pluralize} :before => id" do
-          get :index, {:before => @second.id}, valid_session
+          get action, {:before => @second.id}, valid_session
           assigns(@sym_plural).should == [@first]
         end
 
         it "should return #{klass.to_s.pluralize} :after => id" do
-          get :index, {:after => @second.id}, valid_session
+          get action, {:after => @second.id}, valid_session
           assigns(@sym_plural).should == [@third]
         end
       end
     end
+  end
+
+  def it_should_handle_before_and_after_for_action_and_user(klass, action, user)
+    it_should_handle_before_and_after(klass, user)
   end
 end

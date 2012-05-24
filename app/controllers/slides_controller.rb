@@ -13,7 +13,7 @@ class SlidesController < ApplicationController
     else
       @user = params['uid'] ? User.find_by_auth_hash(params) : current_user
 
-      @slides = @user.slides.before_or_after(params).recent(@user)
+      # @slides = @user.slides.before_or_after(params).recent(@user)
     end
 
     respond_with @slides
