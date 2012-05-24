@@ -58,7 +58,7 @@ module ControllerMacros
   end
 
   def it_should_handle_before_and_after_for_action_and_by_current_user(klass, action)
-    context 'before_or_after handling' do
+    context 'before_or_after' do
       before(:each) do
         klass.destroy_all
 
@@ -77,6 +77,30 @@ module ControllerMacros
         4.times { FactoryGirl.create(@sym) }
       end
 
+      it_should_handle_before_and_after_for_action(klass, action, false)
+    end
+  end
+
+  def it_should_handle_before_and_after_for_action(klass, action, before_block_needed=true)
+    before(:each) do
+      klass.destroy_all
+
+      str         = klass.to_s.downcase
+      @sym        = str.intern 
+      @sym_plural = str.pluralize.intern 
+
+      # noise before
+      4.times { FactoryGirl.create(@sym) }
+
+      @first  = FactoryGirl.create(@sym, :user_id => @user.id)
+      @second = FactoryGirl.create(@sym, :user_id => @user.id)
+      @third  = FactoryGirl.create(@sym, :user_id => @user.id)
+
+      # noise after
+      4.times { FactoryGirl.create(@sym) }
+    end if before_block_needed
+
+    context 'handling' do
       it 'should call recent (limit/sort/blocked)' do
         pending 'not sure this is right'
         klass.should_receive :recent
@@ -102,9 +126,5 @@ module ControllerMacros
         end
       end
     end
-  end
-
-  def it_should_handle_before_and_after_for_action_and_user(klass, action, user)
-    it_should_handle_before_and_after(klass, user)
   end
 end
