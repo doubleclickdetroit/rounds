@@ -132,9 +132,9 @@ module ModelMacros
   def it_should_have_a_community_feed_finder(klass) 
     describe '.community_feed' do
       before(:each) do 
-        sym = klass.to_s.downcase.intern
-
         klass.destroy_all
+
+        sym = klass.to_s.downcase.intern
 
         @user = FactoryGirl.create(:user)
 

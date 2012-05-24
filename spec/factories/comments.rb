@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :comment do
-    sequence(:user_id) {|n| n}
+    user_id 0
     slide nil
     text 'Lorem ipsum dolor sit amet'
   end

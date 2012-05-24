@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :ballot do
     slide { FactoryGirl.create(:slide) }
-    sequence(:user_id) {|n| n.to_s} 
+    user_id 0
     vote 1
   end
 end
