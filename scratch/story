@@ -1,7 +1,13 @@
+  LEGEND:
+    _ unimplemented
+    \ partially implemented
+    X implemented
+
+
   LOGIN
   the user starts up the app and sees a loading screen
-    - ***** FACEBOOK MAGIC *****
-    - ***** APP LOGIN (OMNIAUTH?) *****
+    - ***** APP LOGIN (OMNIAUTH) *****
+    - ***** FACEBOOK MAGIC (friends facebook ids) *****
 
   FEED
   (the user is now logged in) 
@@ -51,17 +57,18 @@ X   - POST /api/slides/:slide_id/comments {:comment => {...}}
 
   BLOCK A USER
   the user finds himself back on his feed and sees something he doesnt care for from a user. he clicks to user, block, and confirms
-_   - POST    /api/providers/:provider/users/:uid/block/
+X   - POST    /api/providers/:provider/users/:uid/block/
 
   WATCH A SLIDE
   # todo watch a slide timeout
   # todo watch a slide spoiler
   the user sees a slide he wants to add to, but when he goes to add the next slide, its locked. 
   he's asked if he wants to watch the round to see if the user takes too long to finish and confirms
-X   - POST /api/rounds/:round_id/round_lock/watchings # facebook id derived from current_user
+X   - POST /api/rounds/:round_id/round_lock/watchings # id derived from current_user
 
   SEND AN INVITATION
   ????????????????????????????????????????????
+  (this will change to accomodate provider/uid)
 _ POST /api/rounds/:round_id/invitations/:invited_user_id
 
   VIEW A COMPLETED ROUND
