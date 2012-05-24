@@ -1,10 +1,12 @@
 Draw::Application.routes.draw do
   # todo use :via for all matches
-  
+
+  # todo remove after dev
+  resources :uploads
+
   # session
   match '/auth/facebook/callback' => 'sessions#create'
   match '/signout' => 'sessions#destroy', :as => :signout #, :via => :delete
-
 
   scope 'api' do
 
