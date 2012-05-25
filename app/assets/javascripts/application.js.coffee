@@ -8,7 +8,7 @@ define [], (require) ->
 
 
 	# StreamView (View)
-		# StackView (View)
+		# SlideskView (View)
 		# Slides (Collection)
 			# Slide (Model)
 			# SlideView (View)
