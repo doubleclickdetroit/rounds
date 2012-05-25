@@ -5,6 +5,6 @@ define [], (require) ->
 	class Slide extends Backbone.Model
 
 		initialize: ->
-			console.log "Slide", do @toJSON
+			# console.log "Slide", do @toJSON
 
 	Slide

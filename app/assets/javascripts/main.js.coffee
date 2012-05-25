@@ -1,3 +1,3 @@
-require ['jquery', 'backbone', 'application', 'jquery_ujs'], ($, Backbone, App) ->
+require ['jquery', 'backbone', 'application', 'jquery_ujs', './modules'], ($, Backbone, App) ->
 
 	do App.initialize
