@@ -1,11 +1,19 @@
 define ['backbone'], (Backbone) ->
 
-	class AppRouter extends Backbone.Router
+	class Router extends Backbone.Router
 
 		routes:
-			"": "home_actions"
+			""   : "render_home"
+			"_=_": "redirect_home"
 
-		home_actions: ->
-			console.log 'home_actions invoked!'
+		render_home: ->
+			console.log "render HomeView!"
 
-	AppRouter
+		redirect_home: ->
+			@navigate '', true
+
+		initialize: ->
+			Backbone.history.start
+				pushState: true
+
+	Router

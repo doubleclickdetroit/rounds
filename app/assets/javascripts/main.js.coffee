@@ -1,8 +1,3 @@
-define ['router'], (Router) ->
+require ['jquery', 'backbone', 'application', 'jquery_ujs'], ($, Backbone, App) ->
 
-	name: "Rounds Mobile Game"
-	version: "0.1.dev"
-
-	initialize: ->
-		new Router()
-		Backbone.history.start()
+	do App.initialize
