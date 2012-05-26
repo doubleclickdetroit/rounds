@@ -16,9 +16,9 @@ gem 'factory_girl_rails'
 gem "paperclip", "~> 2.7"
 
 gem 'jquery-rails'
-# gem 'haml-rails'
-# gem 'html5-rails', :git => 'git://github.com/sporkd/html5-rails.git'
-
+gem 'haml-rails'
+gem 'html5-rails', :git => 'git://github.com/sporkd/html5-rails.git'
+gem 'rails-backbone'
 gem 'requirejs-rails'
 
 # gem 'mailman', :require => false
