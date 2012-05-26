@@ -14,7 +14,8 @@ class User < ActiveRecord::Base
 
   # todo as scopes?
   def filter_blocked(klass)
-    klass.where(['user_id NOT IN (?)', blocked_user_ids]).eight_most_recent
+    ids = blocked_user_ids
+    ids.empty? ? klass.where('1 = 1') : klass.where(['user_id NOT IN (?)', ids]).eight_most_recent 
   end
 
   def recent(klass)

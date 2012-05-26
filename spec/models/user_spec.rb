@@ -202,6 +202,13 @@ describe User do
         end
 
         describe '.friends' do
+          it 'should return [] if the user has no friends' do
+            @user.friend_ids = []
+            @user.friend_ids.should == []
+
+            @user.friends(klass).should == []
+          end
+
           it "should return only instances of the #{klass} for which the user_id belongs to .friends_ids" do
             @user.friend_ids.should == [@friend.id.to_s]
 
@@ -224,6 +231,13 @@ describe User do
         end
 
         describe '.filter_blocked' do
+          it 'should return everything if no blocked user exists' do
+            @blocked.destroy
+            BlacklistEntry.destroy_all
+
+            @user.filter_blocked(klass).should == klass.all
+          end
+
           it "should not return instances of the #{klass} for which the user_id is in blocked_user_ids" do
             @user.blocked_user_ids.should == [@blocked.id]
 
