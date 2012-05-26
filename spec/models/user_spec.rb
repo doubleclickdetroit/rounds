@@ -201,6 +201,64 @@ describe User do
           @blocked_users = FactoryGirl.create(@klass_sym, :user => @blocked)
         end
 
+        describe '.own' do
+          before(:each) do
+            @plural     = klass.to_s.pluralize
+            @plural_sym = @plural.downcase.intern
+
+            8.times { FactoryGirl.create(@klass_sym, :user => @user) }
+
+            # latest created not by @user
+            FactoryGirl.create(@klass_sym, :user => @friend)
+            FactoryGirl.create(@klass_sym, :user => @stranger)
+          end
+
+          it "should return [] if the User has no #{@plural}" do
+            instances = @user.send @plural_sym
+            instances.destroy_all
+            instances.reload.count.should == 0
+
+            @user.own(klass).count.should == 0
+          end
+
+          it 'should only return results for the User' do
+            instances = @user.send @plural_sym
+            instances.all {|i| i.instance_of? klass}.should be_true
+          end
+
+          it 'should sort the results'
+
+          it 'should limit the results to 8' do
+            instances = @user.send @plural_sym
+            instances.count.should == 9
+
+            @user.own(klass).count.should == 8
+          end
+        end
+
+        describe '.filter_blocked' do
+          it 'should return eight_most_recent if no blocked ids' do
+            @blocked.destroy
+            BlacklistEntry.destroy_all
+
+            @user.filter_blocked(klass).should == @user.recent(klass)
+          end
+
+          it "should not return instances of the #{klass} for which the user_id is in blocked_user_ids" do
+            @user.blocked_user_ids.should == [@blocked.id]
+
+            @user.filter_blocked(klass).should_not include(@blocked_users)
+          end
+
+          it 'should sort the results'
+
+          it 'should limit the results to 8' do
+            9.times { FactoryGirl.create(@klass_sym, :user => @friend) }
+            klass.count.should > 8
+            @user.filter_blocked(klass).count == 8
+          end
+        end
+
         describe '.friends' do
           it 'should return [] if the user has no friends' do
             @user.friend_ids = []
@@ -227,29 +285,6 @@ describe User do
             klass.count.should > 8
 
             @user.friends(klass).should_not include(@blocked_users)
-          end
-        end
-
-        describe '.filter_blocked' do
-          it 'should return eight_most_recent if no blocked ids' do
-            @blocked.destroy
-            BlacklistEntry.destroy_all
-
-            @user.filter_blocked(klass).should == @user.recent(klass)
-          end
-
-          it "should not return instances of the #{klass} for which the user_id is in blocked_user_ids" do
-            @user.blocked_user_ids.should == [@blocked.id]
-
-            @user.filter_blocked(klass).should_not include(@blocked_users)
-          end
-
-          it 'should sort the results'
-
-          it 'should limit the results to 8' do
-            9.times { FactoryGirl.create(@klass_sym, :user => @friend) }
-            klass.count.should > 8
-            @user.filter_blocked(klass).count == 8
           end
         end
 

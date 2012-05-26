@@ -13,6 +13,13 @@ class User < ActiveRecord::Base
 
 
   # todo as scopes?
+  def own(klass)
+    plural_sym = klass.to_s.pluralize.downcase.intern
+
+    instances = self.send plural_sym
+    instances.eight_most_recent
+  end
+
   def filter_blocked(klass)
     ids = blocked_user_ids
     ids.empty? ? klass.eight_most_recent : klass.where(['user_id NOT IN (?)', ids]).eight_most_recent 
