@@ -65,7 +65,7 @@ FactoryGirl.create(:authorization, :user_id => @ammar.id, :provider => 'facebook
 print '.'
 
 @ben   = FactoryGirl.create(:user, :name => 'Ben Babics')
-FactoryGirl.create(:authorization, :user_id => @ben.id, :provider => 'facebook', :uid => '5000322772')
+FactoryGirl.create(:authorization, :user_id => @ben.id, :provider => 'facebook', :uid => '500032277')
 @users << @ben
 print '.'
 

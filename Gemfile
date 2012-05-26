@@ -7,6 +7,9 @@ gem 'omniauth-facebook'
 # gem 'devise'
 # gem 'cancan'
 
+# fook
+gem 'fb_graph'
+
 gem 'yajl-ruby'
 gem 'rabl'
 # gem 'json_builder'
