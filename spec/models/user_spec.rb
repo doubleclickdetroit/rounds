@@ -237,11 +237,9 @@ describe User do
         end
 
         describe '.filter_blocked' do
-          it 'should return eight_most_recent if no blocked ids' do
-            @blocked.destroy
-            BlacklistEntry.destroy_all
-
-            @user.filter_blocked(klass).should == @user.recent(klass)
+          it 'should return eight_most_recent' do
+            klass.should_receive :eight_most_recent
+            @user.filter_blocked(klass)
           end
 
           it "should not return instances of the #{klass} for which the user_id is in blocked_user_ids" do
@@ -289,18 +287,38 @@ describe User do
         end
 
         describe '.recent' do
-          before(:each) do
-            8.times { FactoryGirl.create(@klass_sym) }
+          context "with more than 8 #{klass.to_s.pluralize}" do
+            before(:each) do
+              8.times { FactoryGirl.create(@klass_sym) }
 
-            # making this one eighth and the most recent
-            @blocked_users = FactoryGirl.create(@klass_sym, :user => @blocked)
+              # making this one eighth and the most recent
+              @blocked_users = FactoryGirl.create(@klass_sym, :user => @blocked)
+            end
+
+            it "should not return instances of the #{klass} for which the user_id is in blocked_user_ids" do
+              8.times { FactoryGirl.create(@klass_sym) }
+
+              # making this one eighth and the most recent
+              @blocked_users = FactoryGirl.create(@klass_sym, :user => @blocked)
+
+              @user.blocked_user_ids.should == [@blocked.id]
+              klass.count.should > 8
+
+              @user.recent(klass).should_not include(@blocked_users)
+            end
+
+            it "should not return instances of the #{klass} for which the user_id is in blocked_user_ids" do
+              @user.blocked_user_ids.should == [@blocked.id]
+              klass.count.should > 8
+
+              @user.recent(klass).should_not include(@blocked_users)
+            end
           end
 
-          it "should not return instances of the #{klass} for which the user_id is in blocked_user_ids" do
-            @user.blocked_user_ids.should == [@blocked.id]
-            klass.count.should > 8
+          it "should not return #{klass.to_s.pluralize} belonging to @user" do
+            klass.count.should == 4
 
-            @user.recent(klass).should_not include(@blocked_users)
+            @user.recent(klass).should_not include(@mine)
           end
         end
       end

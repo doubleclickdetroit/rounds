@@ -27,7 +27,7 @@ class User < ActiveRecord::Base
 
   def recent(klass)
     # filter_blocked also sorts/limits
-    filter_blocked(klass)
+    filter_blocked(klass).where(['user_id NOT IN (?)', [self.id]])
   end
 
   def friends(klass)
