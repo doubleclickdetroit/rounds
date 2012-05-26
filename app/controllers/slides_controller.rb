@@ -13,7 +13,7 @@ class SlidesController < ApplicationController
     else
       @user = params['uid'] ? User.find_by_auth_hash(params) : current_user
 
-      @slides = @user.slides.before_or_after(params).recent(@user)
+      @slides = @user.own(Slide).before_or_after(params)
     end
 
     respond_with @slides
@@ -41,20 +41,24 @@ class SlidesController < ApplicationController
   # RESTless
   def feed
     # todo dangerous?
-    @community_slides = @type.constantize.recent(current_user)
-    @friends_slides   = [] 
+    klass = @type.constantize
+
+    @community_slides = current_user.recent(klass)
+    @friends_slides   = current_user.friends(klass)
+
     # todo unnecessary
     respond_with @type
   end
 
   def community
-    @slides = @type.constantize.before_or_after(params).recent(current_user)
+    @slides = current_user.recent(@type.constantize).before_or_after(params)
 
     respond_with @slides
   end
 
   def friends
-    @slides = [] 
+    @slides = current_user.friends(@type.constantize).before_or_after(params)
+
     respond_with @slides
   end
 

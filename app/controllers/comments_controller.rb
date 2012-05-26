@@ -9,7 +9,7 @@ class CommentsController < ApplicationController
     else
       @user = params['uid'] ? User.find_by_auth_hash(params) : current_user
 
-      @comments = @user.comments.before_or_after(params).recent(@user)
+      @comments = @user.own(Comment).before_or_after(params)
     end
 
     respond_with @comments

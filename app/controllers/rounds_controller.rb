@@ -4,9 +4,9 @@ class RoundsController < ApplicationController
   def index
     @user = params['uid'] ? User.find_by_auth_hash(params) : current_user
 
-    @rounds = @user.rounds.before_or_after(params).recent(@user)
+    @rounds = @user.own(Round).before_or_after(params)
 
-    respond_with @rounds.to_json
+    respond_with @rounds
   end
 
   def show

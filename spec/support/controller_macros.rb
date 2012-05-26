@@ -95,8 +95,11 @@ module ControllerMacros
     end if before_block_needed
 
     context 'handling' do
-      it 'should call recent (limit/sort/blocked)' do
-        klass.should_receive :recent
+      it 'should call (limit/sort/blocked)' do
+        pending
+        @user.stub(@sym_plural).and_return(klass.all)
+        @user.should_receive :filter_blocked
+        klass.should_receive :eight_most_recent
         get action, {}, valid_session
       end
 
