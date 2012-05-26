@@ -60,17 +60,17 @@ print '  ** Users '
 
 
 @ammar = FactoryGirl.create(:user, :name => 'Ammar Almakzumi')
-FactoryGirl.create(:authorization, :user_id => @ammar.id, :provider => 'facebook', :uid => '1')
+FactoryGirl.create(:authorization, :user_id => @ammar.id, :provider => 'facebook', :uid => '535058569')
 @users << @ammar
 print '.'
 
 @ben   = FactoryGirl.create(:user, :name => 'Ben Babics')
-FactoryGirl.create(:authorization, :user_id => @ben.id, :provider => 'facebook', :uid => '2')
+FactoryGirl.create(:authorization, :user_id => @ben.id, :provider => 'facebook', :uid => '5000322772')
 @users << @ben
 print '.'
 
 @brad  = FactoryGirl.create(:user, :name => 'Brad Chase')
-FactoryGirl.create(:authorization, :user_id => @brad.id, :provider => 'facebook', :uid => '3')
+FactoryGirl.create(:authorization, :user_id => @brad.id, :provider => 'facebook', :uid => '30118972')
 @users << @brad
 print '.'
 
