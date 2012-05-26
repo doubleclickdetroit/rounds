@@ -231,11 +231,11 @@ describe User do
         end
 
         describe '.filter_blocked' do
-          it 'should return everything if no blocked user exists' do
+          it 'should return eight_most_recent if no blocked ids' do
             @blocked.destroy
             BlacklistEntry.destroy_all
 
-            @user.filter_blocked(klass).should == klass.all
+            @user.filter_blocked(klass).should == @user.recent(klass)
           end
 
           it "should not return instances of the #{klass} for which the user_id is in blocked_user_ids" do
