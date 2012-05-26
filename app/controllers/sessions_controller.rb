@@ -9,7 +9,8 @@ class SessionsController < ApplicationController
     
     session[:user_id] = @user.id
     session[:image]   = auth_hash['info']['image']
-    session[:token]   = token
+
+    cookies[:facebook_token]   = token
 
     uids = FbGraph::User.me(token).friends.map {|f| f.raw_attributes['id']}
     ids  = uids.reduce([]) {|arr,uid| arr << Authorization.find_by_provider_and_uid('facebook',uid).try(:user_id)}
