@@ -1,5 +1,3 @@
-require 'set'
-
 class User < ActiveRecord::Base
   # todo left over from devise...
   # attr_accessible :email, :password, :password_confirmation, :remember_me
@@ -12,6 +10,35 @@ class User < ActiveRecord::Base
   has_many :watchings
 
   has_many :blacklist_entries
+
+
+  # todo as scopes
+  def filter_blocked(klass)
+    klass.where(['user_id NOT IN (?)', blocked_user_ids]).eight_most_recent
+  end
+
+  def recent(klass)
+    filter_blocked(klass).eight_most_recent
+  end
+
+  def friends(klass)
+    filter_blocked(klass).where(['user_id IN (?)', friend_ids])
+  end
+
+  # scope :eight_most_recent, :order => 'created_at desc', :limit => 8
+  # scope :before, lambda {|id| where(["id < ?", id])}
+  # scope :after,  lambda {|id| where(["id > ?", id])}
+  # scope :before_or_after, lambda {|params|
+  #   offset = nil
+  #   if val = params[:before] 
+  #     offset = [:before, val]
+  #   elsif val = params[:after]
+  #     offset = [:after, val]
+  #   end
+
+  #   # todo                                     kludgey
+  #   offset.is_a?(Array) ? self.send(*offset) : where('1 = 1')
+  # }
 
 
   def self.via_auth(auth_hash)
@@ -35,8 +62,17 @@ class User < ActiveRecord::Base
   end
 
   def friend_ids
-    # todo
-    []
+    if friend_ids_csv.nil?
+      return []
+    else
+      # todo test this caching...
+      @friend_ids ||= friend_ids_csv.split(',')
+    end
+  end
+
+  def friend_ids=(arr)
+    raise ArgumentError unless arr.is_a?(Array)
+    self.friend_ids_csv = arr.join(',')
   end
 
   def blocked_user_ids

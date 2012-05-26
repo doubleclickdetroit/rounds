@@ -151,4 +151,111 @@ describe User do
     end
   end
 
+  describe '.friend_ids' do
+    pending 'default to String.new'
+
+    it 'should return [] if .friend_ids_csv is nil' do
+      @user.friend_ids_csv = nil
+      @user.friend_ids.should == []
+    end
+
+    it 'should return .friend_ids_csv as an Array of strings' do
+      str = '1,2,3'
+      @user.friend_ids_csv = str
+      @user.friend_ids.should == %w(1 2 3)
+    end
+  end
+
+  describe '.friend_ids=' do
+    it 'should join an Array of ints and assign them to .friend_ids_csv as a String' do
+      arr = [1,2,3]
+      @user.friend_ids_csv.should == nil
+      @user.friend_ids = arr
+      @user.friend_ids.should == %w(1 2 3)
+      @user.friend_ids_csv.should == '1,2,3'
+    end
+
+  end
+
+  describe '.friends' do
+    before(:each) do
+      @friend   = FactoryGirl.create(:user)
+      @user.friend_ids_csv = @friend.id.to_s
+
+      @blocked = FactoryGirl.create(:user)
+      FactoryGirl.create(:blacklist_entry, user_id: @user.id, blocked_user_id: @blocked.id)
+
+      @stranger = FactoryGirl.create(:user)
+    end
+
+    klasses = [Round, Slide, Comment]
+
+    klasses.each do |klass|
+      context "for #{klass}" do
+        before(:each) do
+          @klass_sym = klass.to_s.downcase.intern
+
+          @mine          = FactoryGirl.create(@klass_sym, :user => @user)
+          @friends       = FactoryGirl.create(@klass_sym, :user => @friend)
+          @strangers     = FactoryGirl.create(@klass_sym, :user => @stranger)
+          @blocked_users = FactoryGirl.create(@klass_sym, :user => @blocked)
+        end
+
+        describe '.friends' do
+          it "should return only instances of the #{klass} for which the user_id belongs to .friends_ids" do
+            @user.friend_ids.should == [@friend.id.to_s]
+
+            @user.friends(klass).should == [@friends]
+          end
+
+          it "should not return instances of the #{klass} for which the user_id is in blocked_user_ids" do
+            8.times { FactoryGirl.create(@klass_sym, user: @friend) }
+
+            @user.friend_ids = (@user.friend_ids << @blocked.id.to_s)
+            # making this one eighth and the most recent
+            @blocked_users = FactoryGirl.create(@klass_sym, :user => @blocked)
+
+            @user.friend_ids.should       == [@friend.id.to_s,@blocked.id.to_s]
+            @user.blocked_user_ids.should == [@blocked.id]
+            klass.count.should > 8
+
+            @user.friends(klass).should_not include(@blocked_users)
+          end
+        end
+
+        describe '.filter_blocked' do
+          it "should not return instances of the #{klass} for which the user_id is in blocked_user_ids" do
+            @user.blocked_user_ids.should == [@blocked.id]
+
+            @user.filter_blocked(klass).should_not include(@blocked_users)
+          end
+
+          it 'should sort the results'
+
+          it 'should limit the results to 8' do
+            9.times { FactoryGirl.create(@klass_sym, :user => @friend) }
+            klass.count.should > 8
+            @user.filter_blocked(klass).count == 8
+          end
+        end
+
+        describe '.recent' do
+          before(:each) do
+            8.times { FactoryGirl.create(@klass_sym) }
+
+            # making this one eighth and the most recent
+            @blocked_users = FactoryGirl.create(@klass_sym, :user => @blocked)
+          end
+
+          it "should not return instances of the #{klass} for which the user_id is in blocked_user_ids" do
+            @user.blocked_user_ids.should == [@blocked.id]
+            klass.count.should > 8
+
+            @user.recent(klass).should_not include(@blocked_users)
+          end
+        end
+      end
+    end
+  end
+
 end
