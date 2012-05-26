@@ -12,33 +12,20 @@ class User < ActiveRecord::Base
   has_many :blacklist_entries
 
 
-  # todo as scopes
+  # todo as scopes?
   def filter_blocked(klass)
     klass.where(['user_id NOT IN (?)', blocked_user_ids]).eight_most_recent
   end
 
   def recent(klass)
-    filter_blocked(klass).eight_most_recent
+    # filter_blocked also sorts/limits
+    filter_blocked(klass)
   end
 
   def friends(klass)
+    # filter_blocked also sorts/limits
     filter_blocked(klass).where(['user_id IN (?)', friend_ids])
   end
-
-  # scope :eight_most_recent, :order => 'created_at desc', :limit => 8
-  # scope :before, lambda {|id| where(["id < ?", id])}
-  # scope :after,  lambda {|id| where(["id > ?", id])}
-  # scope :before_or_after, lambda {|params|
-  #   offset = nil
-  #   if val = params[:before] 
-  #     offset = [:before, val]
-  #   elsif val = params[:after]
-  #     offset = [:after, val]
-  #   end
-
-  #   # todo                                     kludgey
-  #   offset.is_a?(Array) ? self.send(*offset) : where('1 = 1')
-  # }
 
 
   def self.via_auth(auth_hash)
