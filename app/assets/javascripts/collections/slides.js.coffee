@@ -11,11 +11,9 @@ define [], (require) ->
 
 		initialize: (options) ->
 			_.bindAll @, "fetch"
-
 			@url      = options.url
-			@rootNode = options.rootNode
 
 		parse: (data) ->
-			data[@rootNode]
+			data[@options.rootNode]
 
 	Slides
