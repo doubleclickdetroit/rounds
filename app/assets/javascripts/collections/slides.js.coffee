@@ -11,7 +11,7 @@ define [], (require) ->
 
 		initialize: (options) ->
 			_.bindAll @, "fetch"
-			@url      = options.url
+			@url = options.url
 
 		parse: (data) ->
 			data[@options.rootNode]
