@@ -17,13 +17,11 @@ define [], (require) ->
 		initialize: ->
 			_.bindAll @, 'addOne', 'addAll', 'render'
 
-			@title = @options.title
-
 			@collection.bind 'add',   @addOne
 			@collection.bind 'reset', @addAll
 
 		render: ->
-			@$el.html @template( @ )
+			@$el.html @template( @options )
 			mediator.publish 'renderSlides', @
 			@
 

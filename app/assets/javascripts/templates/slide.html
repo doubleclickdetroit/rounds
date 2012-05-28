@@ -1,5 +1,13 @@
-<% if (type == "Sentence") { %>
-	<p><%= content %></p>
-<% } else { %>
-	<img src="<%= content %>">
-<% } %>
+<div class="details">
+	<div class="comments">
+		<%= comment_count %> comment(s)
+	</div>
+</div>
+
+<a href="/rounds/<%= round_id %>" data-pushstate>
+	<% if (type == "Sentence") { %>
+		<p><%= content %></p>
+	<% } else { %>
+		<img src="<%= content %>">
+	<% } %>
+</a>
