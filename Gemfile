@@ -12,19 +12,18 @@ gem 'fb_graph'
 
 gem 'yajl-ruby'
 gem 'rabl'
-# gem 'json_builder'
 
 gem 'factory_girl_rails'
 
 gem "paperclip", "~> 2.7"
+
+gem 'private_pub'
 
 gem 'jquery-rails'
 gem 'haml-rails'
 gem 'html5-rails', :git => 'git://github.com/sporkd/html5-rails.git'
 gem 'rails-backbone'
 gem 'requirejs-rails'
-
-# gem 'mailman', :require => false
 
 group :development, :test do
   gem 'webrick'

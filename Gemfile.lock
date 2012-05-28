@@ -66,6 +66,7 @@ GEM
       sass (~> 3.1)
     compass-h5bp (0.0.5)
       compass
+    cookiejar (0.3.0)
     cucumber (1.1.9)
       builder (>= 2.1.2)
       diff-lcs (>= 1.1.2)
@@ -80,7 +81,12 @@ GEM
     database_cleaner (0.7.2)
     diff-lcs (1.1.3)
     ejs (1.0.0)
+    em-http-request (0.3.0)
+      addressable (>= 2.0.0)
+      escape_utils
+      eventmachine (>= 0.12.9)
     erubis (2.7.0)
+    escape_utils (0.2.4)
     eventmachine (0.12.10)
     execjs (1.3.0)
       multi_json (~> 1.0)
@@ -91,6 +97,15 @@ GEM
       railties (>= 3.0.0)
     faraday (0.8.0)
       multipart-post (~> 1.1)
+    faye (0.8.2)
+      cookiejar (>= 0.3.0)
+      em-http-request (>= 0.3.0)
+      eventmachine (>= 0.12.0)
+      faye-websocket (>= 0.4.0)
+      rack (>= 1.0.0)
+      yajl-ruby (>= 1.0.0)
+    faye-websocket (0.4.5)
+      eventmachine (>= 0.12.0)
     fb_graph (2.4.16)
       httpclient (>= 2.2.0.2)
       rack-oauth2 (>= 0.14.4)
@@ -156,6 +171,8 @@ GEM
       mime-types
     pg (0.13.2)
     polyglot (0.3.3)
+    private_pub (1.0.1)
+      faye
     rabl (0.6.11)
       activesupport (>= 2.3.14)
       multi_json (~> 1.0)
@@ -277,6 +294,7 @@ DEPENDENCIES
   omniauth-facebook
   paperclip (~> 2.7)
   pg
+  private_pub
   rabl
   rails (= 3.2.0)
   rails-backbone
