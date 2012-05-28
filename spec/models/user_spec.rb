@@ -46,6 +46,19 @@ describe User do
     end
   end
 
+  describe '.invitations' do
+    it "should return Invitations where the invited_user_id is the User's id" do
+      @invitation1 = FactoryGirl.create(:invitation, :invited_user_id => @user.id)
+      @user.invitations.should == [@invitation1]
+      @invitation2 = FactoryGirl.create(:invitation)
+      @user.invitations << @invitation2
+      @user.save
+      @user.reload
+      @invitation2.invited_user_id== @user.id
+      @user.invitations.should == [@invitation1,@invitation2]
+    end
+  end
+
   describe 'blocking functionality' do
     pending 'blocked ids filter'
 

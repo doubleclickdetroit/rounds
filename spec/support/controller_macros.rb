@@ -9,6 +9,7 @@ module ControllerMacros
 
   def it_should_handle_index_by_parent_id(klass, parent_klass)
     # todo factory :with_parent ? REFACTOR
+    # todo 406 if no parent_id ?
     
     describe 'shared index functionality' do
       parent_str     = parent_klass.to_s.downcase
@@ -53,7 +54,6 @@ module ControllerMacros
         get :index, {}, valid_session
         assigns(:user).should == @user
       end
-
     end
   end
 
@@ -69,9 +69,10 @@ module ControllerMacros
         # noise before
         4.times { FactoryGirl.create(@sym) }
 
-        @first  = FactoryGirl.create(@sym, :user_id => @user.id)
-        @second = FactoryGirl.create(@sym, :user_id => @user.id)
-        @third  = FactoryGirl.create(@sym, :user_id => @user.id)
+        user_id_sym = klass == Invitation ? :invited_user_id : :user_id
+        @first  = FactoryGirl.create(@sym, user_id_sym => @user.id)
+        @second = FactoryGirl.create(@sym, user_id_sym => @user.id)
+        @third  = FactoryGirl.create(@sym, user_id_sym => @user.id)
 
         # noise after
         4.times { FactoryGirl.create(@sym) }
@@ -82,6 +83,8 @@ module ControllerMacros
   end
 
   def it_should_handle_before_and_after_for_action(klass, action, before_block_needed=true)
+    ### DOESNT RUN IF before_block_needed IS FALSE ###
+    ### DOESNT RUN IF before_block_needed IS FALSE ###
     before(:each) do
       klass.destroy_all
 
@@ -93,6 +96,8 @@ module ControllerMacros
       @second = FactoryGirl.create(@sym)
       @third  = FactoryGirl.create(@sym)
     end if before_block_needed
+    ### DOESNT RUN IF before_block_needed IS FALSE ###
+    ### DOESNT RUN IF before_block_needed IS FALSE ###
 
     context 'handling' do
       it 'should call (limit/sort/blocked)' do
@@ -105,6 +110,7 @@ module ControllerMacros
 
       context 'without :before/:after' do
         it "should show recent #{klass.to_s.pluralize}" do
+          @user.send(@sym_plural).count.should == 3
           get action, {}, valid_session
           assigns(@sym_plural).count.should == 3
         end
