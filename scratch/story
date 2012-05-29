@@ -85,7 +85,7 @@ X   /api/watchings
 X   /api/invitations
   
   Convenience route for all of the above
-_   /api/me
+X   /api/me
 
 
   VIEW A GIVEN USER'S RECENT ACTIVITY
@@ -104,8 +104,8 @@ X  GET  /api/providers/:provider/users/:uid/ballots/
 X  GET  /api/users/:user_id/ballots/
 
   Convenience route for all of the above
-_  GET  /api/providers/:provider/users/:uid/
-_  GET  /api/users/:user_id/
+X  GET  /api/providers/:provider/users/:uid/
+X  GET  /api/users/:user_id/
 
 
 
