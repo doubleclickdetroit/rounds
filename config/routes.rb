@@ -27,6 +27,7 @@ Draw::Application.routes.draw do
     match '/providers/:provider/users/:uid/rounds'   => 'rounds#index',   :via => :get
     match '/providers/:provider/users/:uid/slides'   => 'slides#index',   :via => :get
     match '/providers/:provider/users/:uid/comments' => 'comments#index', :via => :get
+    match '/providers/:provider/users/:uid/ballots'  => 'ballots#index',  :via => :get
     
 
     resources :rounds, :except => [:new,:edit] do
@@ -77,6 +78,10 @@ Draw::Application.routes.draw do
 
     # todo needed?
     resources :comments, :except => [:show,:new,:edit]
+
+    # todo cleanup
+    resources :ballots, only: [:index]
+    resources :invitations, only: [:index]
   end
 
 
