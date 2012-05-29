@@ -11,7 +11,7 @@ class BallotsController < ApplicationController
     else
       @user = set_user(params, allow_user_id: true)
 
-      @ballots = @user.own(ballot).before_or_after(params)
+      @ballots = @user.own(Ballot).before_or_after(params)
     end
 
     respond_with @ballots
