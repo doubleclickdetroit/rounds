@@ -12,7 +12,7 @@ class InvitationsController < ApplicationController
     if round_id = params[:round_id]
       @invitations = Round.find(round_id).invitations
     else
-      @user = params['uid'] ? User.find_by_auth_hash(params) : current_user
+      @user = current_user
 
       @invitations = @user.own(Invitation).before_or_after(params)
     end

@@ -9,7 +9,12 @@ describe InvitationsController do
 
   describe 'GET index' do
     it_should_handle_index_by_parent_id(Invitation, Round)
-    it_should_handle_index_by_user(Invitation)
+
+    it 'should handle requests with no round_id relative to current_user' do
+      get :index, {}, valid_session
+      assigns(:user).should == @user
+    end
+
     it_should_handle_before_and_after_for_action_and_by_current_user(Invitation, :index)
   end
 
