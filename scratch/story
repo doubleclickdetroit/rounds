@@ -90,14 +90,18 @@ _   /api/me
 
   VIEW A GIVEN USER'S RECENT ACTIVITY
   ????????????????????????????????????????????
-  Rounds 
-X   /api/providers/:provider/users/:uid/rounds/
-  Slides
-X   /api/providers/:provider/users/:uid/slides/
-  Comments
-X   /api/providers/:provider/users/:uid/comments/
-  Ballots
-X   /api/providers/:provider/users/:uid/ballots/
+Rounds 
+X  GET  /api/providers/:provider/users/:uid/rounds/
+_  GET  /api/users/:user_id/rounds/
+Slides
+X  GET  /api/providers/:provider/users/:uid/slides/
+_  GET  /api/users/:user_id/slides/
+Comments
+X  GET  /api/providers/:provider/users/:uid/comments/
+_  GET  /api/users/:user_id/comments/
+Ballots
+X  GET  /api/providers/:provider/users/:uid/ballots/
+_  GET  /api/users/:user_id/ballots/
 
 
 

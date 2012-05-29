@@ -113,12 +113,16 @@ IMPLEMENTED
     NOTE: these return the 8 most recent, client can request older and new by id # unimplemented
     Rounds 
       I GET     /api/providers/:provider/users/:uid/rounds/
+      I GET     /api/users/:user_id/rounds/
     Slides
       I GET     /api/providers/:provider/users/:uid/slides/
+      I GET     /api/users/:user_id/slides/
     Comments
       I GET     /api/providers/:provider/users/:uid/comments/
+      I GET     /api/users/:user_id/comments/
     Ballots
       I GET     /api/providers/:provider/users/:uid/ballots/
+      I GET     /api/users/:user_id/ballots/
 
 
 WORKING ON THE FOLLOWING
@@ -132,6 +136,7 @@ WORKING ON THE FOLLOWING
     NOTE: these return the 8 most recent, client can request older and new by id # unimplemented
     ALL
       I GET     /api/providers/:provider/users/:uid/ # ???
+      I GET     /api/users/:user_id/                 # ???
 
   Invitations - THESE ROUTES MAY BE CHANGING
     C POST    /api/rounds/:round_id/invitations/?provider=...&uid=...
