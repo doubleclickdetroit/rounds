@@ -29,7 +29,7 @@ describe BallotsController do
     end
   end
 
-  describe 'GET index', :focus do
+  describe 'GET index' do
     it_should_properly_assign_user(action: :index, by_user_id: true)
 
     it_should_handle_index_by_parent_id(FactoryGirl.build(:ballot), Slide)

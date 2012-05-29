@@ -20,7 +20,7 @@ describe BallotsController do
   describe "nested routing within Slides" do
 
     it "routes to #index" do
-      post("/api/slides/1/ballots").should route_to("ballots#index", :slide_id => "1")
+      get("/api/slides/1/ballots").should route_to("ballots#index", :slide_id => "1")
     end
   
     it "routes to #create" do
