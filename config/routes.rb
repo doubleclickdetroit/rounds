@@ -51,6 +51,8 @@ Draw::Application.routes.draw do
 
       resources :watchings, :only => :create
       # todo why do i need this? ... should it take an id?
+      # the resource is singular from the perspective of a 
+      # single user, but the Slide has_many
       match     'watchings' => 'watchings#destroy', :via => :delete
     end
 

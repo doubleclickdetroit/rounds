@@ -79,4 +79,14 @@ describe Ballot do
     end
   end
 
+  klass = Ballot
+
+  it_should_have_a_creator(klass)
+
+  it_should_scope_recent(klass)
+
+  it_should_scope_friends(klass)
+
+  it_should_scope_before_and_after(klass)
+
 end

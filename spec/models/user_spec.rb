@@ -38,6 +38,14 @@ describe User do
     end
   end
 
+  describe '.ballots' do
+    it 'should return an array of ballots' do
+      @ballot = FactoryGirl.create(:ballot)
+      @user.ballots << @ballot
+      @user.ballots.should == [@ballot]
+    end
+  end
+
   describe '.watchings' do
     it 'should return an array of Watchings' do
       @watching = FactoryGirl.create(:watching)
@@ -46,6 +54,7 @@ describe User do
     end
   end
 
+  # todo this kind of doesnt make sense
   describe '.invitations' do
     it "should return Invitations where the invited_user_id is the User's id" do
       @invitation1 = FactoryGirl.create(:invitation, :invited_user_id => @user.id)
