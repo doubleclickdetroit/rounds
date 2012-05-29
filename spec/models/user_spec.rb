@@ -103,7 +103,8 @@ describe User do
         'provider' => 'facebook',
         'uid' => '1337',
         'info' => {
-          'name' => 'Fox McCloud'
+          'name' => 'Fox McCloud',
+          'image' => 'http://foo.bar'
         }
       }
     end
@@ -152,6 +153,12 @@ describe User do
 
     context 'where no user exists' do
       pending "not sure if this is it, but theres another case im not spec'ing..."
+      
+      pending 'for facebook only'
+      it 'should save the image to User.image_path' do
+        user = User.via_auth(@auth_hash)
+        user.image_path.should == @auth_hash['info']['image']
+      end
     end
   end
 

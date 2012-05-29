@@ -77,10 +77,12 @@ X   /api/rounds
 X   /api/slides
   Comments
 X   /api/comments
+  Ballots
+X   /api/ballots
   Watchings
-_   /api/watchings
+X   /api/watchings
   Invitations
-_   /api/invitations
+X   /api/invitations
   
   Convenience route for all of the above
 _   /api/me
@@ -94,10 +96,8 @@ X   /api/providers/:provider/users/:uid/rounds/
 X   /api/providers/:provider/users/:uid/slides/
   Comments
 X   /api/providers/:provider/users/:uid/comments/
-  Watchings
-_   /api/providers/:provider/users/:uid/watchings/
-  Invitations
-_   /api/providers/:provider/users/:uid/invitations/
+  Ballots
+X   /api/providers/:provider/users/:uid/ballots/
 
 
 

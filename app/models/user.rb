@@ -41,8 +41,10 @@ class User < ActiveRecord::Base
   def self.via_auth(auth_hash)
     auth = Authorization.find_or_initialize_by_provider_and_uid(auth_hash['provider'], auth_hash['uid'])
 
+    # todo this is flawed if we use anything other than facebook
     if auth.new_record?
-      user = User.create(:name => auth_hash['info']['name'])
+      info = auth_hash['info']
+      user = User.create(name: info['name'], image_path: info['image'])
 
       # todo this sucks, fix it
       auth.user = user

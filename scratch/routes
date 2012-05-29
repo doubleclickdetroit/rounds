@@ -102,6 +102,12 @@ IMPLEMENTED
       I GET     /api/slides/
     Comments
       I GET     /api/comments/
+    Ballots
+      I GET     /api/ballots/
+    Watchings
+      I GET     /api/watchings/
+    Invitations
+      I GET     /api/invitations/
 
   Resources belonging to user identified by provider/uid (e.g. provider='facebook'):
     NOTE: these return the 8 most recent, client can request older and new by id # unimplemented
@@ -111,6 +117,8 @@ IMPLEMENTED
       I GET     /api/providers/:provider/users/:uid/slides/
     Comments
       I GET     /api/providers/:provider/users/:uid/comments/
+    Ballots
+      I GET     /api/providers/:provider/users/:uid/ballots/
 
 
 WORKING ON THE FOLLOWING
@@ -119,19 +127,11 @@ WORKING ON THE FOLLOWING
     NOTE: these return the 8 most recent, client can request older and new by id # unimplemented
     ALL
       I GET     /api/me
-    Watchings
-      I GET     /api/watching
-    Invitations
-      I GET     /api/invitations/
 
   Resources belonging to user identified by provider/uid (e.g. provider='facebook'):
     NOTE: these return the 8 most recent, client can request older and new by id # unimplemented
     ALL
       I GET     /api/providers/:provider/users/:uid/ # ???
-    Watchings
-      I GET     /api/providers/:provider/users/:uid/watching
-    Invitations
-      I GET     /api/providers/:provider/users/:uid/invitations/
 
   Invitations - THESE ROUTES MAY BE CHANGING
     C POST    /api/rounds/:round_id/invitations/?provider=...&uid=...
