@@ -43,23 +43,6 @@ describe RoundsController do
     end
   end
 
-  describe 'PUT update' do
-    it 'should update the Round whose id was passed in' do
-      pending 'dont think this is needed'
-      @round = FactoryGirl.create(:round, :user_id => 1)
-
-      id  = @round.to_param
-      user_id = 2
-      params = { 
-        :id => id,
-        :round  => {:user_id => user_id} 
-      }
-
-      put :update, params, valid_session
-      Round.find(id).user_id.should == user_id 
-    end
-  end
-
   describe 'DELETE destroy' do
     it 'should destroy the (empty) Round whose id was passed in' do
       @round = FactoryGirl.create(:round)

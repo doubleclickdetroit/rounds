@@ -64,7 +64,7 @@ IMPLEMENTED
 
       C POST    /api/rounds/:round_id/slides/?type=:type
       R GET     /api/rounds/:round_id/slides/:id
-      U PUT     /api/rounds/:round_id/slides/:id
+    # U PUT     /api/rounds/:round_id/slides/:id
       D DELETE  /api/rounds/:round_id/slides/:id
       I GET     /api/rounds/:round_id/slides/?type=:type
 

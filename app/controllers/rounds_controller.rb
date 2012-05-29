@@ -20,10 +20,6 @@ class RoundsController < ApplicationController
     respond_with @round.to_json
   end
 
-  # def update
-  #   respond_with Round.update(params[:id],params[:round]).to_json
-  # end
-
   def destroy
     @round = Round.find(params[:id])
     # todo not 401

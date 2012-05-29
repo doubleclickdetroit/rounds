@@ -7,10 +7,14 @@ module ControllerMacros
     end
   end
 
-  def it_should_handle_index_by_parent_id(klass, parent_klass)
+  def it_should_handle_index_by_parent_id(klass_or_instance, parent_klass)
     # todo factory :with_parent ? REFACTOR
     # todo 406 if no parent_id ?
     
+    
+    klass    =  klass_or_instance.is_a?(Class) ? klass_or_instance : klass_or_instance.class
+    instance = !klass_or_instance.is_a?(Class) ? klass_or_instance : nil
+
     describe 'shared index functionality' do
       parent_str     = parent_klass.to_s.downcase
       parent_id_str = "#{parent_str}_id"
@@ -27,8 +31,20 @@ module ControllerMacros
       context "with #{parent_id_str}" do
         it "should show #{klass.to_s.pluralize} for a #{parent_klass.to_s}" do
           @parent   = FactoryGirl.create(@parent_sym)
-          @instance = FactoryGirl.create(@sym, @parent_id_sym => @parent.id)
-          FactoryGirl.create(@sym, @parent_id_sym => @parent.id + 1)
+          attrs = instance ? instance.attributes : {}
+          attrs.delete 'id'
+          attrs.delete parent_id_str  
+
+          attrs[@parent_id_sym] = @parent.id
+          @instance = FactoryGirl.create(@sym, attrs)
+
+          attrs[@parent_id_sym] = @parent.id + 1
+          if klass == Ballot
+            Ballot.any_instance.stub(:increment_slide_votes).and_return(true)
+            attrs['user_id'] = attrs['user_id'] + 1
+          end
+          FactoryGirl.create(@sym, attrs)
+
           params = { @parent_id_sym => @parent.to_param }
 
           get :index, params, valid_session

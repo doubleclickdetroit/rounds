@@ -28,9 +28,9 @@ describe SlidesController do
       post("/api/slides").should route_to("slides#create")
     end
 
-    it "routes to #update" do
-      put("/api/slides/2").should route_to("slides#update", :id => "2")
-    end
+    # it "routes to #update" do
+    #   put("/api/slides/2").should route_to("slides#update", :id => "2")
+    # end
 
     it "routes to #destroy" do
       delete("/api/slides/2").should route_to("slides#destroy", :id => "2")
@@ -52,9 +52,9 @@ describe SlidesController do
       post("/api/rounds/1/slides").should route_to("slides#create", :round_id => "1")
     end
 
-    it "routes to #update" do
-      put("/api/rounds/1/slides/2").should route_to("slides#update", :id => "2", :round_id => "1")
-    end
+    # it "routes to #update" do
+    #   put("/api/rounds/1/slides/2").should route_to("slides#update", :id => "2", :round_id => "1")
+    # end
 
     it "routes to #destroy" do
       delete("/api/rounds/1/slides/2").should route_to("slides#destroy", :id => "2", :round_id => "1")

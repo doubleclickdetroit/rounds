@@ -54,7 +54,7 @@ Draw::Application.routes.draw do
     match '/providers/:provider/users/:uid/ballots'  => 'ballots#index',  :via => :get
 
 
-    resources :rounds, :except => [:index,:new,:edit] do
+    resources :rounds, :except => [:index,:update,:new,:edit] do
       # todo DRY?
       match     'sentences' => 'slides#create', :type => 'Sentence', :via => :post
       match     'pictures'  => 'slides#create', :type => 'Picture',  :via => :post
@@ -72,6 +72,7 @@ Draw::Application.routes.draw do
     resources :slides, :except => [:index,:new,:edit] do
       resources :comments, :except => [:show,:new,:edit]
 
+      resources :ballots, :only => [:index]
       match     'vote/:vote' => 'ballots#create'
 
       resources :watchings, :only => :create
