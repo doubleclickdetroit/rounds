@@ -7,7 +7,7 @@ class CommentsController < ApplicationController
     if slide_id = params[:slide_id]
       @comments = Slide.find(slide_id).comments
     else
-      @user = params['uid'] ? User.find_by_auth_hash(params) : current_user
+      @user = set_user(params, allow_user_id: true)
 
       @comments = @user.own(Comment).before_or_after(params)
     end

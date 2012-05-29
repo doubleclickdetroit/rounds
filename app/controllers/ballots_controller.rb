@@ -6,7 +6,7 @@ class BallotsController < ApplicationController
 
 
   def index
-    @user = params['uid'] ? User.find_by_auth_hash(params) : current_user
+    @user = set_user(params, allow_user_id: true)
 
     @ballots = @user.own(Ballot).before_or_after(params)
 

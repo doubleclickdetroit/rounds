@@ -5,7 +5,7 @@ describe RoundsController do
 
   login_user()
 
-  describe 'GET index', :focus do
+  describe 'GET index' do
     it_should_handle_index_by_user(Round, by_user_id: true)
     it_should_handle_before_and_after_for_action_and_by_current_user(Round, :index)
   end
