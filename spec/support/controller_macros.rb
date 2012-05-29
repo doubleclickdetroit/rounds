@@ -28,7 +28,7 @@ module ControllerMacros
         @parent_id_sym = parent_id_str.intern
       end
 
-      context "with #{parent_id_str}" do
+      context "with #{parent_id_str}", :focus do
         it "should show #{klass.to_s.pluralize} for a #{parent_klass.to_s}" do
           @parent   = FactoryGirl.create(@parent_sym)
           attrs = instance ? instance.attributes : {}

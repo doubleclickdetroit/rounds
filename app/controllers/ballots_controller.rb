@@ -6,9 +6,13 @@ class BallotsController < ApplicationController
 
 
   def index
-    @user = set_user(params, allow_user_id: true)
+    if slide_id = params[:slide_id]
+      @ballots = Slide.find(slide_id).ballots
+    else
+      @user = set_user(params, allow_user_id: true)
 
-    @ballots = @user.own(Ballot).before_or_after(params)
+      @ballots = @user.own(ballot).before_or_after(params)
+    end
 
     respond_with @ballots
   end
