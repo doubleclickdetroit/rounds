@@ -8,6 +8,19 @@ class ApplicationController < ActionController::Base
   helper_method :current_user
 
 protected
+  def set_user(*args)
+    params        = args.shift
+    allow_user_id = args.extract_options![:allow_user_id]
+
+    if allow_user_id && user_id = params['user_id']
+      User.find(user_id)
+    elsif params['provider'] && params['uid']
+      User.find_by_auth_hash(params)
+    else
+      current_user
+    end
+  end
+
   def authenticate
     authenticate_or_request_with_http_basic do |username, password|
       username == "rounds_dev_server" && password == "YE%:Py+,oT\]dPWD"
