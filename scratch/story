@@ -92,16 +92,20 @@ _   /api/me
   ????????????????????????????????????????????
 Rounds 
 X  GET  /api/providers/:provider/users/:uid/rounds/
-_  GET  /api/users/:user_id/rounds/
+X  GET  /api/users/:user_id/rounds/
 Slides
 X  GET  /api/providers/:provider/users/:uid/slides/
-_  GET  /api/users/:user_id/slides/
+X  GET  /api/users/:user_id/slides/
 Comments
 X  GET  /api/providers/:provider/users/:uid/comments/
-_  GET  /api/users/:user_id/comments/
+X  GET  /api/users/:user_id/comments/
 Ballots
 X  GET  /api/providers/:provider/users/:uid/ballots/
-_  GET  /api/users/:user_id/ballots/
+X  GET  /api/users/:user_id/ballots/
+
+  Convenience route for all of the above
+_  GET  /api/providers/:provider/users/:uid/
+_  GET  /api/users/:user_id/
 
 
 
