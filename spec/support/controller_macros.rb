@@ -40,28 +40,32 @@ module ControllerMacros
 
   def it_should_handle_index_by_user(*args)
     klass = args.shift
-    handles_user_id = args.extract_options![:by_user_id]
+
+    args = args.extract_options!
+
+    action          = args[:action] || :index
+    handles_user_id = args[:by_user_id]
 
     context "without parent_id and with auth" do
       it 'should use provider/uid params if passed' do
         user = FactoryGirl.create(:user)
         auth = FactoryGirl.create(:authorization, :user_id => user.id)
 
-        get :index, {:provider => auth.provider, :uid => auth.uid}, valid_session
+        get action, {:provider => auth.provider, :uid => auth.uid}, valid_session
 
         assigns(:user).should_not == @user
         assigns(:user).should == user
       end
 
       it 'should use the current user if no provider/uid is passed in' do
-        get :index, {}, valid_session
+        get action, {}, valid_session
         assigns(:user).should == @user
       end
 
       if handles_user_id
         it 'should use user_id if passed in' do
           user = FactoryGirl.create(:user)
-          get :index, {user_id: user.to_param}, valid_session
+          get action, {user_id: user.to_param}, valid_session
           assigns(:user).should == user
         end
       end

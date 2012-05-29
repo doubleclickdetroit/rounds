@@ -1,4 +1,8 @@
 Draw::Application.routes.draw do
+  get "user_feed/me"
+
+  get "user_feed/other"
+
   # todo use :via for all matches
 
   # todo remove after dev
