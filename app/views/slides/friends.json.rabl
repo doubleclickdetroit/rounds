@@ -1,2 +1,2 @@
 collection @slides, :root => 'friends'
-extends 'slides/show'
+extends 'slides/index'

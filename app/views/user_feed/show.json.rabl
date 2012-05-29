@@ -1,4 +1,6 @@
-# node(:user) { attributes :id, :name, :image_path }
+object @user
+
+attributes :id, :name, :image_path
 
 node :rounds do
   partial("rounds/index", :object => @rounds)

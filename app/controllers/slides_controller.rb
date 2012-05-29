@@ -46,8 +46,7 @@ class SlidesController < ApplicationController
     @community_slides = current_user.recent(klass)
     @friends_slides   = current_user.friends(klass)
 
-    # todo unnecessary
-    respond_with @type
+    respond_with 'slides/feed'
   end
 
   def community

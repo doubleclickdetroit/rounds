@@ -20,7 +20,7 @@ protected
              current_user
            end
 
-    @user_in_full = user == current_user # for rabl rendering
+    @skip_user = user == current_user # for rabl rendering
 
     user
   end

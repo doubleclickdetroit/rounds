@@ -41,8 +41,9 @@ module ControllerMacros
   def it_should_properly_assign_user(*args)
     args = args.extract_options!
 
-    action          = args[:action] || :index
-    handles_user_id = args[:by_user_id]
+    action                 = args[:action] || :index
+    handles_user_id        = args[:by_user_id]
+    skip_user_always_true  = args[:skip_user_always_true]
 
     context "without parent_id and with auth" do
       it 'should use provider/uid params if passed' do
@@ -69,27 +70,32 @@ module ControllerMacros
       end
     end
 
-    it_should_properly_assign_user_in_full_var(action: action)
+    it_should_properly_assign_skip_user_var(action: action, skip_user_always_true: skip_user_always_true)
   end
 
-  def it_should_properly_assign_user_in_full_var(*args)
-    args   = args.extract_options!
-    action = args[:action] || :index
+  def it_should_properly_assign_skip_user_var(*args)
+    args                   = args.extract_options!
+    action                 = args[:action] || :index
+    skip_user_always_true  = args[:skip_user_always_true]
 
     context "without parent_id and with auth" do
-      it 'should set @user_in_full to false if @user is not current_user' do
+      it "should set @skip_user to #{!!skip_user_always_true} if @user is not current_user" do
         user = FactoryGirl.create(:user)
         auth = FactoryGirl.create(:authorization, :user_id => user.id)
 
         get action, {:provider => auth.provider, :uid => auth.uid}, valid_session
 
-        assigns(:user_in_full).should be_false
+        if skip_user_always_true 
+          assigns(:skip_user).should be_true
+        else
+          assigns(:skip_user).should be_false
+        end
       end
 
-      it 'should set @user_in_full to true if @user is current_user' do
+      it 'should set @skip_user to true if @user is current_user' do
         get action, {}, valid_session
 
-        assigns(:user_in_full).should be_true
+        assigns(:skip_user).should be_true
       end
     end
   end

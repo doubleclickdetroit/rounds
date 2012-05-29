@@ -10,6 +10,7 @@ class UserFeedController < ApplicationController
     @comments = @user.own(Comment)
     @ballots  = @user.own(Ballot)
 
+    @skip_user = true
     respond_with 'user_feed/show'
   end
 end
