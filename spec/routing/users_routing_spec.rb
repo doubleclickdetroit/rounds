@@ -7,7 +7,7 @@ describe '/api/users/' do
     context 'for user feeds' do
 
       it "routes to #index" do
-        get("/api/me").should route_to("user_feed#show")
+        get("/api/users/me").should route_to("user_feed#show")
       end
 
       it "routes to #index for provider/uid" do
