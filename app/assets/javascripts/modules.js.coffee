@@ -26,6 +26,7 @@ define [], (require) ->
 		initRender = ->
 			has_rendered = true
 
+			# eventually abstract this layer into a factory
 			# have model for each stream
 			# use singleton to prevent multiple instantiations
 			streams.sentences = new StreamView stream_name: "sentences"
@@ -35,7 +36,6 @@ define [], (require) ->
 			do streams.sentences.render
 			do streams.pictures.render
 
-		# eventually abstract this layer into a factory
 		renderDelegation
 	)()
 
