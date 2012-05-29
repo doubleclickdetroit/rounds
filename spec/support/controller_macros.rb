@@ -38,9 +38,7 @@ module ControllerMacros
     end
   end
 
-  def it_should_handle_index_by_user(*args)
-    klass = args.shift
-
+  def it_should_properly_assign_user(*args)
     args = args.extract_options!
 
     action          = args[:action] || :index

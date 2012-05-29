@@ -5,8 +5,9 @@ describe UserFeedController do
 
   login_user()
 
-  describe 'GET feed', :focus do
-    it_should_handle_index_by_user('need to remove this', by_user_id: true, action: :feed)
+  describe 'GET feed' do
+    it_should_properly_assign_user(by_user_id: true, action: :feed)
+
     # it_should_handle_before_and_after_for_action_and_by_current_user(Round, :index)
   end
 

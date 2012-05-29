@@ -7,7 +7,8 @@ describe BallotsController do
   login_user()
 
   describe 'GET index' do
-    it_should_handle_index_by_user(Ballot, by_user_id: true)
+    it_should_properly_assign_user(action: :index, by_user_id: true)
+
     it_should_handle_before_and_after_for_action_and_by_current_user(Ballot, :index)
   end
 
