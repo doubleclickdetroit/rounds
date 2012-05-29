@@ -69,23 +69,6 @@ _ ????????????????????????????????????????????
   ????????????????????????????????????????????
 
 
-  VIEW OWN RECENT ACTIVITY
-  the user navigates to the Me tab to see his recent
-  Rounds
-X   /api/rounds
-  Slides
-X   /api/slides
-  Comments
-X   /api/comments
-  Ballots
-X   /api/ballots
-  Watchings
-X   /api/watchings
-  Invitations
-X   /api/invitations
-  
-  Convenience route for all of the above
-X   /api/me
 
 
   VIEW A GIVEN USER'S RECENT ACTIVITY
@@ -93,19 +76,24 @@ X   /api/me
 Rounds 
 X  GET  /api/providers/:provider/users/:uid/rounds/
 X  GET  /api/users/:user_id/rounds/
+_  GET  /api/users/me/rounds/
 Slides
 X  GET  /api/providers/:provider/users/:uid/slides/
-X  GET  /api/users/:user_id/slides/
+X  GET  /api/users/user_id/slides/
+_  GET  /api/users/me/slides/
 Comments
 X  GET  /api/providers/:provider/users/:uid/comments/
 X  GET  /api/users/:user_id/comments/
+_  GET  /api/users/me/comments/
 Ballots
 X  GET  /api/providers/:provider/users/:uid/ballots/
 X  GET  /api/users/:user_id/ballots/
+_  GET  /api/users/me/ballots/
 
   Convenience route for all of the above
 X  GET  /api/providers/:provider/users/:uid/
 X  GET  /api/users/:user_id/
+_  GET  /api/users/me/
 
 
 

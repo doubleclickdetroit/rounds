@@ -94,40 +94,32 @@ IMPLEMENTED
     C POST    /api/providers/:provider/users/:uid/block/
     D DELETE  /api/providers/:provider/users/:uid/block/
 
-  Resources belonging to the current user:
-    NOTE: these return the 8 most recent, client can request older and new by id # unimplemented
-    Rounds 
-      I GET     /api/rounds/
-    Slides
-      I GET     /api/slides/
-    Comments
-      I GET     /api/comments/
-    Ballots
-      I GET     /api/ballots/
-    Watchings
-      I GET     /api/watchings/
-    Invitations
-      I GET     /api/invitations/
-    ALL
-      I GET     /api/me
-
   Resources belonging to user identified by provider/uid (e.g. provider='facebook'):
     NOTE: these return the 8 most recent, client can request older and new by id # unimplemented
     Rounds 
       I GET     /api/providers/:provider/users/:uid/rounds/
       I GET     /api/users/:user_id/rounds/
+      I GET     /api/users/me/rounds/
     Slides
       I GET     /api/providers/:provider/users/:uid/slides/
       I GET     /api/users/:user_id/slides/
+      I GET     /api/users/me/slides/
     Comments
       I GET     /api/providers/:provider/users/:uid/comments/
       I GET     /api/users/:user_id/comments/
+      I GET     /api/users/me/comments/
     Ballots
       I GET     /api/providers/:provider/users/:uid/ballots/
       I GET     /api/users/:user_id/ballots/
+      I GET     /api/users/me/ballots/
+    Watchings
+      I GET     /api/users/me/watchings/
+    Invitations
+      I GET     /api/users/me/invitations/
     ALL
       I GET     /api/providers/:provider/users/:uid/ # ???
       I GET     /api/users/:user_id/                 # ???
+      I GET     /api/users/me/                       # ???
 
 
 WORKING ON THE FOLLOWING
