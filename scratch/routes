@@ -94,8 +94,8 @@ IMPLEMENTED
     C POST    /api/providers/:provider/users/:uid/block/
     D DELETE  /api/providers/:provider/users/:uid/block/
 
-  Resources belonging to user identified by provider/uid (e.g. provider='facebook'):
-    NOTE: these return the 8 most recent, client can request older and new by id # unimplemented
+  Resources belonging to user identified by user_id, provider/uid, or current user
+    NOTE: these return the 8 most recent, client can request older and new by id
     Rounds 
       I GET     /api/providers/:provider/users/:uid/rounds/
       I GET     /api/users/:user_id/rounds/
@@ -117,9 +117,9 @@ IMPLEMENTED
     Invitations
       I GET     /api/users/me/invitations/
     ALL
-      I GET     /api/providers/:provider/users/:uid/ # ???
-      I GET     /api/users/:user_id/                 # ???
-      I GET     /api/users/me/                       # ???
+      I GET     /api/providers/:provider/users/:uid/ 
+      I GET     /api/users/:user_id/                
+      I GET     /api/users/me/                     
 
 
 WORKING ON THE FOLLOWING
