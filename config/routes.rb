@@ -10,10 +10,6 @@ Draw::Application.routes.draw do
   match '/signout' => 'sessions#destroy', :as => :signout #, :via => :delete
 
   scope 'api' do
-    # full user feed for current_user
-    match '/me' => 'user_feed#show', :via => :get
-
-    # blocking
     scope 'users' do
       # own full user feed
       match '/me'   => 'user_feed#show', :via => :get
