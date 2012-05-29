@@ -1,15 +1,23 @@
 class WatchingsController < ApplicationController
-  before_filter :check_for_round_id, :only => [:index,:create]
+  before_filter :check_for_round_id, :only => :create # [:index,:create]
 
   respond_to :json
 
-  def create
-    respond_with Watching.create(:round_id => @round_id, :user_id => current_user.id).to_json
+  def index
+    @user = current_user
+
+    @watchings = @user.own(Watching).before_or_after(params)
+
+    respond_with @watchings
   end
 
-  # def destroy
-  #   respond_with Watching.destroy(params[:id]).to_json
-  # end
+  def create
+    respond_with Watching.create(:round_id => @round_id, :user_id => current_user.id)
+  end
+
+  def destroy
+    respond_with Watching.destroy(params[:id])
+  end
 
 private
   def check_for_round_id

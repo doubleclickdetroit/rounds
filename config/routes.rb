@@ -82,6 +82,7 @@ Draw::Application.routes.draw do
     # todo cleanup
     resources :ballots, only: [:index]
     resources :invitations, only: [:index]
+    resources :watchings, only: [:index]
   end
 
 
