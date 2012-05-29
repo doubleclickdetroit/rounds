@@ -13,14 +13,31 @@ define [], (require) ->
 		do $('#main').empty
 
 
-	facade.subscribe 'navigateIndex', ->
-		facade.publish 'emptyMainContent'
+	facade.subscribe 'navigateIndex', (->
+
+		streams      = {}
+		has_rendered = false
+
+		renderDelegation = ->
+			facade.publish 'emptyMainContent'
+			if has_rendered is on then do reRender else do initRender
+			@
+
+		initRender = ->
+			has_rendered = true
+
+			# have model for each stream
+			# use singleton to prevent multiple instantiations
+			streams.sentences = new StreamView stream_name: "sentences"
+			streams.pictures  = new StreamView stream_name: "pictures"
+
+		reRender = ->
+			do streams.sentences.render
+			do streams.pictures.render
 
 		# eventually abstract this layer into a factory
-		# have model for each stream
-		# use singleton to prevent multiple instantiations
-		sentences = new StreamView stream_name: "sentences"
-		pictures  = new StreamView stream_name: "pictures"
+		renderDelegation
+	)()
 
 
 	facade.subscribe 'navigateRound', (round_id) ->
