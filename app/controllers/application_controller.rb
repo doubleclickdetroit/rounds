@@ -12,13 +12,17 @@ protected
     params        = args.shift
     allow_user_id = args.extract_options![:allow_user_id]
 
-    if allow_user_id && user_id = params['user_id']
-      User.find(user_id)
-    elsif params['provider'] && params['uid']
-      User.find_by_auth_hash(params)
-    else
-      current_user
-    end
+    user = if allow_user_id && user_id = params['user_id']
+             User.find(user_id)
+           elsif params['provider'] && params['uid']
+             User.find_by_auth_hash(params)
+           else
+             current_user
+           end
+
+    @user_in_full = user == current_user # for rabl rendering
+
+    user
   end
 
   def authenticate

@@ -9,7 +9,6 @@ describe SlidesController do
 
   describe 'GET index' do
     it_should_properly_assign_user(action: :index, by_user_id: true)
-    it_should_properly_assign_user_in_full_var(action: :index)
 
     it_should_handle_index_by_parent_id(Slide, Round)
     it_should_handle_before_and_after_for_action_and_by_current_user(Slide, :index)

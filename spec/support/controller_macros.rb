@@ -68,6 +68,8 @@ module ControllerMacros
         end
       end
     end
+
+    it_should_properly_assign_user_in_full_var(action: action)
   end
 
   def it_should_properly_assign_user_in_full_var(*args)
