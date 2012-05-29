@@ -10,6 +10,6 @@ class UserFeedController < ApplicationController
     @comments = @user.own(Comment)
     @ballots  = @user.own(Ballot)
 
-    respond_with foo: 'bar'
+    respond_with 'user_feed/show'
   end
 end

@@ -6,4 +6,6 @@ node(:content) {|slide| slide.content }
 node(:comment_count) {|slide| slide.comment_count }
 node(:round_lock) {|slide| !!slide.round.round_lock }
 
-child(:user) { attributes :id, :name, :image_path }
+# # todo
+# # currently determined from 'slides/index'
+# child(:user) { attributes :id, :name, :image_path } if @user_in_full

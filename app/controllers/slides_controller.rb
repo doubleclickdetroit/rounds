@@ -16,6 +16,7 @@ class SlidesController < ApplicationController
       @slides = @user.own(Slide).before_or_after(params)
     end
 
+    @user_in_full = @user == current_user # for rabl rendering
     respond_with @slides
   end
 

@@ -70,6 +70,28 @@ module ControllerMacros
     end
   end
 
+  def it_should_properly_assign_user_in_full_var(*args)
+    args   = args.extract_options!
+    action = args[:action] || :index
+
+    context "without parent_id and with auth" do
+      it 'should set @user_in_full to false if @user is not current_user' do
+        user = FactoryGirl.create(:user)
+        auth = FactoryGirl.create(:authorization, :user_id => user.id)
+
+        get action, {:provider => auth.provider, :uid => auth.uid}, valid_session
+
+        assigns(:user_in_full).should be_false
+      end
+
+      it 'should set @user_in_full to true if @user is current_user' do
+        get action, {}, valid_session
+
+        assigns(:user_in_full).should be_true
+      end
+    end
+  end
+
   def it_should_handle_before_and_after_for_action_and_by_current_user(klass, action)
     context 'before_or_after' do
       before(:each) do
