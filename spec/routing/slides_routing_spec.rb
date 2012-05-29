@@ -8,8 +8,12 @@ describe SlidesController do
       get("/api/slides").should route_to("slides#index")
     end
 
-    it "routes to #index with :user_id" do
+    it "routes to #index with provider/uid" do
       get("/api/providers/facebook/users/525/slides").should route_to("slides#index", :provider => 'facebook', :uid => '525')
+    end
+
+    it "routes to #index with :user_id" do
+      get("/api/users/525/slides").should route_to("slides#index", user_id: '525')
     end
 
   end

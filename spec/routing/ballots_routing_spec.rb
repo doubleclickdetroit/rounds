@@ -11,6 +11,10 @@ describe BallotsController do
       get("/api/providers/facebook/users/525/ballots").should route_to("ballots#index", :provider => 'facebook', :uid => '525')
     end
 
+    it "routes to #index with :user_id" do
+      get("/api/users/525/ballots").should route_to("ballots#index", user_id: '525')
+    end
+
   end
 
   describe "nested routing within Slides" do

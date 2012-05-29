@@ -12,23 +12,26 @@ Draw::Application.routes.draw do
 
     # blocking
     scope 'users' do
+      # user activity
+      match '/:user_id/rounds'   => 'rounds#index',              :via => :get
+      match '/:user_id/slides'   => 'slides#index',              :via => :get
+      match '/:user_id/comments' => 'comments#index',            :via => :get
+      match '/:user_id/ballots'  => 'ballots#index',             :via => :get
       # blocking by User.id
-      match '/block/:blocked_user_id' => "blacklist_entries#create", :via => :post
-      match '/block/:blocked_user_id' => "blacklist_entries#destroy", :via => :delete
+      match '/block/:blocked_user_id'  => "blacklist_entries#create",  :via => :post
+      match '/block/:blocked_user_id'  => "blacklist_entries#destroy", :via => :delete
     end
     # blocking by provider
     # todo clean up the match's
     match '/providers/:provider/users/:uid/block' => 'blacklist_entries#create', :via => :post
     match '/providers/:provider/users/:uid/block' => 'blacklist_entries#destroy', :via => :delete
-
-
-    # user activity / feeds
+    # user activity / feeds by provider / uid
     # todo clean up the match's
     match '/providers/:provider/users/:uid/rounds'   => 'rounds#index',   :via => :get
     match '/providers/:provider/users/:uid/slides'   => 'slides#index',   :via => :get
     match '/providers/:provider/users/:uid/comments' => 'comments#index', :via => :get
     match '/providers/:provider/users/:uid/ballots'  => 'ballots#index',  :via => :get
-    
+
 
     resources :rounds, :except => [:new,:edit] do
       # todo DRY?
