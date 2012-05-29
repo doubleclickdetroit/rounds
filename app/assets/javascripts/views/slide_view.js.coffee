@@ -1,6 +1,5 @@
 define [], (require) ->
 
-	$ = require "jquery"
 	_ = require "underscore"
 	Backbone = require "backbone"
 
@@ -22,7 +21,7 @@ define [], (require) ->
 
 		render: ->
 			@$el.html @template( do @model.toJSON )
-			mediator.publish 'renderSlide', @
+			mediator.publish 'renderSlide', @, @model.toJSON()
 			@
 
 	SlideView

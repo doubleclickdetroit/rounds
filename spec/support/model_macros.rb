@@ -38,9 +38,9 @@ module ModelMacros
         5.times { FactoryGirl.create(klass.to_s.downcase.intern, :user_id => @other_user.id) }
       end
 
-      describe '.recent' do
-        pending 'test recent (order)? not just limit 8?'
+      pending '.eight_most_recent'
 
+      describe '.recent' do
         it "should return the 8 most recent #{klass.to_s.pluralize}" do
           klass.recent(@user).count.should == 8
         end

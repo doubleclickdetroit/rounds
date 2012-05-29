@@ -1,11 +1,7 @@
-define [], (require) ->
-
-	StreamView = require "views/stream_view"
+define ['./router'], (AppRouter) ->
 
 	initialize: ->
-		# eventually abstract this layer into a factory
-		@sentences = new StreamView stream_name: "sentences"
-		@pictures  = new StreamView stream_name: "pictures"
+		new AppRouter()
 
 
 	# StreamView (View)

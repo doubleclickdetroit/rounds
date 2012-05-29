@@ -74,6 +74,16 @@ FactoryGirl.create(:authorization, :user_id => @brad.id, :provider => 'facebook'
 @users << @brad
 print '.'
 
+class User
+  def add_facebook_image_path
+    fid = self.authorizations.where(provider: 'facebook').first.uid
+    self.image_path = "http://graph.facebook.com/#{fid}/picture?type=square"
+    self.save
+  end
+end
+
+@users.each &:add_facebook_image_path
+
 
 
 ##########################################

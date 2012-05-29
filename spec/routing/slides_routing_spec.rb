@@ -5,11 +5,15 @@ describe SlidesController do
   describe 'user feeds' do
 
     it "routes to #index" do
-      get("/api/slides").should route_to("slides#index")
+      get("/api/users/me/slides").should route_to("slides#index")
+    end
+
+    it "routes to #index with provider/uid" do
+      get("/api/providers/facebook/users/525/slides").should route_to("slides#index", :provider => 'facebook', :uid => '525')
     end
 
     it "routes to #index with :user_id" do
-      get("/api/providers/facebook/users/525/slides").should route_to("slides#index", :provider => 'facebook', :uid => '525')
+      get("/api/users/525/slides").should route_to("slides#index", user_id: '525')
     end
 
   end
@@ -24,9 +28,9 @@ describe SlidesController do
       post("/api/slides").should route_to("slides#create")
     end
 
-    it "routes to #update" do
-      put("/api/slides/2").should route_to("slides#update", :id => "2")
-    end
+    # it "routes to #update" do
+    #   put("/api/slides/2").should route_to("slides#update", :id => "2")
+    # end
 
     it "routes to #destroy" do
       delete("/api/slides/2").should route_to("slides#destroy", :id => "2")
@@ -48,9 +52,9 @@ describe SlidesController do
       post("/api/rounds/1/slides").should route_to("slides#create", :round_id => "1")
     end
 
-    it "routes to #update" do
-      put("/api/rounds/1/slides/2").should route_to("slides#update", :id => "2", :round_id => "1")
-    end
+    # it "routes to #update" do
+    #   put("/api/rounds/1/slides/2").should route_to("slides#update", :id => "2", :round_id => "1")
+    # end
 
     it "routes to #destroy" do
       delete("/api/rounds/1/slides/2").should route_to("slides#destroy", :id => "2", :round_id => "1")

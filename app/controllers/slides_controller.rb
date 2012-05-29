@@ -11,7 +11,7 @@ class SlidesController < ApplicationController
     if round_id = params[:round_id]
       @slides = Round.find(round_id).slides
     else
-      @user = params['uid'] ? User.find_by_auth_hash(params) : current_user
+      @user = set_user(params, allow_user_id: true)
 
       @slides = @user.own(Slide).before_or_after(params)
     end
@@ -29,9 +29,9 @@ class SlidesController < ApplicationController
     respond_with Slide.create_next(params[:slide]).to_json
   end
 
-  def update
-    respond_with Slide.update(params[:id],params[:slide]).to_json
-  end
+  # def update
+  #   respond_with Slide.update(params[:id],params[:slide]).to_json
+  # end
 
   def destroy
     respond_with Slide.destroy(params[:id]).to_json
@@ -46,8 +46,7 @@ class SlidesController < ApplicationController
     @community_slides = current_user.recent(klass)
     @friends_slides   = current_user.friends(klass)
 
-    # todo unnecessary
-    respond_with @type
+    respond_with 'slides/feed'
   end
 
   def community

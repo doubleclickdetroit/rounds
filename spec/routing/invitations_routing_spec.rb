@@ -4,8 +4,17 @@ describe InvitationsController do
 
   describe "nested routing within Rounds" do
   
-    it "routes to #index" do
-      get("/api/rounds/1/invitations").should route_to("invitations#index", :round_id => "1")
+    context 'user feeds' do
+
+      it "routes to #index" do
+        get("/api/users/me/invitations").should route_to("invitations#index")
+      end
+
+      it "routes to #index with :user_id" do
+        pending 'i dont think this is needed'
+        get("/api/providers/facebook/users/525/invitations").should route_to("invitations#index", :provider => 'facebook', :uid => '525')
+      end
+
     end
 
     it "routes to #create" do

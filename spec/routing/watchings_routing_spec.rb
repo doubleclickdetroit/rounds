@@ -1,6 +1,14 @@
 require "spec_helper"
 
 describe WatchingsController do
+  describe 'feed routing' do
+
+    it "routes to #index" do
+      get("/api/users/me/watchings").should route_to("watchings#index")
+    end
+
+  end
+
   describe "nested routing within Slides" do
   
     it "routes to #create" do

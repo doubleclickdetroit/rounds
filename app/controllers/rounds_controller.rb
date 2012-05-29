@@ -2,7 +2,7 @@ class RoundsController < ApplicationController
   respond_to :json
 
   def index
-    @user = params['uid'] ? User.find_by_auth_hash(params) : current_user
+    @user = set_user(params, allow_user_id: true)
 
     @rounds = @user.own(Round).before_or_after(params)
 
@@ -19,10 +19,6 @@ class RoundsController < ApplicationController
     @round.round_lock = RoundLock.create(:user_id => current_user.id)
     respond_with @round.to_json
   end
-
-  # def update
-  #   respond_with Round.update(params[:id],params[:round]).to_json
-  # end
 
   def destroy
     @round = Round.find(params[:id])

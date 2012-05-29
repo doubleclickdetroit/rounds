@@ -1,6 +1,7 @@
 class InvitationsController < ApplicationController
+
   before_filter :setup_invitation, :only => [:index,:create]
-  before_filter :check_for_round_id, :only => [:index,:create]
+  before_filter :check_for_round_id, :only => :create # [:index,:create]
   before_filter :check_for_invited_user_id, :only => :create
   before_filter :force_current_user_id, :only => :create
   
@@ -8,8 +9,15 @@ class InvitationsController < ApplicationController
 
 
   def index
-    @invitations = Round.find(@round_id).invitations
-    respond_with @invitations.to_json
+    if round_id = params[:round_id]
+      @invitations = Round.find(round_id).invitations
+    else
+      @user = current_user
+
+      @invitations = @user.own(Invitation).before_or_after(params)
+    end
+
+    respond_with @invitations
   end
 
   def create

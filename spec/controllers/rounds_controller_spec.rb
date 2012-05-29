@@ -6,7 +6,8 @@ describe RoundsController do
   login_user()
 
   describe 'GET index' do
-    it_should_handle_index_by_user(Round)
+    it_should_properly_assign_user(action: :index, by_user_id: true)
+
     it_should_handle_before_and_after_for_action_and_by_current_user(Round, :index)
   end
 
@@ -39,23 +40,6 @@ describe RoundsController do
     it 'should set Round.created_by to current_user' do
       post :create, {} , valid_session
       Round.last.creator.should == @user
-    end
-  end
-
-  describe 'PUT update' do
-    it 'should update the Round whose id was passed in' do
-      pending 'dont think this is needed'
-      @round = FactoryGirl.create(:round, :user_id => 1)
-
-      id  = @round.to_param
-      user_id = 2
-      params = { 
-        :id => id,
-        :round  => {:user_id => user_id} 
-      }
-
-      put :update, params, valid_session
-      Round.find(id).user_id.should == user_id 
     end
   end
 
