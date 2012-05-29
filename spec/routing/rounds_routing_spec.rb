@@ -7,7 +7,7 @@ describe RoundsController do
     context 'user feeds' do
 
       it "routes to #index" do
-        get("/api/rounds").should route_to("rounds#index")
+        get("/api/users/me/rounds").should route_to("rounds#index")
       end
 
       it "routes to #index for provider/uid" do

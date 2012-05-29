@@ -7,7 +7,7 @@ describe InvitationsController do
     context 'user feeds' do
 
       it "routes to #index" do
-        get("/api/invitations").should route_to("invitations#index")
+        get("/api/users/me/invitations").should route_to("invitations#index")
       end
 
       it "routes to #index with :user_id" do

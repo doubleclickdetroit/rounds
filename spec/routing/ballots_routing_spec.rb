@@ -4,7 +4,7 @@ describe BallotsController do
   describe 'feed routing' do
 
     it "routes to #index" do
-      get("/api/ballots").should route_to("ballots#index")
+      get("/api/users/me/ballots").should route_to("ballots#index")
     end
 
     it "routes to #index with :user_id" do

@@ -5,7 +5,7 @@ describe SlidesController do
   describe 'user feeds' do
 
     it "routes to #index" do
-      get("/api/slides").should route_to("slides#index")
+      get("/api/users/me/slides").should route_to("slides#index")
     end
 
     it "routes to #index with provider/uid" do

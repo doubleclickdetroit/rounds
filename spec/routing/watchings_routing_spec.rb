@@ -4,7 +4,7 @@ describe WatchingsController do
   describe 'feed routing' do
 
     it "routes to #index" do
-      get("/api/watchings").should route_to("watchings#index")
+      get("/api/users/me/watchings").should route_to("watchings#index")
     end
 
   end
