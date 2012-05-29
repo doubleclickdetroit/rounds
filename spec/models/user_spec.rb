@@ -38,11 +38,33 @@ describe User do
     end
   end
 
+  describe '.ballots' do
+    it 'should return an array of ballots' do
+      @ballot = FactoryGirl.create(:ballot)
+      @user.ballots << @ballot
+      @user.ballots.should == [@ballot]
+    end
+  end
+
   describe '.watchings' do
     it 'should return an array of Watchings' do
       @watching = FactoryGirl.create(:watching)
       @user.watchings << @watching
       @user.watchings.should == [@watching]
+    end
+  end
+
+  # todo this kind of doesnt make sense
+  describe '.invitations' do
+    it "should return Invitations where the invited_user_id is the User's id" do
+      @invitation1 = FactoryGirl.create(:invitation, :invited_user_id => @user.id)
+      @user.invitations.should == [@invitation1]
+      @invitation2 = FactoryGirl.create(:invitation)
+      @user.invitations << @invitation2
+      @user.save
+      @user.reload
+      @invitation2.invited_user_id== @user.id
+      @user.invitations.should == [@invitation1,@invitation2]
     end
   end
 
@@ -81,7 +103,8 @@ describe User do
         'provider' => 'facebook',
         'uid' => '1337',
         'info' => {
-          'name' => 'Fox McCloud'
+          'name' => 'Fox McCloud',
+          'image' => 'http://foo.bar'
         }
       }
     end
@@ -130,6 +153,12 @@ describe User do
 
     context 'where no user exists' do
       pending "not sure if this is it, but theres another case im not spec'ing..."
+      
+      pending 'for facebook only'
+      it 'should save the image to User.image_path' do
+        user = User.via_auth(@auth_hash)
+        user.image_path.should == @auth_hash['info']['image']
+      end
     end
   end
 

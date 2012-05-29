@@ -77,10 +77,12 @@ X   /api/rounds
 X   /api/slides
   Comments
 X   /api/comments
+  Ballots
+X   /api/ballots
   Watchings
-_   /api/watchings
+X   /api/watchings
   Invitations
-_   /api/invitations
+X   /api/invitations
   
   Convenience route for all of the above
 _   /api/me
@@ -88,16 +90,22 @@ _   /api/me
 
   VIEW A GIVEN USER'S RECENT ACTIVITY
   ????????????????????????????????????????????
-  Rounds 
-X   /api/providers/:provider/users/:uid/rounds/
-  Slides
-X   /api/providers/:provider/users/:uid/slides/
-  Comments
-X   /api/providers/:provider/users/:uid/comments/
-  Watchings
-_   /api/providers/:provider/users/:uid/watchings/
-  Invitations
-_   /api/providers/:provider/users/:uid/invitations/
+Rounds 
+X  GET  /api/providers/:provider/users/:uid/rounds/
+X  GET  /api/users/:user_id/rounds/
+Slides
+X  GET  /api/providers/:provider/users/:uid/slides/
+X  GET  /api/users/:user_id/slides/
+Comments
+X  GET  /api/providers/:provider/users/:uid/comments/
+X  GET  /api/users/:user_id/comments/
+Ballots
+X  GET  /api/providers/:provider/users/:uid/ballots/
+X  GET  /api/users/:user_id/ballots/
+
+  Convenience route for all of the above
+_  GET  /api/providers/:provider/users/:uid/
+_  GET  /api/users/:user_id/
 
 
 

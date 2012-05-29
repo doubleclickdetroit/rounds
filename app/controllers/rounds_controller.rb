@@ -2,7 +2,7 @@ class RoundsController < ApplicationController
   respond_to :json
 
   def index
-    @user = params['uid'] ? User.find_by_auth_hash(params) : current_user
+    @user = set_user(params, allow_user_id: true)
 
     @rounds = @user.own(Round).before_or_after(params)
 

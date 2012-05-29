@@ -9,6 +9,7 @@ module ControllerMacros
 
   def it_should_handle_index_by_parent_id(klass, parent_klass)
     # todo factory :with_parent ? REFACTOR
+    # todo 406 if no parent_id ?
     
     describe 'shared index functionality' do
       parent_str     = parent_klass.to_s.downcase
@@ -37,7 +38,10 @@ module ControllerMacros
     end
   end
 
-  def it_should_handle_index_by_user(klass)
+  def it_should_handle_index_by_user(*args)
+    klass = args.shift
+    handles_user_id = args.extract_options![:by_user_id]
+
     context "without parent_id and with auth" do
       it 'should use provider/uid params if passed' do
         user = FactoryGirl.create(:user)
@@ -54,6 +58,13 @@ module ControllerMacros
         assigns(:user).should == @user
       end
 
+      if handles_user_id
+        it 'should use user_id if passed in' do
+          user = FactoryGirl.create(:user)
+          get :index, {user_id: user.to_param}, valid_session
+          assigns(:user).should == user
+        end
+      end
     end
   end
 
@@ -69,9 +80,10 @@ module ControllerMacros
         # noise before
         4.times { FactoryGirl.create(@sym) }
 
-        @first  = FactoryGirl.create(@sym, :user_id => @user.id)
-        @second = FactoryGirl.create(@sym, :user_id => @user.id)
-        @third  = FactoryGirl.create(@sym, :user_id => @user.id)
+        user_id_sym = klass == Invitation ? :invited_user_id : :user_id
+        @first  = FactoryGirl.create(@sym, user_id_sym => @user.id)
+        @second = FactoryGirl.create(@sym, user_id_sym => @user.id)
+        @third  = FactoryGirl.create(@sym, user_id_sym => @user.id)
 
         # noise after
         4.times { FactoryGirl.create(@sym) }
@@ -82,6 +94,8 @@ module ControllerMacros
   end
 
   def it_should_handle_before_and_after_for_action(klass, action, before_block_needed=true)
+    ### DOESNT RUN IF before_block_needed IS FALSE ###
+    ### DOESNT RUN IF before_block_needed IS FALSE ###
     before(:each) do
       klass.destroy_all
 
@@ -93,6 +107,8 @@ module ControllerMacros
       @second = FactoryGirl.create(@sym)
       @third  = FactoryGirl.create(@sym)
     end if before_block_needed
+    ### DOESNT RUN IF before_block_needed IS FALSE ###
+    ### DOESNT RUN IF before_block_needed IS FALSE ###
 
     context 'handling' do
       it 'should call (limit/sort/blocked)' do
@@ -105,6 +121,7 @@ module ControllerMacros
 
       context 'without :before/:after' do
         it "should show recent #{klass.to_s.pluralize}" do
+          @user.send(@sym_plural).count.should == 3
           get action, {}, valid_session
           assigns(@sym_plural).count.should == 3
         end

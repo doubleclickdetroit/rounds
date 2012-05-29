@@ -11,7 +11,7 @@ class SlidesController < ApplicationController
     if round_id = params[:round_id]
       @slides = Round.find(round_id).slides
     else
-      @user = params['uid'] ? User.find_by_auth_hash(params) : current_user
+      @user = set_user(params, allow_user_id: true)
 
       @slides = @user.own(Slide).before_or_after(params)
     end
