@@ -13,10 +13,14 @@ Draw::Application.routes.draw do
   match '/signout' => 'sessions#destroy', :as => :signout #, :via => :delete
 
   scope 'api' do
+    # full user feed for current_user
+    match '/me' => 'user_feed#show', :via => :get
 
     # blocking
     scope 'users' do
-      # user activity
+      # full user feed
+      match '/:user_id'   => 'user_feed#show',                   :via => :get
+      # user activity by resource
       match '/:user_id/rounds'   => 'rounds#index',              :via => :get
       match '/:user_id/slides'   => 'slides#index',              :via => :get
       match '/:user_id/comments' => 'comments#index',            :via => :get
@@ -29,8 +33,10 @@ Draw::Application.routes.draw do
     # todo clean up the match's
     match '/providers/:provider/users/:uid/block' => 'blacklist_entries#create', :via => :post
     match '/providers/:provider/users/:uid/block' => 'blacklist_entries#destroy', :via => :delete
-    # user activity / feeds by provider / uid
     # todo clean up the match's
+    # full user feed
+    match '/providers/:provider/users/:uid/'         => 'user_feed#show', :via => :get
+    # user activity / feeds by provider / uid
     match '/providers/:provider/users/:uid/rounds'   => 'rounds#index',   :via => :get
     match '/providers/:provider/users/:uid/slides'   => 'slides#index',   :via => :get
     match '/providers/:provider/users/:uid/comments' => 'comments#index', :via => :get
