@@ -34,6 +34,9 @@ describe WatchingsController do
       w.round_id.should == @round.id
       w.user_id.should      == @user.id
     end
+
+    it 'should respond with a PrivatePub JSON object for .sign' do
+    end
   end
 
   describe 'DELETE destroy' do

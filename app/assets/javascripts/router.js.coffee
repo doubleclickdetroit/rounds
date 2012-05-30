@@ -18,6 +18,7 @@ define [], (require) ->
 			mediator.publish 'navigateIndex'
 
 		render_round: (round_id) ->
+			console.log PrivatePub
 			# Todo: include an arg from return of Parent ViewFactory to send along Sub ViewFactory
 			mediator.publish 'navigateRound', round_id
 

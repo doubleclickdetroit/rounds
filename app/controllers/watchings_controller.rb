@@ -12,7 +12,9 @@ class WatchingsController < ApplicationController
   end
 
   def create
-    respond_with Watching.create(:round_id => @round_id, :user_id => current_user.id)
+    Watching.create(:round_id => @round_id, :user_id => current_user.id)
+
+    respond_with PrivatePub.subscription channel: "/api/rounds/#{@round_id}"
   end
 
   def destroy

@@ -60,8 +60,11 @@ Draw::Application.routes.draw do
       match     'invitations/:invited_user_id' => 'invitations#create', :via => :post
       resources :invitations, :only => [:index,:destroy]
 
+      # todo make sure this is right...
+      resource  :watch, :controller => :watchings, only: [:create,:destroy]
+
       resource  :round_lock, :only => [:show,:create,:destroy] do
-        resources :watchings, :only => :create
+        # resources :watchings, :only => :create
       end
     end
 
@@ -70,12 +73,6 @@ Draw::Application.routes.draw do
 
       resources :ballots, :only => [:index]
       match     'vote/:vote' => 'ballots#create'
-
-      resources :watchings, :only => :create
-      # todo why do i need this? ... should it take an id?
-      # the resource is singular from the perspective of a 
-      # single user, but the Slide has_many
-      match     'watchings' => 'watchings#destroy', :via => :delete
     end
 
     ##### BEGIN MESS
