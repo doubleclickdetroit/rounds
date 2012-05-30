@@ -8,7 +8,8 @@ class WatchingsController < ApplicationController
 
     @watchings = @user.own(Watching).before_or_after(params)
 
-    respond_with @watchings
+    # todo with respond_with if at all possible
+    render 'watchings/index'
   end
 
   def create
