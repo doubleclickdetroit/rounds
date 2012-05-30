@@ -6,13 +6,21 @@ describe RoundLocksController do
   login_user()
 
   describe 'GET show' do
-    it 'should return a given RoundLock' do
+    before(:each) do
       @round      = FactoryGirl.create(:round)
       @round_lock = FactoryGirl.create(:round_lock, :round_id => @round.id)
-      params = { :round_id => @round.to_param }
+      @params = { :round_id => @round.to_param }
 
+    end
+
+    it 'should return a RoundLock for a given Round' do
       RoundLock.should_receive(:find_by_round_id).with(@round.to_param)
-      get :show, params, valid_session
+      get :show, @params, valid_session
+    end
+
+    it 'should return a PrivatePub subscription for /api/rounds/:round_id/lock ' do
+      PrivatePub.should_receive :subscription, {channel: "/api/rounds/#{@round.id}/lock"}
+      get :show, @params, valid_session
     end
   end
 
