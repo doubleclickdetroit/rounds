@@ -12,6 +12,12 @@ describe WatchingsController do
     end
 
     it_should_handle_before_and_after_for_action_and_by_current_user(Watching, :index)
+
+    it 'should respond with a PrivatePub JSON object for .sign' do
+      PrivatePub.should_receive(:subscription)
+      round = FactoryGirl.create(:round)
+      get :index, {}, valid_session
+    end
   end
 
   describe 'POST create' do
@@ -32,11 +38,15 @@ describe WatchingsController do
 
       w = Watching.last
       w.round_id.should == @round.id
-      w.user_id.should      == @user.id
+      w.user_id.should  == @user.id
     end
 
-    it 'should respond with a PrivatePub JSON object for .sign'
-  end
+    it 'should respond with a PrivatePub JSON object for .sign' do
+      PrivatePub.should_receive(:subscription)
+      round = FactoryGirl.create(:round)
+      post :create, {round_id: round.to_param}, valid_session
+    end
+	end
 
   describe 'DELETE destroy' do
     it 'should not throw a 406 if there is no round_id' do
@@ -52,6 +62,12 @@ describe WatchingsController do
       expect {
         delete :destroy, params, valid_session
       }.to change(Watching, :count).by(-1)
+    end
+
+    it 'should not respond with a PrivatePub JSON object for .sign' do
+      PrivatePub.should_not_receive(:subscription)
+      watching = FactoryGirl.create(:watching)
+      delete :destroy, {id: watching.to_param}, valid_session
     end
   end
 

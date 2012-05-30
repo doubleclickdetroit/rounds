@@ -20,7 +20,6 @@ class WatchingsController < ApplicationController
   end
 
   def destroy
-    @dont_build_subscription = true
     respond_with Watching.destroy(params[:id])
   end
 
