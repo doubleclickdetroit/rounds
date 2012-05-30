@@ -1,6 +1,38 @@
 define([], function(require) {
 
 	/*
+	 * Convert JSON object into a string
+	 *
+	 * @access : private
+	 * @param  : object (JSON object)
+	 * @return : string
+	 */
+	function stringJSON (obj) {
+		var arr = [],
+			isArray = obj instanceof Array;
+
+		if (typeof obj == 'string') return obj;
+		for (key in obj) {
+			var val = obj[key];
+
+			if (typeof val == 'object') {
+				var str = (!isArray) ? '"' + key + '":' : "";
+				str += core.stringJSON(val);
+				arr.push(str);
+			}
+			else {
+				var str = (!isArray) ? '"' + key + '":' : ""
+				if (typeof val == 'number') str += val;
+				else if (typeof val == 'boolean') str += (val) ? '"true"' : '"false"';
+				else str += '"' + val + '"';
+				arr.push(str);
+			}
+		}
+
+		return (isArray) ? "[" + arr.join(',') + "]" : "{" + arr.join(',') + "}";
+	};
+
+	/*
 	 * Cookie Get/Set Mutator
 	 *
 	 * @access : private
@@ -15,7 +47,7 @@ define([], function(require) {
 
 			if (value === null) options.expires = -1;
 			else if (typeof value === 'object') {
-				value = core.stringJSON(value);
+				value = stringJSON(value);
 			}
 
 			if (typeof options.expires === 'number') {
