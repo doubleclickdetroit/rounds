@@ -1,0 +1,20 @@
+three reasons for push, all of which involve watching a Round:
+  1 Round is locked, User wishes to be notified if the lock times out
+  2 Round is locked, User wishes to place dibs on the next slide
+  3 Round is being viewed, client subscribes to be notified if Round is locked during viewing
+  
+USER GOES TO VIEW A ROUND WITH ID 123, CLIENT WISHES TO WATCH ROUND LOCK
+  POST /api/rounds/123/watch
+    # creates a Watching for the Round
+    # returns PrivatePub json to be passed to PrivatePub.sign (JS) like so:
+      json = {
+        channel: "/messages/new",
+        timestamp: 1302306682972,
+        signature: "dc1c71d3e959ebb6f49aa6af0c86304a0740088d",
+        server: "http://localhost:9292/faye"
+      }
+    # define callback
+      PrivatePub.subscribe"/messages/new", (data, channel) ->
+          $("#chat").append(data.chat_message)
+    # authenticate 
+      PrivatePub.sign json

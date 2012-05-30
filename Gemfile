@@ -19,6 +19,8 @@ gem "paperclip", "~> 2.7"
 
 gem 'private_pub'
 
+gem 'coffee-filter'
+
 gem 'jquery-rails'
 gem 'haml-rails'
 gem 'html5-rails', :git => 'git://github.com/sporkd/html5-rails.git'

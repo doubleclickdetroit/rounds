@@ -7,13 +7,12 @@ class RoundLock < ActiveRecord::Base
   before_destroy :before_destroy_processing
 
   belongs_to :round
-  has_many   :watchings, :class_name => 'Watching', :primary_key => :round_id, :foreign_key => :round_id
 
   validates_presence_of :round_id
   validates_presence_of :user_id
 
 private
   def before_destroy_processing
-    self.watchings.destroy_all
+    self.round.watchings.destroy_all
   end
 end

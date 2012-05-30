@@ -53,6 +53,9 @@ GEM
       ffi (~> 1.0.6)
     chunky_png (1.2.5)
     cocaine (0.2.1)
+    coffee-filter (0.1.1)
+      coffee-script (>= 2.2.0)
+      haml (>= 3.0.18)
     coffee-rails (3.2.2)
       coffee-script (>= 2.2.0)
       railties (~> 3.2.0)
@@ -276,6 +279,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  coffee-filter
   coffee-rails (~> 3.2.1)
   compass (= 0.12.alpha.2)
   compass-h5bp

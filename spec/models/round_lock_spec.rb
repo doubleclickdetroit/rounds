@@ -5,7 +5,7 @@ describe RoundLock do
     @round = FactoryGirl.create(:round)
     @lock  = FactoryGirl.create(:round_lock, :round_id => @round.id)
     @num_of_watchings = 3
-    @num_of_watchings.times { @lock.watchings << FactoryGirl.create(:watching, :round_id => @lock.round_id) }
+    @num_of_watchings.times { @lock.round.watchings << FactoryGirl.create(:watching, :round_id => @lock.round_id) }
   end
 
   describe '.creator' do
@@ -20,7 +20,7 @@ describe RoundLock do
 
   describe 'before_destroy callbacks' do
     it 'should destroy all watchings' do
-      @lock.watchings.count.should == @num_of_watchings
+      @lock.round.watchings.count.should == @num_of_watchings
 
       expect {
         @lock.destroy
