@@ -17,8 +17,9 @@ define [], (require) ->
 		initialize: ->
 			_.bindAll @, 'addOne', 'addAll', 'render'
 
-			@collection.bind 'add',   @addOne
-			@collection.bind 'reset', @addAll
+			@collection.bind 'add',    @addOne
+			@collection.bind 'reset',  @addAll
+			@collection.bind 'remove', @addAll
 
 		render: ->
 			@$el.html @template( @options )
