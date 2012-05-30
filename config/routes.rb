@@ -60,12 +60,8 @@ Draw::Application.routes.draw do
       match     'invitations/:invited_user_id' => 'invitations#create', :via => :post
       resources :invitations, :only => [:index,:destroy]
 
-      # todo make sure this is right...
       resource  :watch, :controller => :watchings, only: [:create,:destroy]
-
-      resource  :round_lock, :only => [:show,:create,:destroy] do
-        # resources :watchings, :only => :create
-      end
+      resource  :lock, :controller => :round_locks, :only => [:show,:create,:destroy] 
     end
 
     resources :slides, :except => [:index,:new,:edit] do
