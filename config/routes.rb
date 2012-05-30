@@ -85,7 +85,7 @@ Draw::Application.routes.draw do
     # todo cleaner
     scope 'pictures' do
       match '/community' => 'slides#community', :type => 'Picture'
-      match '/friends '  => 'slides#friends',   :type => 'Picture'
+      match '/friends'   => 'slides#friends',   :type => 'Picture'
     end
     ##### END MESS
 
