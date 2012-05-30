@@ -79,13 +79,13 @@ Draw::Application.routes.draw do
     # todo cleaner
     scope 'sentences' do
       match '/community' => 'slides#community', :type => 'Sentence'
-      match '/friends' => 'slides#friends', :type => 'Sentence'
+      match '/friends'   => 'slides#friends',   :type => 'Sentence'
     end
 
     # todo cleaner
     scope 'pictures' do
       match '/community' => 'slides#community', :type => 'Picture'
-      match '/friends' => 'slides#friends', :type => 'Picture'
+      match '/friends '  => 'slides#friends',   :type => 'Picture'
     end
     ##### END MESS
 
