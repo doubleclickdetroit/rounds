@@ -9,4 +9,5 @@
 
 		#main{ :role => "main" }
 
-		= requirejs_include_tag "main"
+		- if current_user
+			= requirejs_include_tag "main"

@@ -9,8 +9,14 @@ define [], (require) ->
 	StreamView = require "views/stream_view"
 
 
+	facade.subscribe 'XHRHandleResponse',(xhr) ->
+		do window.location.reload if xhr.status is 601
+		@
+
+
 	facade.subscribe 'emptyMainContent', ->
 		do $('#main').empty
+		@
 
 
 	facade.subscribe 'navigateIndex', (->
@@ -45,15 +51,19 @@ define [], (require) ->
 
 		# eventually abstract this layer into a factory
 		new RoundView "round_id": round_id
+		@
 
 
 	facade.subscribe 'renderRound', (context) ->
 		# console.log 'renderRound', context
+		@
 
 
 	facade.subscribe 'renderSlides', (context) ->
 		# console.log 'renderSlides', context
+		@
 
 
 	facade.subscribe 'renderSlide', (context, slide) ->
 		# console.log 'renderSlide', context, slide
+		@
