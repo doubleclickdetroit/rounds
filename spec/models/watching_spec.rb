@@ -1,10 +1,6 @@
 require 'spec_helper'
 
 describe Watching do
-  before(:each) do
-    @watching = FactoryGirl.create(:watching)
-  end
-
   describe '.round' do
     it 'should return the associated RoundLock' do                  
       @round = FactoryGirl.create(:round)
@@ -18,7 +14,10 @@ describe Watching do
 
   describe 'before_destroy callbacks' do
     it 'should call send_push_notification' do
-      @watching.should_receive :send_push_notification
+      @round = FactoryGirl.create(:round)
+      @watching = FactoryGirl.create(:watching, :round_id => @round.id)
+      @watching.round = @round
+      PrivatePub.should_receive(:publish_to).with("/api/rounds/#{@round.id}/watch", message: "Round #{@round.id} is unlocked!")
       @watching.destroy
     end
 

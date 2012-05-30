@@ -15,6 +15,6 @@ class Watching < ActiveRecord::Base
 
 private
   def send_push_notification
-    # todo
+    PrivatePub.publish_to "/api/rounds/#{round_id}/watch", message: "Round #{round_id} is unlocked!"
   end
 end
