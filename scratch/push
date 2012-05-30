@@ -6,15 +6,22 @@ three reasons for push, all of which involve watching a Round:
 USER GOES TO VIEW A ROUND WITH ID 123, CLIENT WISHES TO WATCH ROUND LOCK
   POST /api/rounds/123/watch
     # creates a Watching for the Round
-    # returns PrivatePub json to be passed to PrivatePub.sign (JS) like so:
-      json = {
-        channel: "/messages/new",
-        timestamp: 1302306682972,
-        signature: "dc1c71d3e959ebb6f49aa6af0c86304a0740088d",
-        server: "http://localhost:9292/faye"
-      }
-    # define callback
-      PrivatePub.subscribe"/messages/new", (data, channel) ->
-          $("#chat").append(data.chat_message)
-    # authenticate 
-      PrivatePub.sign json
+    # returns Watching object with a 'subscription' key to the 
+    # PrivatePub json of the following format:
+    #  {
+    #   channel: "/messages/new",
+    #   timestamp: 1302306682972,
+    #   signature: "dc1c71d3e959ebb6f49aa6af0c86304a0740088d",
+    #   server: "http://localhost:9292/faye"
+    # }
+
+    # create a Watching for this round
+    $.post "/api/rounds/#{round_id}/watch", (watching) ->
+      subscription = watching.subscription
+
+      # subscribe to subsequent channel with callback
+      PrivatePub.subscribe subscription.channel, (data, channel) ->
+        alert data.message
+
+      # authenticate with PrivatePub/Faye server
+      PrivatePub.sign subscription
