@@ -5,13 +5,12 @@ describe Watching do
     @watching = FactoryGirl.create(:watching)
   end
 
-  describe '.round_lock' do
+  describe '.round' do
     it 'should return the associated RoundLock' do                  
       @round = FactoryGirl.create(:round)
       @watching = FactoryGirl.create(:watching, :round_id => @round.id)
-      @lock = FactoryGirl.create(:round_lock, :round_id => @round.id) 
-      @watching.round_lock = @lock
-      @watching.reload.round_lock.should == @lock
+      @watching.round = @round
+      @watching.reload.round.should == @round
     end                                                             
 
     it 'should have no more than one RoundLock'                     
