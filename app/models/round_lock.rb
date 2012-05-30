@@ -5,7 +5,7 @@ class RoundLock < ActiveRecord::Base
   include Common::Associations::HasCreator
 
   after_create :notify_locked
-  before_destroy :notify_unlocked, :before_destroy_processing
+  before_destroy :notify_unlocked, :destroy_all_watchings
 
   belongs_to :round
 
@@ -25,7 +25,7 @@ private
     notify(false)
   end
 
-  def before_destroy_processing
+  def destroy_all_watchings
     self.round.watchings.destroy_all
   end
 end
