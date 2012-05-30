@@ -12,12 +12,14 @@ class WatchingsController < ApplicationController
   end
 
   def create
-    Watching.create(:round_id => @round_id, :user_id => current_user.id)
+    @watching = Watching.create(:round_id => @round_id, :user_id => current_user.id)
 
-    respond_with PrivatePub.subscription channel: "/api/rounds/#{@round_id}"
+    # todo with respond_with if at all possible
+    render 'watchings/show'
   end
 
   def destroy
+    @dont_build_subscription = true
     respond_with Watching.destroy(params[:id])
   end
 

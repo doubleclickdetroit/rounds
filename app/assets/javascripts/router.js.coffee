@@ -18,7 +18,14 @@ define [], (require) ->
 			mediator.publish 'navigateIndex'
 
 		render_round: (round_id) ->
-			console.log PrivatePub
+			$.post "/api/rounds/#{round_id}/watch", (watching) ->
+				subscription = watching.subscription
+
+				PrivatePub.subscribe subscription.channel, (data, channel) ->
+					alert data.message
+
+				PrivatePub.sign subscription
+
 			# Todo: include an arg from return of Parent ViewFactory to send along Sub ViewFactory
 			mediator.publish 'navigateRound', round_id
 
