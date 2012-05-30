@@ -21,7 +21,7 @@ module Common
             where(['user_id NOT IN (?)', user_id_arr])
           }
 
-          scope :eight_most_recent, :order => 'created_at desc', :limit => 8
+          scope :eight_most_recent, limit: 8, order: 'id DESC'
         end
       end
     end
