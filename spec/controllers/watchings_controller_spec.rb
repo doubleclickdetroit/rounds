@@ -15,7 +15,7 @@ describe WatchingsController do
 
     it 'should respond with a PrivatePub JSON object for .sign' do
       PrivatePub.should_receive(:subscription)
-      round = FactoryGirl.create(:round)
+      FactoryGirl.create :watching, user: @user
       get :index, {}, valid_session
     end
   end
