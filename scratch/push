@@ -1,7 +1,7 @@
 three reasons for push, all of which involve watching a Round:
 X 1 Round is being viewed, client subscribes to be notified if Round is locked during viewing
 X 2 Round is locked, User wishes to be notified if the lock times out
-_ 3 Round is locked, User wishes to place dibs on the next slide
+\ 3 Round is locked, User wishes to place dibs on the next slide
   
 
 
