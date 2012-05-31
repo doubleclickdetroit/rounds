@@ -47,19 +47,37 @@ class Slide < ActiveRecord::Base
   end
 
   def self.build_json_for_feed(community, friends, priv=[])
-    puts community.inspect
-    puts friends.inspect
     {
-      'community' => community.map(&:to_hash),
-      'friends'   => friends.map(&:to_hash)
+      'private'   => priv.map(&:to_hash),
+      'friends'   => friends.map(&:to_hash),
+      'community' => community.map(&:to_hash)
     }
   end
 
   ATTRS = %w(type id round_id votes created_at)
-  def to_hash
-    hash  = self.attributes.select { |key,v| ATTRS.include? key }
 
+  def to_hash1
+    hash = {}
+    hash  = self.attributes.select { |key,v| ATTRS.include? key }
     hash['created_at']       = hash['created_at'] # todo transform this
+
+    hash['content']          = self.content
+    hash['comment_count']    = self.comments.count
+    hash['round_locked']     = !!self.round.round_lock
+    hash['user']             = self.user.attributes.select {|k,v| %w(id name image_path).include? k}
+
+    hash
+  end
+  alias :to_hash :to_hash1
+
+  def to_hash2
+    hash = {}
+
+    hash['id']               = self.id
+    hash['type']             = self.type
+    hash['round_id']         = self.round_id
+    hash['votes']            = self.votes
+    hash['created_at']       = self.created_at
     hash['content']          = self.content
     hash['comment_count']    = self.comments.count
     hash['round_locked']     = !!self.round.round_lock
