@@ -50,14 +50,24 @@ describe RoundLocksController do
   end
 
   describe 'DELETE destroy' do
-    it 'should destroy the RoundLock whose id was passed in' do
+    it 'should destroy the RoundLock whose id was passed in belonging to the user' do
       @round      = FactoryGirl.create(:round)
-      @round_lock = FactoryGirl.create(:round_lock, :round_id => @round.to_param)
+      @round_lock = FactoryGirl.create(:round_lock, :user_id => @user.id, :round_id => @round.to_param)
       params = { :round_id => @round.to_param }
 
       expect {
         delete :destroy, params, valid_session
       }.to change(RoundLock, :count).by(-1)
+    end
+
+    it 'should not destroy a round lock not belonging to the user' do
+      @round      = FactoryGirl.create(:round)
+      @round_lock = FactoryGirl.create(:round_lock, :user_id => FactoryGirl.create(:user).id, :round_id => @round.to_param)
+      params = { :round_id => @round.to_param }
+
+      expect {
+        delete :destroy, params, valid_session
+      }.to change(RoundLock, :count).by(0)
     end
   end
 
