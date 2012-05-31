@@ -9,8 +9,7 @@ describe RoundLocksController do
     before(:each) do
       @round      = FactoryGirl.create(:round)
       @round_lock = FactoryGirl.create(:round_lock, :round_id => @round.id)
-      @params = { :round_id => @round.to_param }
-
+      @params     = { :round_id => @round.to_param }
     end
 
     it 'should return a RoundLock for a given Round' do

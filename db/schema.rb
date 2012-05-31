@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120529013144) do
+ActiveRecord::Schema.define(:version => 20120531005221) do
 
   create_table "authorizations", :force => true do |t|
     t.string   "provider"
@@ -113,9 +113,11 @@ ActiveRecord::Schema.define(:version => 20120529013144) do
     t.integer  "user_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.string   "type"
   end
 
   add_index "watchings", ["round_id"], :name => "index_watchings_on_round_id"
+  add_index "watchings", ["type"], :name => "index_watchings_on_type"
   add_index "watchings", ["user_id"], :name => "index_watchings_on_user_id"
 
 end

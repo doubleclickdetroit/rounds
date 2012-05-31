@@ -142,8 +142,6 @@ module ControllerMacros
   end
 
   def it_should_handle_before_and_after_for_action(klass, action, before_block_needed=true)
-    ### DOESNT RUN IF before_block_needed IS FALSE ###
-    ### DOESNT RUN IF before_block_needed IS FALSE ###
     before(:each) do
       klass.destroy_all
 
@@ -154,9 +152,9 @@ module ControllerMacros
       @first  = FactoryGirl.create(@sym)
       @second = FactoryGirl.create(@sym)
       @third  = FactoryGirl.create(@sym)
+
+      yield if block_given?
     end if before_block_needed
-    ### DOESNT RUN IF before_block_needed IS FALSE ###
-    ### DOESNT RUN IF before_block_needed IS FALSE ###
 
     context 'handling' do
       it 'should call (limit/sort/blocked)' do

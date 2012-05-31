@@ -9,17 +9,19 @@ class WatchingsController < ApplicationController
     @watchings = @user.own(Watching).before_or_after(params)
 
     # todo with respond_with if at all possible
-    render 'watchings/index'
+    # render 'watchings/index.json.rabl', object: @watchings
+    render collection: @watchings, handlers: [:rabl], formats: [:json]
   end
 
   def create
     @watching = Watching.create(:round_id => @round_id, :user_id => current_user.id)
 
     # todo with respond_with if at all possible
-    render 'watchings/show'
+    render 'watchings/show.json.rabl', object: @watching
   end
 
   def destroy
+    @dont_build_subscription = true
     respond_with Watching.destroy(params[:id])
   end
 

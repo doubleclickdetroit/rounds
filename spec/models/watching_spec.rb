@@ -12,16 +12,16 @@ describe Watching do
     it 'should have no more than one RoundLock'                     
   end    
 
-  describe 'before_destroy callbacks' do
-    it 'should call send_push_notification' do
-      @round = FactoryGirl.create(:round)
-      @watching = FactoryGirl.create(:watching, :round_id => @round.id)
-      @watching.round = @round
-      PrivatePub.should_receive(:publish_to).with("/api/rounds/#{@round.id}/watch", message: "Round #{@round.id} is unlocked!")
-      @watching.destroy
+  context 'before_destroy callbacks' do
+    describe 'send_push_notification' do
+      it 'should send a push notification to the user' do
+        @round = FactoryGirl.create(:round)
+        @watching = FactoryGirl.create(:watching, :round_id => @round.id)
+        @watching.round = @round
+        PrivatePub.should_receive(:publish_to).with("/api/rounds/#{@round.id}/watch", message: "Round #{@round.id} is unlocked!")
+        @watching.destroy
+      end
     end
-
-    it 'should send a push notification to the user'
   end
 
   klass = Watching
@@ -34,7 +34,4 @@ describe Watching do
 
   it_should_scope_before_and_after(klass)
 
-end
-
-describe Dib do
 end

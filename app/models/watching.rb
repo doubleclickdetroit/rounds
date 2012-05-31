@@ -13,11 +13,18 @@ class Watching < ActiveRecord::Base
 
   before_destroy :send_push_notification
 
-private
-  def send_push_notification
-    PrivatePub.publish_to "/api/rounds/#{round_id}/watch", message: "Round #{round_id} is unlocked!"
+protected
+  def message
+    "Round #{round_id} is unlocked!"
   end
-end
 
-class Dib < Watching
+  def channel
+    "/api/rounds/#{round_id}/watch"
+  end
+
+  def send_push_notification
+    message = self.send :message # || "Round #{round_id} is unlocked!"
+    channel = self.send :channel # || "/api/rounds/#{round_id}/watch"
+    PrivatePub.publish_to channel, message: message
+  end
 end

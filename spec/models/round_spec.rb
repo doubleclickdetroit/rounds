@@ -35,6 +35,14 @@ describe Round do
     @round.reload.watchings.should == [@watching]
   end
 
+  it 'should have one Dib' do
+    @dib = FactoryGirl.create(:dib)
+    @round.dib = @dib
+    @round.save
+
+    @round.reload.dib.should == @dib
+  end
+
   it 'should have Slides of class Sentence' do
     @round.slides.any? do |slide|
       slide.instance_of?(Sentence)

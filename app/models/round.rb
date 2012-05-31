@@ -11,4 +11,5 @@ class Round < ActiveRecord::Base
   has_many :invitations
   has_one  :round_lock
   has_many :watchings
+  has_one  :dib
 end

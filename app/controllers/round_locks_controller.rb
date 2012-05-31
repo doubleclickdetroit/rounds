@@ -8,7 +8,7 @@ class RoundLocksController < ApplicationController
 
     @build_subscription = true # used in rabl for PrivatePub
     # todo respond_with instead of render
-    render 'round_locks/show'
+    render 'round_locks/show.json.rabl', object: @round_lock
   end
 
   def create
@@ -29,4 +29,7 @@ private
   def check_for_round_id
     respond_with :bad_request unless @round_id = params[:round_id]
   end
+
+rescue ActionView::MissingTemplate => e
+  render 'home/index'
 end

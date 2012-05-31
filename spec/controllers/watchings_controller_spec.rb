@@ -11,7 +11,7 @@ describe WatchingsController do
       assigns(:user).should == @user
     end
 
-    it_should_handle_before_and_after_for_action_and_by_current_user(Watching, :index)
+    it_should_handle_before_and_after_for_action_and_by_current_user(Watching, :index) 
 
     it 'should respond with a PrivatePub JSON object for .sign' do
       PrivatePub.should_receive(:subscription)
