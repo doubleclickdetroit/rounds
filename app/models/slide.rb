@@ -56,6 +56,24 @@ class Slide < ActiveRecord::Base
 
   ATTRS = %w(type id round_id votes created_at)
 
+  def comment_count
+    comments.count
+  end
+
+  def round_locked
+    !!round.round_lock
+  end
+
+  def user_info
+    u = user # .attributes.select {|k,v| %w(id name image_path).include? k}
+    {
+      'id'         => u.id,
+      'name'       => u.name,
+      'image_path' => u.image_path
+    }
+  end
+
+
   def to_hash1
     hash = {}
     hash  = self.attributes.select { |key,v| ATTRS.include? key }
@@ -68,7 +86,6 @@ class Slide < ActiveRecord::Base
 
     hash
   end
-  alias :to_hash :to_hash1
 
   def to_hash2
     hash = {}
@@ -85,5 +102,16 @@ class Slide < ActiveRecord::Base
 
     hash
   end
+
+  def to_hash3
+    attrs = %w(id type round_id votes created_at content comment_count round_locked)
+
+    hash = attrs.inject({}) {|h,str| h[str] = self.send str; h}
+    hash['user'] = self.user_info
+
+    hash
+  end
+
+  alias :to_hash :to_hash3
 
 end
