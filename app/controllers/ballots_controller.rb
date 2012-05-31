@@ -23,6 +23,6 @@ class BallotsController < ApplicationController
 
 private
   def check_for_slide_id
-    respond_with :bad_request if not @slide_id = params[:slide_id]
+    head :not_acceptable if not @slide_id = params[:slide_id]
   end
 end

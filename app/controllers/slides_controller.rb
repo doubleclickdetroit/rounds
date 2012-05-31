@@ -66,7 +66,7 @@ private
   def check_for_round_id
     # todo ?
     if not @round_id = params[:round_id] || params[:slide].try(:[], :round_id)
-      respond_with :bad_request
+      head :not_acceptable
     else
       params[:slide][:round_id] ||= @round_id if params[:slide]
     end
@@ -75,7 +75,7 @@ private
   def check_for_type
     # todo this with .constantize? 
     if not @type = params[:type] || params[:slide].try(:[], :type)
-      respond_with :bad_request
+      head :not_acceptable
     else
       params[:slide][:type] ||= @type if params[:slide]
     end

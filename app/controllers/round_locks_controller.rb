@@ -27,7 +27,7 @@ class RoundLocksController < ApplicationController
 
 private
   def check_for_round_id
-    respond_with :bad_request unless @round_id = params[:round_id]
+    head :not_acceptable unless @round_id = params[:round_id]
   end
 
 rescue ActionView::MissingTemplate => e

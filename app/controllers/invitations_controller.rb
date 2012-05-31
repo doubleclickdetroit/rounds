@@ -37,7 +37,7 @@ private
   def check_for_round_id
     # todo ?
     if not @round_id = params[:round_id]
-      respond_with :bad_request
+      head :not_acceptable
     else
       @invitation[:round_id] ||= @round_id 
     end
@@ -46,7 +46,7 @@ private
   def check_for_invited_user_id
     # todo ?
     if not @invited_user_id = params[:invited_user_id]
-      respond_with :bad_request
+      head :not_acceptable
     else
       @invitation[:invited_user_id] ||= @invited_user_id
     end

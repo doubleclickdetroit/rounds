@@ -31,7 +31,7 @@ class CommentsController < ApplicationController
 private
   def check_for_slide_id
     if not @slide_id = params[:slide_id]
-      respond_with :bad_request
+      head :not_acceptable
     else
       params[:comment][:slide_id] = @slide_id if params[:comment]
     end

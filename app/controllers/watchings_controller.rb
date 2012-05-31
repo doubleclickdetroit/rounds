@@ -31,7 +31,7 @@ private
   def check_for_round_id
     # todo || ?
     if not @round_id = params[:round_id] || params[:watching].try(:[],:round_id)
-      respond_with :bad_request
+      head :not_acceptable
     else
       params[:watching][:round_id] = @round_id if params[:watching]
     end
