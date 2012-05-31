@@ -19,6 +19,22 @@ describe Round do
     end.should be_true
   end
 
+  it 'should have one RoundLock' do
+    @round_lock = FactoryGirl.create :round_lock
+    @round.round_lock = @round_lock
+    @round.save
+
+    @round.reload.round_lock.should == @round_lock
+  end
+
+  it 'should have many Watchings' do
+    @watching = FactoryGirl.create :watching
+    @round.watchings << @watching
+    @round.save
+
+    @round.reload.watchings.should == [@watching]
+  end
+
   it 'should have Slides of class Sentence' do
     @round.slides.any? do |slide|
       slide.instance_of?(Sentence)
@@ -31,7 +47,7 @@ describe Round do
     end.should be_true
   end
 
-  it 'should return .slides in order of their created_by'
+  it 'should return .slides in order of id DESC'
 
   klass = Round
 

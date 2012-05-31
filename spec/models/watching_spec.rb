@@ -35,3 +35,6 @@ describe Watching do
   it_should_scope_before_and_after(klass)
 
 end
+
+describe Dib do
+end

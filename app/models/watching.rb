@@ -18,3 +18,6 @@ private
     PrivatePub.publish_to "/api/rounds/#{round_id}/watch", message: "Round #{round_id} is unlocked!"
   end
 end
+
+class Dib < Watching
+end
