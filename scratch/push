@@ -18,6 +18,12 @@ USER GOES TO VIEW A ROUND WITH ID 123, USER WISHES TO BE NOTIFIED UPON RESOLUTIO
     # returns Watching object with a 'subscription' key to
     # subscribe to /api/rounds/123/watch
 
+USER GOES TO VIEW A ROUND WITH ID 123, IT IS LOCKED, AND USER WISHES TO PLACE DIBS ON NEXT SLIDE
+  POST /api/rounds/123/dib
+    # creates a Dib for the Round
+    # returns Dib object with a 'subscription' key to
+    # subscribe to /api/rounds/123/dib
+
 
 
 the above requests return a PrivatePub json of the following format:

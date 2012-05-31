@@ -21,6 +21,7 @@ Draw::Application.routes.draw do
         match '/ballots'     => 'ballots#index',     :via => :get
         match '/invitations' => 'invitations#index', :via => :get
         match '/watchings'   => 'watchings#index',   :via => :get
+        match '/dibs'        => 'watchings#index',   :via => :get
       end
 
       # full user feed
@@ -60,8 +61,9 @@ Draw::Application.routes.draw do
       match     'invitations/:invited_user_id' => 'invitations#create', :via => :post
       resources :invitations, :only => [:index,:destroy]
 
-      resource  :watch, :controller => :watchings, only: [:create,:destroy]
-      resource  :lock, :controller => :round_locks, :only => [:show,:create,:destroy] 
+      resource  :lock,  :controller => :round_locks, only: [:show,:create,:destroy] 
+      resource  :watch, :controller => :watchings,   only: [:create,:destroy]
+      resource  :dib,   :controller => :watchings,   only: [:create,:destroy], type: 'Dib'
     end
 
     resources :slides, :except => [:index,:new,:edit] do
