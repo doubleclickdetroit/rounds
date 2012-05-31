@@ -46,8 +46,7 @@ class SlidesController < ApplicationController
     @community_slides = current_user.recent(klass)
     @friends_slides   = current_user.friends(klass)
 
-    # respond_with Slide.build_json_for_feed(@community_slides, @friends_slides, []).to_json
-
+    # respond_with klass.feed(current_user).to_json
     respond_with 'slides/feed'
   end
 

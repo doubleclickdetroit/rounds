@@ -46,7 +46,24 @@ class Slide < ActiveRecord::Base
     comments.count
   end
 
+  def self.feed(user)
+    priv = []
+
+    community = user.recent(self)
+    friends   = user.friends(self)
+
+    @@users = User.where(["id IN (?)", (community.map(&:user_id) | friends.map(&:user_id))]).inject({}) {|h,user| h[user.id] = user; h}
+
+    {
+      'private'   => priv.map(&:to_hash),
+      'friends'   => friends.map(&:to_hash),
+      'community' => community.map(&:to_hash)
+    }
+  end
+
   def self.build_json_for_feed(community, friends, priv=[])
+    @@users = User.where(["id IN (?)", (community.map(&:user_id) | friends.map(&:user_id))]).inject({}) {|h,user| h[user.id] = user; h}
+
     {
       'private'   => priv.map(&:to_hash),
       'friends'   => friends.map(&:to_hash),
@@ -56,16 +73,13 @@ class Slide < ActiveRecord::Base
 
   ATTRS = %w(type id round_id votes created_at)
 
-  def comment_count
-    comments.count
-  end
-
   def round_locked
     !!round.round_lock
   end
 
   def user_info
-    u = user # .attributes.select {|k,v| %w(id name image_path).include? k}
+    # u = user.attributes.select {|k,v| %w(id name image_path).include? k}
+    u = @@users[user_id] || user 
     {
       'id'         => u.id,
       'name'       => u.name,
@@ -82,7 +96,8 @@ class Slide < ActiveRecord::Base
     hash['content']          = self.content
     hash['comment_count']    = self.comments.count
     hash['round_locked']     = !!self.round.round_lock
-    hash['user']             = self.user.attributes.select {|k,v| %w(id name image_path).include? k}
+    # hash['user']             = self.user.attributes.select {|k,v| %w(id name image_path).include? k}
+    hash['user']             = self.user_info
 
     hash
   end
@@ -112,6 +127,6 @@ class Slide < ActiveRecord::Base
     hash
   end
 
-  alias :to_hash :to_hash3
+  alias :to_hash :to_hash1
 
 end
