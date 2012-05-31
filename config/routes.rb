@@ -21,7 +21,7 @@ Draw::Application.routes.draw do
         match '/ballots'     => 'ballots#index',     :via => :get
         match '/invitations' => 'invitations#index', :via => :get
         match '/watchings'   => 'watchings#index',   :via => :get
-        match '/dibs'        => 'watchings#index',   :via => :get
+        match '/dibs'        => 'watchings#index',   :via => :get, type: 'Dib'
       end
 
       # full user feed
