@@ -1,3 +1,5 @@
 object @comment
 
-attributes :id, :created_at, :slide_id, :text, :inappropriate
+attributes :id, :slide_id, :text, :inappropriate
+
+node(:created_at) {|record| record.created_at.to_s}

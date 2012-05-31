@@ -1,6 +1,8 @@
 object @watching
 
-attributes :id, :user_id, :round_id, :created_at
+attributes :id, :user_id, :round_id
+
+node(:created_at) {|record| record.created_at.to_s}
 
 unless @dont_build_subscription 
   # todo save this as attribute?

@@ -1,6 +1,8 @@
 object @round
 
-attributes :id, :created_at
+attributes :id
+
+node(:created_at) {|record| record.created_at.to_s}
 
 # # todo
 # # currently determined from 'rounds/index'
