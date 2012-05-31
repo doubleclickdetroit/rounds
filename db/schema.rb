@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120531005221) do
+ActiveRecord::Schema.define(:version => 20120531082904) do
 
   create_table "authorizations", :force => true do |t|
     t.string   "provider"
@@ -98,6 +98,7 @@ ActiveRecord::Schema.define(:version => 20120531005221) do
   end
 
   add_index "slides", ["round_id"], :name => "index_slides_on_round_id"
+  add_index "slides", ["type"], :name => "index_slides_on_type"
   add_index "slides", ["user_id"], :name => "index_slides_on_user_id"
 
   create_table "users", :force => true do |t|
