@@ -7,14 +7,15 @@ A couple caveats:
 
 
 Adding a Slide to a Round (first requires RoundLock)
-  POST /api/rounds/:round_id/round_lock # user derived from session
+  POST /api/rounds/:round_id/lock # user derived from session
   POST /api/rounds/:round_id/sentences {:sentence => {...}} 
     OR
   POST /api/rounds/:round_id/picuturs  {:picture => {...}} 
 
 Watching a Round that is locked
-  GET  /api/rounds/:round_id/round_lock # check for lock
-  POST /api/rounds/:round_id/round_lock/watchings 
+  GET  /api/rounds/:round_id/lock  # check for lock/get PrivatePub subscribtion obj
+  POST /api/rounds/:round_id/lock  # apply for the lock
+  POST /api/rounds/:round_id/watch # watch the lock (be notified upon resolution)
 
 
   ***** WHERE DO COMPLETED ROUND FEEDS GO? *****
@@ -45,16 +46,17 @@ IMPLEMENTED
     I GET     /api/rounds/ # NOTE: this is for rounds for current user
 
     RoundLocks
-      C POST    /api/rounds/:round_id/round_lock/
-      R GET     /api/rounds/:round_id/round_lock/
-    # U PUT     /api/rounds/:round_id/round_lock/
-      D DELETE  /api/rounds/:round_id/round_lock/
+      C POST    /api/rounds/:round_id/lock/
+      R GET     /api/rounds/:round_id/lock/
+    # U PUT     /api/rounds/:round_id/lock/
+      D DELETE  /api/rounds/:round_id/lock/
 
       Watchings
-        C POST    /api/rounds/:round_id/round_lock/watching
-      # R GET     /api/rounds/:round_id/round_lock/watching
-      # U PUT     /api/rounds/:round_id/round_lock/watching
-      # D DELETE  /api/rounds/:round_id/round_lock/watching
+        C POST    /api/rounds/:round_id/watch
+      # R GET     /api/rounds/:round_id/watch
+      # U PUT     /api/rounds/:round_id/watch
+        D DELETE  /api/rounds/:round_id/watch
+        I GET     /api/users/me/watchings
     
     Slides, round_id and type ('Sentence' or 'Picture') required for create and index
       Sentences
