@@ -94,7 +94,7 @@ print "\n  ** Round "
 
 @rounds = []
 
-20.times do 
+50.times do 
   round = FactoryGirl.create(:round, :user_id => random_user().id)
   print '.'
   @rounds << round
