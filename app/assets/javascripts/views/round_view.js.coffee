@@ -20,7 +20,8 @@ define [], (require) ->
 		initialize: ->
 			_.bindAll @, 'addOne', 'addAll', 'render'
 
-			round_id = @options.round_id
+			console.log @options
+			round_id = @options.round.id
 			@collection = new Slides url: "/api/rounds/#{round_id}/slides"
 
 			@collection.bind 'add',   @addOne
