@@ -46,4 +46,87 @@ class Slide < ActiveRecord::Base
     comments.count
   end
 
+  def self.feed(user)
+    priv = []
+
+    community = user.recent(self)
+    friends   = user.friends(self)
+
+    @@users = User.where(["id IN (?)", (community.map(&:user_id) | friends.map(&:user_id))]).inject({}) {|h,user| h[user.id] = user; h}
+
+    {
+      'private'   => priv.map(&:to_hash),
+      'friends'   => friends.map(&:to_hash),
+      'community' => community.map(&:to_hash)
+    }
+  end
+
+  def self.build_json_for_feed(community, friends, priv=[])
+    @@users = User.where(["id IN (?)", (community.map(&:user_id) | friends.map(&:user_id))]).inject({}) {|h,user| h[user.id] = user; h}
+
+    {
+      'private'   => priv.map(&:to_hash),
+      'friends'   => friends.map(&:to_hash),
+      'community' => community.map(&:to_hash)
+    }
+  end
+
+  ATTRS = %w(type id round_id votes created_at)
+
+  def round_locked
+    !!round.round_lock
+  end
+
+  def user_info
+    # u = user.attributes.select {|k,v| %w(id name image_path).include? k}
+    u = @@users[user_id] || user 
+    {
+      'id'         => u.id,
+      'name'       => u.name,
+      'image_path' => u.image_path
+    }
+  end
+
+
+  def to_hash1
+    hash = {}
+    hash  = self.attributes.select { |key,v| ATTRS.include? key }
+    hash['created_at']       = hash['created_at'] # todo transform this
+
+    hash['content']          = self.content
+    hash['comment_count']    = self.comments.count
+    hash['round_locked']     = !!self.round.round_lock
+    # hash['user']             = self.user.attributes.select {|k,v| %w(id name image_path).include? k}
+    hash['user']             = self.user_info
+
+    hash
+  end
+
+  def to_hash2
+    hash = {}
+
+    hash['id']               = self.id
+    hash['type']             = self.type
+    hash['round_id']         = self.round_id
+    hash['votes']            = self.votes
+    hash['created_at']       = self.created_at
+    hash['content']          = self.content
+    hash['comment_count']    = self.comments.count
+    hash['round_locked']     = !!self.round.round_lock
+    hash['user']             = self.user.attributes.select {|k,v| %w(id name image_path).include? k}
+
+    hash
+  end
+
+  def to_hash3
+    attrs = %w(id type round_id votes created_at content comment_count round_locked)
+
+    hash = attrs.inject({}) {|h,str| h[str] = self.send str; h}
+    hash['user'] = self.user_info
+
+    hash
+  end
+
+  alias :to_hash :to_hash1
+
 end

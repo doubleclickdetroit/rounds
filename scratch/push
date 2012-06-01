@@ -1,0 +1,55 @@
+three reasons for push, all of which involve watching a Round:
+X 1 Round is being viewed, client subscribes to be notified if Round is locked during viewing
+X 2 Round is locked, User wishes to be notified if the lock times out
+\ 3 Round is locked, User wishes to place dibs on the next slide
+  
+
+
+USER GOES TO VIEW A ROUND WITH ID 123, CLIENT WATCHES FOR ROUND LOCK
+  POST /api/rounds/123/lock
+    # creates a Watching for the Round
+    # returns Watching object with a 'subscription' key to 
+    # subscribe to /api/rounds/123/lock
+    # return will contain other keys for a RoundLock if one exists
+
+USER GOES TO VIEW A ROUND WITH ID 123, USER WISHES TO BE NOTIFIED UPON RESOLUTION OF ROUND LOCK
+  POST /api/rounds/123/watch
+    # creates a Watching for the Round
+    # returns Watching object with a 'subscription' key to
+    # subscribe to /api/rounds/123/watch
+
+USER GOES TO VIEW A ROUND WITH ID 123, IT IS LOCKED, AND USER WISHES TO PLACE DIBS ON NEXT SLIDE
+  POST /api/rounds/123/dib
+    # creates a Dib for the Round
+    # returns Dib object with a 'subscription' key to
+    # subscribe to /api/rounds/123/dib
+
+
+
+the above requests return a PrivatePub json of the following format:
+  {
+    channel: "/channel",
+    timestamp: 1302306682972,
+    signature: "dc1c71d3e959ebb6f49aa6af0c86304a0740088d",
+    server: "http://localhost:9292/faye"
+  }
+
+to be used in coffee in some way like the following:
+  # create a Watching for this round
+  $.post "/api/rounds/#{round_id}/watch", (watching) ->
+    subscription = watching.subscription
+
+    # subscribe to subsequent channel with callback
+    PrivatePub.subscribe subscription.channel, (data, channel) ->
+      alert data.message
+
+    # authenticate with PrivatePub/Faye server
+    PrivatePub.sign subscription
+
+
+UNIMPLEMENTED
+  USER GOES TO VIEW A ROUND WITH ID 123, USER WISHES TO PLACE DIBS ON NEXT SLIDE
+    POST /api/rounds/123/dib
+    # creates a Dib for the Round
+    # returns Dib object with a 'subscription' key to 
+    # subscribe to /api/rounds/123/dib

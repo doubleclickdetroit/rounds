@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120521193305) do
+ActiveRecord::Schema.define(:version => 20120531082904) do
 
   create_table "authorizations", :force => true do |t|
     t.string   "provider"
@@ -98,12 +98,15 @@ ActiveRecord::Schema.define(:version => 20120521193305) do
   end
 
   add_index "slides", ["round_id"], :name => "index_slides_on_round_id"
+  add_index "slides", ["type"], :name => "index_slides_on_type"
   add_index "slides", ["user_id"], :name => "index_slides_on_user_id"
 
   create_table "users", :force => true do |t|
     t.string   "name"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+    t.string   "friend_ids_csv"
+    t.string   "image_path"
   end
 
   create_table "watchings", :force => true do |t|
@@ -111,9 +114,11 @@ ActiveRecord::Schema.define(:version => 20120521193305) do
     t.integer  "user_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.string   "type"
   end
 
   add_index "watchings", ["round_id"], :name => "index_watchings_on_round_id"
+  add_index "watchings", ["type"], :name => "index_watchings_on_type"
   add_index "watchings", ["user_id"], :name => "index_watchings_on_user_id"
 
 end

@@ -8,19 +8,14 @@ describe InvitationsController do
   before(:each) { Invitation.any_instance.stub(:content).and_return('') }
 
   describe 'GET index' do
-    it 'should throw a 406 if there is no round_id' do
-      get :index, {}, valid_session 
-      response.status.should == 406
+    it_should_handle_index_by_parent_id(Invitation, Round)
+
+    it 'should handle requests with no round_id relative to current_user' do
+      get :index, {}, valid_session
+      assigns(:user).should == @user
     end
 
-    it 'should show Invitations for a Round' do
-      @round = FactoryGirl.create(:round)
-      @invitation = FactoryGirl.create(:invitation, :round_id => @round.id)
-      params = { :round_id => @round.to_param }
-
-      get :index, params, valid_session
-      assigns(:invitations).should == [@invitation]
-    end
+    it_should_handle_before_and_after_for_action_and_by_current_user(Invitation, :index)
   end
 
   describe 'POST create' do

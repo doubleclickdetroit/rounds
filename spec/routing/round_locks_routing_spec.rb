@@ -4,15 +4,15 @@ describe RoundLocksController do
   describe "nested routing within Rounds" do
   
     it "routes to #show" do
-      get("/api/rounds/1/round_lock").should route_to("round_locks#show", :round_id => "1")
+      get("/api/rounds/1/lock").should route_to("round_locks#show", :round_id => "1")
     end
 
     it "routes to #create" do
-      post("/api/rounds/1/round_lock").should route_to("round_locks#create", :round_id => "1")
+      post("/api/rounds/1/lock").should route_to("round_locks#create", :round_id => "1")
     end
 
     it "routes to #destroy" do
-      delete("/api/rounds/1/round_lock").should route_to("round_locks#destroy", :round_id => "1")
+      delete("/api/rounds/1/lock").should route_to("round_locks#destroy", :round_id => "1")
     end
 
   end

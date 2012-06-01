@@ -7,21 +7,25 @@ gem 'omniauth-facebook'
 # gem 'devise'
 # gem 'cancan'
 
+# fook
+gem 'fb_graph'
+
 gem 'yajl-ruby'
 gem 'rabl'
-# gem 'json_builder'
 
 gem 'factory_girl_rails'
 
 gem "paperclip", "~> 2.7"
 
+gem 'private_pub'
+
+gem 'coffee-filter'
+
 gem 'jquery-rails'
-# gem 'haml-rails'
-# gem 'html5-rails', :git => 'git://github.com/sporkd/html5-rails.git'
-
-# gem 'requirejs-rails'
-
-# gem 'mailman', :require => false
+gem 'haml-rails'
+gem 'html5-rails', :git => 'git://github.com/sporkd/html5-rails.git'
+gem 'rails-backbone'
+gem 'requirejs-rails'
 
 group :development, :test do
   gem 'webrick'

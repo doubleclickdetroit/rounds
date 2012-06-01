@@ -3,6 +3,9 @@ require 'spec_helper'
 describe SessionsController do
   pending "this really needs spec'd"
 
+  pending 'spec token'
+  pending 'spec friend ids'
+
   describe 'POST create' do
     context 'provider success' do
       it 'should set the user_id in session' do

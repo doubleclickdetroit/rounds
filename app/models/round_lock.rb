@@ -4,16 +4,28 @@ class RoundLock < ActiveRecord::Base
   # todo spec
   include Common::Associations::HasCreator
 
-  before_destroy :before_destroy_processing
+  after_create :notify_locked
+  before_destroy :notify_unlocked, :destroy_all_watchings
 
   belongs_to :round
-  has_many   :watchings, :class_name => 'Watching', :primary_key => :round_id, :foreign_key => :round_id
 
   validates_presence_of :round_id
   validates_presence_of :user_id
 
 private
-  def before_destroy_processing
-    self.watchings.destroy_all
+  def notify(locked)
+    PrivatePub.publish_to "/api/rounds/#{round_id}/lock", locked: locked
+  end
+
+  def notify_locked
+    notify(true)
+  end
+
+  def notify_unlocked
+    notify(false)
+  end
+
+  def destroy_all_watchings
+    self.round.watchings.destroy_all
   end
 end

@@ -1,13 +1,7 @@
-  LEGEND:
-    _ unimplemented
-    \ partially implemented
-    X implemented
-
-
   LOGIN
   the user starts up the app and sees a loading screen
-    - ***** APP LOGIN (OMNIAUTH) *****
-    - ***** FACEBOOK MAGIC (friends facebook ids) *****
+    - ***** FACEBOOK MAGIC *****
+    - ***** APP LOGIN (OMNIAUTH?) *****
 
   FEED
   (the user is now logged in) 
@@ -28,7 +22,7 @@ X   - GET /api/pictures/friends?time=time_of_last_slide_in_first_eight
   CREATE A SLIDE
   user sees a picture he likes and clicks to create the next sentence
     - not ironed out yet, but probably something like this:
-X     - POST /api/rounds/:round_id/round_lock # creates RoundLock, user_id derived from current_user
+X     - POST /api/rounds/:round_id/lock # creates RoundLock, user_id derived from current_user
   the user creates the slide and submits it
 X   - POST /api/rounds/:round_id/sentences {:sentence => {...}} # checks for RoundLock (which permits user to create Slide) destroys it and creates the slide
     # destroys round lock
@@ -57,18 +51,17 @@ X   - POST /api/slides/:slide_id/comments {:comment => {...}}
 
   BLOCK A USER
   the user finds himself back on his feed and sees something he doesnt care for from a user. he clicks to user, block, and confirms
-X   - POST    /api/providers/:provider/users/:uid/block/
+_   - POST    /api/providers/:provider/users/:uid/block/
 
   WATCH A SLIDE
   # todo watch a slide timeout
   # todo watch a slide spoiler
   the user sees a slide he wants to add to, but when he goes to add the next slide, its locked. 
   he's asked if he wants to watch the round to see if the user takes too long to finish and confirms
-X   - POST /api/rounds/:round_id/round_lock/watchings # id derived from current_user
+X   - POST /api/rounds/:round_id/round_lock/watchings # facebook id derived from current_user
 
   SEND AN INVITATION
   ????????????????????????????????????????????
-  (this will change to accomodate provider/uid)
 _ POST /api/rounds/:round_id/invitations/:invited_user_id
 
   VIEW A COMPLETED ROUND
@@ -76,35 +69,31 @@ _ ????????????????????????????????????????????
   ????????????????????????????????????????????
 
 
-  VIEW OWN RECENT ACTIVITY
-  the user navigates to the Me tab to see his recent
-  Rounds
-X   /api/rounds
-  Slides
-X   /api/slides
-  Comments
-X   /api/comments
-  Watchings
-_   /api/watchings
-  Invitations
-_   /api/invitations
-  
-  Convenience route for all of the above
-_   /api/me
 
 
   VIEW A GIVEN USER'S RECENT ACTIVITY
   ????????????????????????????????????????????
-  Rounds 
-X   /api/providers/:provider/users/:uid/rounds/
-  Slides
-X   /api/providers/:provider/users/:uid/slides/
-  Comments
-X   /api/providers/:provider/users/:uid/comments/
-  Watchings
-_   /api/providers/:provider/users/:uid/watchings/
-  Invitations
-_   /api/providers/:provider/users/:uid/invitations/
+Rounds 
+X  GET  /api/providers/:provider/users/:uid/rounds/
+X  GET  /api/users/:user_id/rounds/
+X  GET  /api/users/me/rounds/
+Slides
+X  GET  /api/providers/:provider/users/:uid/slides/
+X  GET  /api/users/user_id/slides/
+X  GET  /api/users/me/slides/
+Comments
+X  GET  /api/providers/:provider/users/:uid/comments/
+X  GET  /api/users/:user_id/comments/
+X  GET  /api/users/me/comments/
+Ballots
+X  GET  /api/providers/:provider/users/:uid/ballots/
+X  GET  /api/users/:user_id/ballots/
+X  GET  /api/users/me/ballots/
+
+  Convenience route for all of the above
+X  GET  /api/providers/:provider/users/:uid/
+X  GET  /api/users/:user_id/
+X  GET  /api/users/me/
 
 
 

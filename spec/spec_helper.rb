@@ -54,8 +54,9 @@ Spork.prefork do
     config.extend ModelMacros, :type => :model
     # config.include Devise::TestHelpers, :type => :controller
     # config.extend ModelMacros # , :type => :controller
-  end
 
+    config.before(:each) { PrivatePub.stub(:publish_to) }
+  end
 
   # RSpec.configure do |config|
   #   unless defined?(SPEC_ROOT)

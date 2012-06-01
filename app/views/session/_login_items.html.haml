@@ -1,0 +1,7 @@
+- if current_user
+	= image_tag session[:image]
+	= "| Logged in as #{current_user.name} | "
+	= link_to "Sign out", signout_path
+
+- else
+	= link_to "Sign in with Facebook", '/auth/facebook/'

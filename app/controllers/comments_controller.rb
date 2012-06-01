@@ -7,9 +7,9 @@ class CommentsController < ApplicationController
     if slide_id = params[:slide_id]
       @comments = Slide.find(slide_id).comments
     else
-      @user = params['uid'] ? User.find_by_auth_hash(params) : current_user
+      @user = set_user(params, allow_user_id: true)
 
-      @comments = @user.comments.before_or_after(params).recent(@user)
+      @comments = @user.own(Comment).before_or_after(params)
     end
 
     respond_with @comments
@@ -31,7 +31,7 @@ class CommentsController < ApplicationController
 private
   def check_for_slide_id
     if not @slide_id = params[:slide_id]
-      respond_with :bad_request
+      head :not_acceptable
     else
       params[:comment][:slide_id] = @slide_id if params[:comment]
     end

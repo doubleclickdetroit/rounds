@@ -8,8 +8,9 @@ describe SlidesController do
   before(:each) { Slide.any_instance.stub(:content).and_return('') }
 
   describe 'GET index' do
+    it_should_properly_assign_user(action: :index, by_user_id: true)
+
     it_should_handle_index_by_parent_id(Slide, Round)
-    it_should_handle_index_by_user(Slide)
     it_should_handle_before_and_after_for_action_and_by_current_user(Slide, :index)
   end
 
@@ -25,8 +26,9 @@ describe SlidesController do
 
   describe 'GET show' do
     it 'should not throw a 406 if there is no slide_id' do
-      pending 'no idea, try after you have more implemented'
-      put :update, { :slide => FactoryGirl.build(:slide) }, valid_session 
+      pending
+      slide = FactoryGirl.create(:slide)
+      get :show, {id: slide.id}, valid_session 
       response.status.should_not == 406
     end
 
@@ -127,27 +129,27 @@ describe SlidesController do
     end
   end
 
-  describe 'PUT update' do
-    it 'should not throw a 406 if there is no slide_id' do
-      pending 'no idea, try after you have more implemented'
-      put :update, { :slide => FactoryGirl.build(:slide) }, valid_session 
-      response.status.should_not == 406
-    end
+  # describe 'PUT update' do
+  #   it 'should not throw a 406 if there is no slide_id' do
+  #     pending 'no idea, try after you have more implemented'
+  #     put :update, { :slide => FactoryGirl.build(:slide) }, valid_session 
+  #     response.status.should_not == 406
+  #   end
 
-    it 'should update the Slide whose id was passed in' do
-      @slide = FactoryGirl.create(:slide)
+  #   it 'should update the Slide whose id was passed in' do
+  #     @slide = FactoryGirl.create(:slide)
 
-      id = @slide.to_param
-      round_id = 1 
-      params = { 
-        :id => id,
-        :slide  => {:round_id => round_id} 
-      }
+  #     id = @slide.to_param
+  #     round_id = 1 
+  #     params = { 
+  #       :id => id,
+  #       :slide  => {:round_id => round_id} 
+  #     }
 
-      put :update, params, valid_session
-      Slide.find(id).round_id.should == round_id 
-    end
-  end
+  #     put :update, params, valid_session
+  #     Slide.find(id).round_id.should == round_id 
+  #   end
+  # end
 
   describe 'DELETE destroy' do
     it 'should not throw a 406 if there is no slide_id' do
