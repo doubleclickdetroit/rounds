@@ -59,7 +59,7 @@ print '  ** Users '
 @users = []
 
 
-@ammar = FactoryGirl.create(:user, :name => 'Ammar Almakzumi')
+@ammar = FactoryGirl.create(:user, :name => 'Ammar Almakzumi', :friend_ids_csv => '2')
 FactoryGirl.create(:authorization, :user_id => @ammar.id, :provider => 'facebook', :uid => '535058569')
 @users << @ammar
 print '.'
@@ -94,7 +94,7 @@ print "\n  ** Round "
 
 @rounds = []
 
-10.times do 
+20.times do 
   round = FactoryGirl.create(:round, :user_id => random_user().id)
   print '.'
   @rounds << round
