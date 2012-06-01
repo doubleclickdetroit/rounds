@@ -51,6 +51,8 @@ class User < ActiveRecord::Base
       auth.save
       user
     else
+      # auth.token = auth_hash['credentials']['token']
+      # auth.save
       user = auth.user
     end
   end

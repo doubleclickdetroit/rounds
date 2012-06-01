@@ -105,6 +105,9 @@ describe User do
         'info' => {
           'name' => 'Fox McCloud',
           'image' => 'http://foo.bar'
+        },
+        'credentials' => {
+          'token' => '1234567890ABCDEF'
         }
       }
     end
@@ -153,8 +156,10 @@ describe User do
 
     context 'where no user exists' do
       pending "not sure if this is it, but theres another case im not spec'ing..."
+
+      it 'should persist the auth token in the DB'
       
-      pending 'for facebook only'
+      pending 'for facebook only?'
       it 'should save the image to User.image_path' do
         user = User.via_auth(@auth_hash)
         user.image_path.should == @auth_hash['info']['image']
@@ -164,11 +169,16 @@ describe User do
 
   describe '#find_by_auth_hash' do
     before(:each) do
+      @user.destroy
       @auth_hash = {
         'provider' => 'facebook',
         'uid' => '1337',
         'info' => {
-          'name' => 'Fox McCloud'
+          'name' => 'Fox McCloud',
+          'image' => 'http://foo.bar'
+        },
+        'credentials' => {
+          'token' => '1234567890ABCDEF'
         }
       }
       @user = FactoryGirl.create(:user, :name => @auth_hash['info']['name'])
