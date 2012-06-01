@@ -10,6 +10,24 @@ def random_text
   text
 end
 
+# def random_text(sentence_text=true)
+#   @comment_lines  ||= "Ice cream brownie lollipop marshmallow gingerbread lemon drops chupa chups. Chocolate cake tiramisu sweet sweet roll croissant souffle gingerbread. Gummies croissant oat cake muffin tootsie roll tiramisu powder sesame snaps. Cheesecake lollipop biscuit cookie. Bonbon carrot cake apple pie cake lollipop carrot cake souffle jelly-o toffee. Pudding donut lemon drops. Ice cream tart jelly powder candy canes dragee pie apple pie pie. Souffle marshmallow chocolate fruitcake cotton candy powder dessert cookie. Tiramisu chocolate bar cookie sesame snaps tootsie roll. Jelly beans faworki biscuit jelly-o danish. Donut oat cake candy canes oat cake. Gummi bears cupcake pastry cake jujubes gingerbread applicake apple pie. Tart croissant brownie cotton candy cupcake sugar plum wypas. Chocolate bar cookie cupcake dessert muffin oat cake faworki jelly-o faworki. Applicake lemon drops muffin croissant candy macaroon candy croissant. Caramels icing tiramisu pie tootsie roll liquorice. Apple pie croissant oat cake danish chocolate chocolate cake. Lemon drops dessert sweet lollipop donut. Applicake pudding toffee toffee. Pie wypas chocolate bar chupa chups oat cake gummi bears. Sesame snaps bear claw chupa chups jelly-o cotton candy biscuit. Faworki souffle carrot cake pie. Gummi bears souffle toffee liquorice jelly-o. Topping chocolate chocolate cake bonbon dragee sesame snaps wafer sugar plum. Chocolate cake toffee cupcake lemon drops. Marshmallow icing dessert jelly. Sweet roll icing pie liquorice. Candy canes wypas bear claw lollipop cupcake jelly. Apple pie halvah pastry jelly beans. Gingerbread jelly beans bonbon sweet roll. Biscuit powder lemon drops brownie. Chocolate gingerbread jelly-o icing lemon drops macaroon gingerbread. Jelly-o oat cake icing gummi bears bear claw carrot cake cookie chocolate. Cake gingerbread liquorice bear claw gingerbread tart tart. Bear claw brownie gummies faworki powder macaroon. Sweet roll cake gummi bears pie croissant. Sugar plum chocolate bar cookie wafer liquorice. Marzipan lollipop jelly icing. Donut jelly beans jelly.".split(/\./).map(&:strip)
+#   @sentence_lines ||= "Hamburger andouille cow sirloin. Swine shank beef filet mignon meatloaf. Sirloin capicola pork chop ball tip ham hock pig tail, tri-tip kielbasa filet mignon beef ground round meatball. Shankle spare ribs t-bone, jerky pork belly strip steak chicken chuck corned beef. Short ribs jerky tenderloin corned beef frankfurter. Shank filet mignon turducken meatloaf. Ham hock strip steak filet mignon, flank shank corned beef pig prosciutto capicola. Ham hock flank biltong, turkey pork chop rump corned beef. Tenderloin fatback short loin, tri-tip pancetta biltong pork beef ribs sirloin corned beef sausage ground round capicola. Pastrami salami filet mignon beef ribs ball tip, tail turducken pork loin ribeye. Chicken tri-tip shankle, jowl shoulder ball tip chuck meatloaf jerky spare ribs shank cow. Tenderloin drumstick leberkas pastrami sausage. Turkey andouille fatback short ribs bacon t-bone. Shank turkey hamburger, chuck beef ribs chicken short ribs jowl. Swine meatloaf turducken ham hock, brisket shank ground round kielbasa filet mignon tenderloin bresaola pork belly beef. Capicola spare ribs tenderloin bacon rump, tri-tip short loin prosciutto leberkas pig ribeye. Tail meatball andouille, ham hock speck flank cow boudin rump ground round hamburger pancetta. Turducken short ribs pork belly, jowl strip steak kielbasa spare ribs turkey ham meatloaf ground round sausage ham hock meatball. Kielbasa sirloin rump, biltong ribeye chicken meatball strip steak. Jerky hamburger ball tip shank short ribs chuck beef ribs. Brisket pork chicken kielbasa, andouille turducken filet mignon hamburger tail strip steak ribeye. Meatball meatloaf strip steak tongue. Corned beef salami swine sirloin bresaola. Pork loin short loin bresaola, frankfurter turducken pork belly salami filet mignon shankle pastrami sausage pancetta. Pork belly turducken turkey pork chop, shankle pig boudin pancetta. Corned beef shank venison, hamburger tail jerky biltong tongue ball tip. Ham hock frankfurter swine pork belly.".split(/\./).map(&:strip)
+#   
+#   lines = sentence_text ? @sentence_lines : @comment_lines 
+#   text = ''
+#   (rand(4)+1).times { text << (lines[rand(lines.size)]+". ") }
+#   text
+# end
+# 
+# def comment_text
+#   random_text(false)
+# end
+# 
+# def sentence_text
+#   random_text(true)
+# end
+
 def make_sentence
   user_id = random_user().id
   params = { :round_id => @round.to_param, :user_id => user_id }
