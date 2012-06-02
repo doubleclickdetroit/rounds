@@ -12,7 +12,7 @@ define [], (require) ->
 	setupAjaxHandling: ->
 		$(document)
 			.ajaxComplete (evt, xhr) ->
-				mediator.publish 'XHRHandleResponse', xhr
+				mediator.publish 'ajax', 'complete', xhr
 
 
 	# StreamView (View)

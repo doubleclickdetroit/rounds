@@ -31,7 +31,7 @@ define [], (require) ->
 
 		render: ->
 			$('#main').html @$el.append round_tmpl
-			mediator.publish 'renderRound', @
+			mediator.publish 'round', 'render', @
 			@
 
 		addOne: (slide) ->
@@ -40,6 +40,6 @@ define [], (require) ->
 
 		addAll: ->
 			@collection.each @addOne
-		
+
 
 	RoundView

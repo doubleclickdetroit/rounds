@@ -21,7 +21,7 @@ define [], (require) ->
 
 		render: ->
 			@$el.html @template( do @model.toJSON )
-			mediator.publish 'renderSlide', @, @model.toJSON()
+			mediator.publish 'slide', 'render', @, @model.toJSON()
 			@
 
 	SlideView

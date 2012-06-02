@@ -15,13 +15,13 @@ define [], (require) ->
 
 		render_home: ->
 			# Todo: include an arg from return of Parent ViewFactory to send along Sub ViewFactory
-			mediator.publish 'navigateIndex'
+			mediator.publish 'streams', 'show'
 
 		render_round: (round_id) ->
 
 			##### START bchase #####
 			##### START bchase #####
-      
+
 			subscribe_to_resource = (callback) ->
 				console.log "in subscribe_to_resource"
 				(data) ->
@@ -37,8 +37,7 @@ define [], (require) ->
 					PrivatePub.sign subscription
 
 			set_lock = (data) ->
-				console.log "in lock callback"
-				console.log data
+				console.log "in lock callback", data
 				if data.locked
 					$('h2').text('View Round LOCKED')
 				else
@@ -63,7 +62,7 @@ define [], (require) ->
 
 
 			# Todo: include an arg from return of Parent ViewFactory to send along Sub ViewFactory
-			mediator.publish 'navigateRound', round_id
+			mediator.publish 'round', 'show', round_id
 
 		redirect_home: ->
 			@navigate '', true
