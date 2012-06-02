@@ -1,13 +1,20 @@
 object @slide
 
-attributes :type, :id, :round_id, :votes # , :created_at
+attributes :type, :id
+
+node(:content) {|slide| slide.content }
 
 # todo maybe not perfomant
 node(:created_at) {|record| record.created_at.to_s}
 
-node(:content) {|slide| slide.content }
+attributes :votes
+
 node(:comment_count) {|slide| slide.comment_count }
-node(:round_lock) {|slide| !!slide.round.round_lock }
+
+child(:round) do 
+  attributes :id
+  node(:locked) {|round| !!round.round_lock}
+end
 
 # # todo
 # # currently determined from 'slides/index'
