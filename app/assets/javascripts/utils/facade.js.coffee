@@ -1,11 +1,11 @@
-define ['./mediator'], (mediator) ->
+define ['./mediator', 'permissions'], (mediator, permissions) ->
 
 	facade = facade or {}
 
-	facade.subscribe = (channel, callback) ->
-		mediator.subscribe channel, callback
+	facade.subscribe = (channel, subscriber, callback) ->
+		mediator.subscribe channel, subscriber, callback if permissions.validate( channel, subscriber )
 
-	facade.publish = (channel) ->
-		mediator.publish channel
+	facade.publish = (channel, subscriber) ->
+		mediator.publish channel, subscriber
 
 	facade

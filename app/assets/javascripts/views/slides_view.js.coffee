@@ -23,7 +23,7 @@ define [], (require) ->
 
 		render: ->
 			@$el.html @template( @options )
-			mediator.publish 'renderSlides', @
+			mediator.publish 'slides', 'render', @
 			@
 
 		addOne: (slide) ->
