@@ -50,7 +50,7 @@ define [], (require) ->
 			# subscribe to round_lock
 			$.ajax("/api/rounds/#{round_id}/lock").done subscribe_to_resource(set_lock)
 
-			button = $ '<button>', text: 'Watch Round'
+			button = $ '<button>', text: 'Click Me to Watch a Round'
 			$('header').prepend	button
 
 			button.click ->

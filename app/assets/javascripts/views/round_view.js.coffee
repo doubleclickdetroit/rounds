@@ -17,6 +17,8 @@ define [], (require) ->
 		# cache template fn for single item
 		template: _.template round_tmpl
 
+		events: "click button" : "watchRound"
+
 		initialize: ->
 			_.bindAll @, 'addOne', 'addAll', 'render'
 
@@ -26,13 +28,13 @@ define [], (require) ->
 			@collection.bind 'add',   @addOne
 			@collection.bind 'reset', @addAll
 
-			do @render
-			do @collection.fetch
-
 		render: ->
-			$('#main').html @$el.append round_tmpl
+			@$el.append round_tmpl
 			mediator.publish 'round', 'render', @
 			@
+
+		watchRound: (evt) ->
+			# create a Watching for this round
 
 		addOne: (slide) ->
 			view = new SlideView model: slide

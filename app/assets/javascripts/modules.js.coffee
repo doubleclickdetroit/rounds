@@ -45,15 +45,16 @@ define [], (require) ->
 
 
 	facade.subscribe 'round', 'show', (round_id) ->
-		do clear_main_content
-
 		# eventually abstract this layer into a factory
-		new RoundView "round_id": round_id
+		round = new RoundView "round_id": round_id
+		do round.render
 		@
 
 
 	facade.subscribe 'round', 'render', (context) ->
 		# console.log 'renderRound', context
+		clear_main_content().append context.el
+		do context.collection.fetch
 		@
 
 
