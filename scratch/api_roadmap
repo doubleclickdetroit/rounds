@@ -1,6 +1,6 @@
 _ round completion
-  _ 'close' once limit is reached
-  _ require slide limit on creation
+  X 'close' once limit is reached
+  X require slide limit on creation
   _ completion callbacks
     _ compile completed round image
       _ as a delayed job

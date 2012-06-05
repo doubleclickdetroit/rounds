@@ -94,7 +94,7 @@ describe Round do
     pending 'handle nil'
   end
 
-  describe '- Validation -', :focus do
+  describe '- Validation -' do
     it 'should require a slide_limit' do
       expect {
         FactoryGirl.create(:round, slide_limit: 7)
