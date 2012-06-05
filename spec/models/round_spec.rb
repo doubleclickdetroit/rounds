@@ -94,6 +94,17 @@ describe Round do
     pending 'handle nil'
   end
 
+  describe '- Validation -', :focus do
+    it 'should require a slide_limit' do
+      expect {
+        FactoryGirl.create(:round, slide_limit: 7)
+      }.to change(Round, :count).by(1)
+      expect {
+        FactoryGirl.create(:round, slide_limit: nil)
+      }.to raise_error(ActiveRecord::RecordInvalid)
+    end
+  end
+
   klass = Round
 
   it_should_have_a_creator(klass)
