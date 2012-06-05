@@ -1,0 +1,25 @@
+_ round completion
+  _ 'close' once limit is reached
+  _ require slide limit on creation
+  _ completion callbacks
+    _ compile completed round image
+      _ as a delayed job
+
+_ private rounds
+  _ invitations
+  _ own feed
+  _ not visible in other feeds
+
+_ push notifications
+  _ fix bens error
+  _ finish dibs
+
+_ gamification
+  _ pick gem and install
+  _ define rules
+
+_ invitations
+  _ invite non-users of app to a round
+
+_ facebook ids
+  _ do client-side instead of on the server? delayed job?
