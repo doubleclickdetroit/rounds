@@ -37,6 +37,13 @@ class User < ActiveRecord::Base
     filter_blocked(klass).where(['user_id IN (?)', friend_ids])
   end
 
+  def private(klass)
+    raise ArgumentError unless [Sentence,Picture].include? klass 
+    private_round_ids = self.invitations.private.map(&:round_id)
+    # puts "######## #{self.invitations.inspect} #{private_round_ids.inspect} #{klass}"
+    # filter_blocked also sorts/limits
+    filter_blocked(klass).where(['round_id IN (?)', private_round_ids])
+  end
 
   def self.via_auth(auth_hash)
     auth = Authorization.find_or_initialize_by_provider_and_uid(auth_hash['provider'], auth_hash['uid'])

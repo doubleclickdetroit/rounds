@@ -39,6 +39,7 @@ class SlidesController < ApplicationController
 
 
   # RESTless
+  # todo not real DRY
   def feed
     # todo dangerous?
     klass = @type.constantize
@@ -58,6 +59,13 @@ class SlidesController < ApplicationController
 
   def friends
     @slides = current_user.friends(@type.constantize).before_or_after(params)
+
+    respond_with @slides
+  end
+
+  def private
+    # @slides = current_user.private(@type.constantize).before_or_after(params)
+    @slides = []
 
     respond_with @slides
   end

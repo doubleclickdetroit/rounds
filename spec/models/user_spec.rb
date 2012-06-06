@@ -216,7 +216,7 @@ describe User do
 
   end
 
-  describe '.friends' do
+  describe '- Slide Feeds -' do
     before(:each) do
       @friend   = FactoryGirl.create(:user)
       @user.friend_ids_csv = @friend.id.to_s
@@ -225,6 +225,55 @@ describe User do
       FactoryGirl.create(:blacklist_entry, user_id: @user.id, blocked_user_id: @blocked.id)
 
       @stranger = FactoryGirl.create(:user)
+    end
+
+    [Picture, Sentence].each do |klass|
+      describe "for #{klass}" do
+        before(:each) do
+          @klass_sym = klass.to_s.downcase.intern
+
+          @private_round     = FactoryGirl.create(:round, :private => true)
+          @invitation        = FactoryGirl.create(:invitation, round: @private_round, invited_user_id: @user.id)
+
+          @mine              = FactoryGirl.create(@klass_sym, :user => @user)
+          @friends           = FactoryGirl.create(@klass_sym, :user => @friend)
+          @strangers         = FactoryGirl.create(@klass_sym, :user => @stranger)
+          @blocked_users     = FactoryGirl.create(@klass_sym, :user => @blocked)
+          @invited_private   = FactoryGirl.create(@klass_sym, :user => @blocked, :round => @private_round)
+          # @uninvited_private = FactoryGirl.create(@klass_sym, :user => @blocked, :round => @private_round)
+        end
+
+        pending 'uninvited private (already specd in model?)'
+
+        describe '#private', :focus do
+          it 'should return [] if the user has no invitations' do
+            @user.invitations.destroy_all
+
+            @user.private(klass).should == []
+          end
+
+          it "should return only instances of the #{klass} for which the has been privately invited to" do
+            pending 'not quite working'
+            puts @user.private(klass).inspect, @invited_private
+            @user.private(klass).should == [@invited_private]
+          end
+
+          it "should not return instances of the #{klass} for which the user_id is in blocked_user_ids" do
+            pending 'already tested elsewhere?'
+            8.times { FactoryGirl.create(@klass_sym, user: @friend) }
+
+            @user.friend_ids = (@user.friend_ids << @blocked.id.to_s)
+            # making this one eighth and the most recent
+            @blocked_users = FactoryGirl.create(@klass_sym, :user => @blocked)
+
+            @user.friend_ids.should       == [@friend.id.to_s,@blocked.id.to_s]
+            @user.blocked_user_ids.should == [@blocked.id]
+            klass.count.should > 8
+
+            @user.friends(klass).should_not include(@blocked_users)
+          end
+        end
+      end
     end
 
     klasses = [Round, Slide, Comment]
