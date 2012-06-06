@@ -136,7 +136,7 @@ describe Round do
 
       @round.stub(:build_complete_round_image).and_return(true)
 
-      @round.should_receive :build_complete_round_image
+      @round.should_receive :check_for_round_completion
       @round.save
     end
   end
