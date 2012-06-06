@@ -14,4 +14,11 @@ class Round < ActiveRecord::Base
   has_one  :dib
 
   validates_presence_of :slide_limit
+
+  after_save :build_complete_round_image, lambda {|round| round.complete}
+
+private
+  def build_complete_round_image
+    # todo
+  end
 end

@@ -106,8 +106,7 @@ describe Round do
   end
 
   describe '- Completion -' do
-    pending 'set in slide.rb ......'
-    it 'should be marked as complete when it hits the slide_limit', :focus do
+    before(:each) do
       @round.slides.destroy_all
       @round.slide_limit = 2
       @round.save
@@ -118,11 +117,26 @@ describe Round do
         slide.delete 'type'
         @round.slides.build slide
       end
+    end
+
+    pending 'this is set in slide.rb ......'
+    it 'should be marked as complete when it hits the slide_limit' do
       @round.save
       @round.reload.complete.should be_true
     end
 
-    it 'should fire a callback to build the image'
+    pending 'further testing'
+    pending 'make sure this doesnt get called constantly since its just calling on after_save and checking .complete'
+    it 'should fire a callback to build the image', :focus do
+      # extra slide to ensure only called once
+      slide = FactoryGirl.build(:slide).attributes
+      slide.delete 'id'
+      slide.delete 'type'
+      @round.slides.build slide
+
+      @round.should_receive :build_complete_round_image
+      @round.save
+    end
   end
 
   klass = Round
