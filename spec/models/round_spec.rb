@@ -127,12 +127,14 @@ describe Round do
 
     pending 'further testing'
     pending 'make sure this doesnt get called constantly since its just calling on after_save and checking .complete'
-    it 'should fire a callback to build the image', :focus do
+    it 'should fire a callback to build the image' do
       # extra slide to ensure only called once
       slide = FactoryGirl.build(:slide).attributes
       slide.delete 'id'
       slide.delete 'type'
       @round.slides.build slide
+
+      @round.stub(:build_complete_round_image).and_return(true)
 
       @round.should_receive :build_complete_round_image
       @round.save
