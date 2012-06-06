@@ -245,7 +245,7 @@ describe User do
 
         pending 'uninvited private (already specd in model?)'
 
-        describe '#private', :focus do
+        describe '#private' do
           it 'should return [] if the user has no invitations' do
             @user.invitations.destroy_all
 
@@ -255,10 +255,17 @@ describe User do
           it "should return only instances of the #{klass} for which the has been privately invited to" do
             @user.invitations.should == [@invitation]
             @invitation.private.should be_true
-            # @user.private(klass).should == [@invited_private]
+            @private_round.slides << @friends
+            @user.private(klass).should == [@friends]
           end
 
-          it "should not return #{klass.to_s.pluralize} for the User"
+          it "should not return #{klass.to_s.pluralize} for the User" do
+            @user.invitations.should == [@invitation]
+            @invitation.private.should be_true
+            @private_round.slides << @friends
+            @private_round.slides << @mine
+            @user.private(klass).should == [@friends]
+          end
           it "should not return instances of the #{klass} for which the user_id is in blocked_user_ids" 
         end
       end
