@@ -70,7 +70,7 @@ Draw::Application.routes.draw do
       resources :comments, :except => [:show,:new,:edit]
 
       resources :ballots, :only => [:index]
-      match     'vote/:vote' => 'ballots#create'
+      match     'vote/:vote' => 'ballots#create', via: :post
     end
 
     ##### BEGIN MESS

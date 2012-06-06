@@ -245,7 +245,7 @@ describe User do
 
         pending 'uninvited private (already specd in model?)'
 
-        describe '#private' do
+        describe '#private', :focus do
           it 'should return [] if the user has no invitations' do
             @user.invitations.destroy_all
 
@@ -253,25 +253,13 @@ describe User do
           end
 
           it "should return only instances of the #{klass} for which the has been privately invited to" do
-            pending 'not quite working'
-            puts @user.private(klass).inspect, @invited_private
-            @user.private(klass).should == [@invited_private]
+            @user.invitations.should == [@invitation]
+            @invitation.private.should be_true
+            # @user.private(klass).should == [@invited_private]
           end
 
-          it "should not return instances of the #{klass} for which the user_id is in blocked_user_ids" do
-            pending 'already tested elsewhere?'
-            8.times { FactoryGirl.create(@klass_sym, user: @friend) }
-
-            @user.friend_ids = (@user.friend_ids << @blocked.id.to_s)
-            # making this one eighth and the most recent
-            @blocked_users = FactoryGirl.create(@klass_sym, :user => @blocked)
-
-            @user.friend_ids.should       == [@friend.id.to_s,@blocked.id.to_s]
-            @user.blocked_user_ids.should == [@blocked.id]
-            klass.count.should > 8
-
-            @user.friends(klass).should_not include(@blocked_users)
-          end
+          it "should not return #{klass.to_s.pluralize} for the User"
+          it "should not return instances of the #{klass} for which the user_id is in blocked_user_ids" 
         end
       end
     end
