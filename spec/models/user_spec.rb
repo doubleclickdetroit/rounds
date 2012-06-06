@@ -245,7 +245,7 @@ describe User do
 
         pending 'uninvited private (already specd in model?)'
 
-        describe '#private', :focus do
+        describe '#private' do
           it 'should return [] if the user has no invitations' do
             @user.invitations.destroy_all
 

@@ -244,7 +244,7 @@ describe SlidesController do
 
   end
 
-  describe 'GET private', :focus do
+  describe 'GET private' do
     pending 'unhappy path'
 
     before(:each) do
@@ -275,6 +275,7 @@ describe SlidesController do
 
     [Sentence,Picture].each do |klass|
       it "should return [] if " do
+        pending
         User.any_instance.stub(:invitations).and_return([])
 
         get :private, {:type => klass.to_s}, valid_session
@@ -283,33 +284,35 @@ describe SlidesController do
       end
     end
 
-    # context 'without time arg' do
-    #   [Sentence,Picture].each do |klass|
-    #     it "should return the most recent slides by friends of the proper type (#{klass.to_s}) with no time arg" do
-    #       pending 'proper auth/friends_ids'
-    #       get :friends, {:type => klass.to_s}, valid_session
+    context 'without time arg' do
+      [Sentence,Picture].each do |klass|
+        it "should return the most recent slides by friends of the proper type (#{klass.to_s}) with no time arg" do
+          pending 'not converted'
+          pending 'proper auth/friends_ids'
+          get :friends, {:type => klass.to_s}, valid_session
 
-    #       slides = assigns(:slides)
+          slides = assigns(:slides)
 
-    #       slides.count.should == 8 # todo spec most recent instead
-    #       slides.all?{|s|s.instance_of?(klass)}.should be_true
-    #     end
-    #   end
-    # end
+          slides.count.should == 8 # todo spec most recent instead
+          slides.all?{|s|s.instance_of?(klass)}.should be_true
+        end
+      end
+    end
 
-    # context 'with time arg' do
-    #   [Sentence,Picture].each do |klass|
-    #     it "should return the slides by friends before the proper time and of the proper type (#{klass.to_s})" do
-    #       pending 'failing on @time'
-    #       get :friends, {:type => klass.to_s, :time => @time}, valid_session
+    context 'with time arg' do
+      [Sentence,Picture].each do |klass|
+        it "should return the slides by friends before the proper time and of the proper type (#{klass.to_s})" do
+          pending 'not converted'
+          pending 'failing on @time'
+          get :friends, {:type => klass.to_s, :time => @time}, valid_session
 
-    #       slides = assigns(:slides)
+          slides = assigns(:slides)
 
-    #       slides.count.should == 5 
-    #       slides.all?{|s|s.instance_of?(klass)}.should be_true
-    #     end
-    #   end
-    # end
+          slides.count.should == 5 
+          slides.all?{|s|s.instance_of?(klass)}.should be_true
+        end
+      end
+    end
 
   end
 
