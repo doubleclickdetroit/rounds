@@ -31,10 +31,10 @@ class User < ActiveRecord::Base
 
     results = klass.eight_most_recent
 
-    if arr.include? :blocked
-      ids = blocked_user_ids << self.id
-      results = results.where(['user_id NOT IN (?)', ids]) 
-    end
+    ignored_ids  = [self.id]
+    ignored_ids |= blocked_user_ids if arr.include? :blocked
+    ignored_ids |= friend_ids       if arr.include? :friends
+    results = results.where(['slides.user_id NOT IN (?)', ignored_ids]) 
 
     if arr.include? :private
       results = results.includes(:round).where(['rounds.private = ?', false])
@@ -46,7 +46,6 @@ class User < ActiveRecord::Base
   def community(klass)
     # remove also sorts/limits
     slides = remove(:blocked, from: klass)
-    slides = slides.where(['user_id NOT IN (?)', friend_ids | [self.id]])
   end
 
   def friends(klass)
