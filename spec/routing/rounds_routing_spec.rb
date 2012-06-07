@@ -28,6 +28,7 @@ describe RoundsController do
 
       it "routes to #create" do
         post("/api/rounds/7").should route_to("rounds#create", slide_limit: '7')
+        post("/api/rounds/7/private").should route_to("rounds#create", slide_limit: '7', :private => true)
       end
 
       it "routes to #destroy" do

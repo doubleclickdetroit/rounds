@@ -46,6 +46,24 @@ describe RoundsController do
       post :create, {slide_limit: 7} , valid_session
       Round.last.creator.should == @user
     end
+
+    it 'should set Round.slide_limit by params' do
+      slide_limit = 7
+      post :create, {slide_limit: slide_limit} , valid_session
+      Round.last.slide_limit.should == 7
+    end
+
+    describe 'private' do
+      it 'should be set set to false if not in params' do
+        post :create, {slide_limit: 7} , valid_session
+        Round.last.private.should be_false
+      end
+
+      it 'should be set set to true if in params' do
+        post :create, {slide_limit: 7, :private => true} , valid_session
+        Round.last.private.should be_true
+      end
+    end
   end
 
   describe 'DELETE destroy' do

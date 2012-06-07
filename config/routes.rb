@@ -53,7 +53,8 @@ Draw::Application.routes.draw do
 
     resources :rounds, :except => [:create,:index,:update,:new,:edit] do
       collection do
-        post '/:slide_limit' => 'rounds#create'
+        post '/:slide_limit'         => 'rounds#create'
+        post '/:slide_limit/private' => 'rounds#create', :private => true
       end
       # todo DRY?
       match     'sentences' => 'slides#create', :type => 'Sentence', :via => :post

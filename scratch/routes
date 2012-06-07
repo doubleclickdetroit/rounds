@@ -39,7 +39,8 @@ IMPLEMENTED
       GET /api/comments
 
   Rounds 
-    C POST    /api/rounds/:slide_limit
+    C POST    /api/rounds/:slide_limit         # creates public Round
+    C POST    /api/rounds/:slide_limit/private # creates private Round
     R GET     /api/rounds/:id
   # U PUT     /api/rounds/:id
     D DELETE  /api/rounds/:id
