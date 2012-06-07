@@ -234,27 +234,30 @@ describe User do
         before(:each) do
           @klass_sym = klass.to_s.downcase.intern
 
-          @private_round     = FactoryGirl.create(:round, :private => true)
-          @invitation        = FactoryGirl.create(:invitation, round: @private_round, invited_user_id: @user.id)
+          @round             = FactoryGirl.create(:round, :private => false)
+          @inv_private_round = FactoryGirl.create(:round, :private => true)
+          @invitation        = FactoryGirl.create(:invitation, round: @inv_private_round, invited_user_id: @user.id)
+          @uninv_priv_round  = FactoryGirl.create(:round, :private => true)
 
-          @mine              = FactoryGirl.create(@klass_sym, :user => @user)
-          @friends           = FactoryGirl.create(@klass_sym, :user => @friend)
-          @strangers         = FactoryGirl.create(@klass_sym, :user => @stranger)
-          @blocked_users     = FactoryGirl.create(@klass_sym, :user => @blocked)
-          @invited_private   = FactoryGirl.create(@klass_sym, :user => @blocked, :round => @private_round)
-          # @uninvited_private = FactoryGirl.create(@klass_sym, :user => @blocked, :round => @private_round)
+          @mine              = FactoryGirl.create(@klass_sym, round: @round, :user => @user)
+          @friends           = FactoryGirl.create(@klass_sym, round: @round, :user => @friend)
+          @strangers         = FactoryGirl.create(@klass_sym, round: @round, :user => @stranger)
+          @blocked_users     = FactoryGirl.create(@klass_sym, round: @round, :user => @blocked)
+
+          @invited_private   = FactoryGirl.create(@klass_sym, :user => @friend,   :round => @inv_private_round)
+          @uninvited_private = FactoryGirl.create(@klass_sym, :user => @stranger, :round => @uninv_priv_round)
         end
 
-        describe '.filter_blocked' do
-          it 'should return eight_most_recent' do
-            klass.should_receive :eight_most_recent
-            @user.filter_blocked(klass)
-          end
-
-          it "should not return instances of the #{klass} for which the user_id is in blocked_user_ids" do
+        describe '.remove', :focus do
+          it "should not return instances of #{klass} for which the user_id is in blocked_user_ids" do
             @user.blocked_user_ids.should == [@blocked.id]
 
-            @user.filter_blocked(klass).should_not include(@blocked_users)
+            @user.remove(:blocked, from: klass).should_not include(@blocked_users)
+          end
+
+          it "should not return instances of #{klass} that belong to private Rounds" do
+            @user.remove(:private, from: klass).should_not include(@invited_private)
+            @user.remove(:private, from: klass).should_not include(@uninvited_private)
           end
 
           it 'should sort the results'
@@ -262,7 +265,7 @@ describe User do
           it 'should limit the results to 8' do
             9.times { FactoryGirl.create(@klass_sym, :user => @friend) }
             klass.count.should > 8
-            @user.filter_blocked(klass).count == 8
+            @user.remove(:blocked, from: klass).count == 8
           end
         end
 
@@ -277,15 +280,15 @@ describe User do
           it "should return only instances of the #{klass} for which the has been privately invited to" do
             @user.invitations.should == [@invitation]
             @invitation.private.should be_true
-            @private_round.slides << @friends
+            @inv_private_round.slides << @friends
             @user.private(klass).should == [@friends]
           end
 
           it "should not return #{klass.to_s.pluralize} for the User" do
             @user.invitations.should == [@invitation]
             @invitation.private.should be_true
-            @private_round.slides << @friends
-            @private_round.slides << @mine
+            @inv_private_round.slides << @friends
+            @inv_private_round.slides << @mine
             @user.private(klass).should == [@friends]
           end
           it "should not return instances of the #{klass} for which the user_id is in blocked_user_ids" 

@@ -25,28 +25,41 @@ class User < ActiveRecord::Base
   end
 
   # for /api/sentences|pictures
-  def filter_blocked(klass)
-    ids = blocked_user_ids
-    ids.empty? ? klass.eight_most_recent : klass.where(['user_id NOT IN (?)', ids]).eight_most_recent 
+  def remove(*args)
+    arr   = args.first.is_a?(Array) ? args.shift : [args.shift]
+    klass = args.extract_options![:from]
+
+    results = klass.eight_most_recent
+
+    if arr.include? :blocked
+      ids = blocked_user_ids << self.id
+      results = results.where(['user_id NOT IN (?)', ids]) 
+    end
+
+    if arr.include? :private
+      results = results.includes(:round).where(['rounds.private = ?', false])
+    end
+
+    results
   end
 
   def community(klass)
-    # filter_blocked also sorts/limits
-    slides = filter_blocked(klass)
+    # remove also sorts/limits
+    slides = remove(:blocked, from: klass)
     slides = slides.where(['user_id NOT IN (?)', friend_ids | [self.id]])
   end
 
   def friends(klass)
-    # filter_blocked also sorts/limits
-    filter_blocked(klass).where(['user_id IN (?)', friend_ids])
+    # remove also sorts/limits
+    remove(:blocked, from: klass).where(['user_id IN (?)', friend_ids])
   end
 
   def private(klass)
     raise ArgumentError unless [Sentence,Picture].include? klass 
-    # filter_blocked(klass).where(['user_id NOT IN (?)', [self.id]])
+    # remove(:blocked, from: klass).where(['user_id NOT IN (?)', [self.id]])
     private_round_ids = self.invitations.private.map(&:round_id)
-    # filter_blocked also sorts/limits
-    slides = filter_blocked(klass).where(['round_id IN (?)', private_round_ids])
+    # remove also sorts/limits
+    slides = remove(:blocked, from: klass).where(['round_id IN (?)', private_round_ids])
     slides = slides.where(['user_id NOT IN (?)', [self.id]])
   end
 
