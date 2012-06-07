@@ -15,6 +15,8 @@ class User < ActiveRecord::Base
 
 
   # todo as scopes?
+  
+  # for /api/users
   def own(klass)
     plural_sym = klass.to_s.pluralize.downcase.intern
 
@@ -22,21 +24,44 @@ class User < ActiveRecord::Base
     instances.eight_most_recent
   end
 
-  def filter_blocked(klass)
-    ids = blocked_user_ids
-    ids.empty? ? klass.eight_most_recent : klass.where(['user_id NOT IN (?)', ids]).eight_most_recent 
+  # for /api/sentences|pictures
+  def remove(*args)
+    arr   = args.first.is_a?(Array) ? args.shift : [args.shift]
+    klass = args.extract_options![:from]
+
+    results = klass.eight_most_recent
+
+    ignored_ids  = [self.id]
+    ignored_ids |= blocked_user_ids if arr.include? :blocked
+    ignored_ids |= friend_ids       if arr.include? :friends
+    results = results.where(['slides.user_id NOT IN (?)', ignored_ids]) 
+
+    if arr.include? :private
+      results = results.includes(:round).where(['rounds.private = ?', false])
+    end
+
+    results
   end
 
-  def recent(klass)
-    # filter_blocked also sorts/limits
-    filter_blocked(klass).where(['user_id NOT IN (?)', [self.id]])
+  def community(klass)
+    # remove also sorts/limits
+    slides = remove([:blocked,:friends], from: klass)
   end
 
   def friends(klass)
-    # filter_blocked also sorts/limits
-    filter_blocked(klass).where(['user_id IN (?)', friend_ids])
+    # remove also sorts/limits
+    remove([:blocked,:private], from: klass).where(['slides.user_id IN (?)', friend_ids])
   end
 
+  def private(klass)
+    raise ArgumentError unless [Sentence,Picture].include? klass 
+    # remove also sorts/limits
+    slides = remove(:blocked, from: klass)
+
+    # select only slides from private rounds
+    private_round_ids = self.invitations.private.map(&:round_id)
+    slides = slides.where(['slides.round_id IN (?)', private_round_ids])
+  end
 
   def self.via_auth(auth_hash)
     auth = Authorization.find_or_initialize_by_provider_and_uid(auth_hash['provider'], auth_hash['uid'])

@@ -216,7 +216,7 @@ describe User do
 
   end
 
-  describe '.friends' do
+  describe '- Slide Feeds -' do
     before(:each) do
       @friend   = FactoryGirl.create(:user)
       @user.friend_ids_csv = @friend.id.to_s
@@ -227,9 +227,148 @@ describe User do
       @stranger = FactoryGirl.create(:user)
     end
 
-    klasses = [Round, Slide, Comment]
+    [Picture, Sentence].each do |klass|
 
-    klasses.each do |klass|
+      describe "for #{klass}" do
+
+        before(:each) do
+          @klass_sym = klass.to_s.downcase.intern
+
+          @round             = FactoryGirl.create(:round, :private => false)
+          @inv_private_round = FactoryGirl.create(:round, :private => true)
+          @invitation        = FactoryGirl.create(:invitation, round: @inv_private_round, invited_user_id: @user.id)
+          @uninv_priv_round  = FactoryGirl.create(:round, :private => true)
+
+          @mine              = FactoryGirl.create(@klass_sym, round: @round, :user => @user)
+          @friends           = FactoryGirl.create(@klass_sym, round: @round, :user => @friend)
+          @strangers         = FactoryGirl.create(@klass_sym, round: @round, :user => @stranger)
+          @blocked_users     = FactoryGirl.create(@klass_sym, round: @round, :user => @blocked)
+
+          @invited_private   = FactoryGirl.create(@klass_sym, :user => @friend,   :round => @inv_private_round)
+          @uninvited_private = FactoryGirl.create(@klass_sym, :user => @stranger, :round => @uninv_priv_round)
+        end
+
+        describe '.remove' do
+          it "should not return instances of #{klass} for which the user_id is in blocked_user_ids" do
+            @user.blocked_user_ids.should == [@blocked.id]
+
+            @user.remove(:blocked, from: klass).should_not include(@blocked_users)
+          end
+
+          it "should not return instances of #{klass} that belong to private Rounds" do
+            @user.remove(:private, from: klass).should_not include(@invited_private)
+            @user.remove(:private, from: klass).should_not include(@uninvited_private)
+          end
+
+          it 'should sort the results'
+
+          it 'should limit the results to 8' do
+            9.times { FactoryGirl.create(@klass_sym, :user => @friend) }
+            klass.count.should > 8
+            @user.remove(:blocked, from: klass).count == 8
+          end
+        end
+
+        pending 'uninvited private (already specd in model?)'
+        describe '.private' do
+          it 'should return [] if the user has no invitations' do
+            @user.invitations.destroy_all
+
+            @user.private(klass).should == []
+          end
+
+          it "should return only instances of the #{klass} for which the has been privately invited to" do
+            @user.invitations.should == [@invitation]
+            @invitation.private.should be_true
+            @inv_private_round.slides.should == [@invited_private] 
+            @user.private(klass).should == [@invited_private]
+          end
+
+          it "should not return #{klass.to_s.pluralize} for the User" do
+            @user.invitations.should == [@invitation]
+            @invitation.private.should be_true
+            @inv_private_round.slides << @mine
+            @inv_private_round.slides.sort.should == [@invited_private,@mine].sort
+            @user.private(klass).should == [@invited_private]
+          end
+          it "should not return instances of the #{klass} for which the user_id is in blocked_user_ids" 
+        end
+
+        describe '.friends' do
+          it 'should return [] if the user has no friends' do
+            @user.friend_ids = []
+            @user.friend_ids.should == []
+
+            @user.friends(klass).should == []
+          end
+
+          it "should return only instances of the #{klass} for which the user_id belongs to .friends_ids but not private slides" do
+            @user.friend_ids.should == [@friend.id.to_s]
+
+            @user.friends(klass).should == [@friends]
+          end
+
+          it "should not return instances of the #{klass} for which the user_id is in blocked_user_ids" do
+            8.times { FactoryGirl.create(@klass_sym, user: @friend) }
+
+            @user.friend_ids = (@user.friend_ids << @blocked.id.to_s)
+            # making this one eighth and the most recent
+            @blocked_users = FactoryGirl.create(@klass_sym, :user => @blocked)
+
+            @user.friend_ids.should       == [@friend.id.to_s,@blocked.id.to_s]
+            @user.blocked_user_ids.should == [@blocked.id]
+            klass.count.should > 8
+
+            @user.friends(klass).should_not include(@blocked_users)
+          end
+        end
+
+        describe '.community' do
+          context "with more than 8 #{klass.to_s.pluralize}" do
+            before(:each) do
+              8.times { FactoryGirl.create(@klass_sym) }
+
+              # making this one eighth and the most recent
+              @blocked_users = FactoryGirl.create(@klass_sym, :user => @blocked)
+            end
+
+            it "should not return instances of the #{klass} for which the user_id is in blocked_user_ids" do
+              8.times { FactoryGirl.create(@klass_sym) }
+
+              # making this one eighth and the most recent
+              @blocked_users = FactoryGirl.create(@klass_sym, :user => @blocked)
+
+              @user.blocked_user_ids.should == [@blocked.id]
+              klass.count.should > 8
+
+              @user.community(klass).should_not include(@blocked_users)
+            end
+
+            it "should not return instances of the #{klass} for which the user_id is in blocked_user_ids" do
+              @user.blocked_user_ids.should == [@blocked.id]
+              klass.count.should > 8
+
+              @user.community(klass).should_not include(@blocked_users)
+            end
+          end
+
+          it "should not return #{klass.to_s.pluralize} belonging to @user" do
+            @user.community(klass).should_not include(@mine)
+          end
+
+          it "should not return #{klass.to_s.pluralize} belonging to friends" do
+            @user.community(klass).should_not include(@friends)
+          end
+        end
+
+      end
+
+    end
+  end
+
+  describe '- User feeds -' do
+
+    [Round, Slide, Comment].each do |klass|
       context "for #{klass}" do
         before(:each) do
           @klass_sym = klass.to_s.downcase.intern
@@ -275,93 +414,9 @@ describe User do
           end
         end
 
-        describe '.filter_blocked' do
-          it 'should return eight_most_recent' do
-            klass.should_receive :eight_most_recent
-            @user.filter_blocked(klass)
-          end
-
-          it "should not return instances of the #{klass} for which the user_id is in blocked_user_ids" do
-            @user.blocked_user_ids.should == [@blocked.id]
-
-            @user.filter_blocked(klass).should_not include(@blocked_users)
-          end
-
-          it 'should sort the results'
-
-          it 'should limit the results to 8' do
-            9.times { FactoryGirl.create(@klass_sym, :user => @friend) }
-            klass.count.should > 8
-            @user.filter_blocked(klass).count == 8
-          end
-        end
-
-        describe '.friends' do
-          it 'should return [] if the user has no friends' do
-            @user.friend_ids = []
-            @user.friend_ids.should == []
-
-            @user.friends(klass).should == []
-          end
-
-          it "should return only instances of the #{klass} for which the user_id belongs to .friends_ids" do
-            @user.friend_ids.should == [@friend.id.to_s]
-
-            @user.friends(klass).should == [@friends]
-          end
-
-          it "should not return instances of the #{klass} for which the user_id is in blocked_user_ids" do
-            8.times { FactoryGirl.create(@klass_sym, user: @friend) }
-
-            @user.friend_ids = (@user.friend_ids << @blocked.id.to_s)
-            # making this one eighth and the most recent
-            @blocked_users = FactoryGirl.create(@klass_sym, :user => @blocked)
-
-            @user.friend_ids.should       == [@friend.id.to_s,@blocked.id.to_s]
-            @user.blocked_user_ids.should == [@blocked.id]
-            klass.count.should > 8
-
-            @user.friends(klass).should_not include(@blocked_users)
-          end
-        end
-
-        describe '.recent' do
-          context "with more than 8 #{klass.to_s.pluralize}" do
-            before(:each) do
-              8.times { FactoryGirl.create(@klass_sym) }
-
-              # making this one eighth and the most recent
-              @blocked_users = FactoryGirl.create(@klass_sym, :user => @blocked)
-            end
-
-            it "should not return instances of the #{klass} for which the user_id is in blocked_user_ids" do
-              8.times { FactoryGirl.create(@klass_sym) }
-
-              # making this one eighth and the most recent
-              @blocked_users = FactoryGirl.create(@klass_sym, :user => @blocked)
-
-              @user.blocked_user_ids.should == [@blocked.id]
-              klass.count.should > 8
-
-              @user.recent(klass).should_not include(@blocked_users)
-            end
-
-            it "should not return instances of the #{klass} for which the user_id is in blocked_user_ids" do
-              @user.blocked_user_ids.should == [@blocked.id]
-              klass.count.should > 8
-
-              @user.recent(klass).should_not include(@blocked_users)
-            end
-          end
-
-          it "should not return #{klass.to_s.pluralize} belonging to @user" do
-            # klass.count.should == 4
-
-            @user.recent(klass).should_not include(@mine)
-          end
-        end
       end
     end
+
   end
 
 end

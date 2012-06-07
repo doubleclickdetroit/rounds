@@ -225,6 +225,7 @@ GEM
       json (~> 1.4)
     requirejs-rails (0.6.1)
       railties (>= 3.1.1, < 3.3)
+    rmagick (2.13.1)
     rspec (2.9.0)
       rspec-core (~> 2.9.0)
       rspec-expectations (~> 2.9.0)
@@ -313,6 +314,7 @@ DEPENDENCIES
   rails (= 3.2.0)
   rails-backbone
   requirejs-rails
+  rmagick
   rspec-rails
   sass-rails (~> 3.2.3)
   selenium-client

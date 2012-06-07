@@ -7,6 +7,15 @@ class Invitation < ActiveRecord::Base
 
   include Common::Associations::HasCreator
 
-
   belongs_to :round
+
+  scope :private, where(:private => true)
+
+  after_create :set_privacy
+
+private
+  def set_privacy
+    self.private = !!round.private
+    self.save
+  end
 end

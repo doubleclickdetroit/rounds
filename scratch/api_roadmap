@@ -1,24 +1,30 @@
-_ round completion
+X round completion
   X 'close' once limit is reached
   X require slide limit on creation
-  _ completion callbacks
-    _ compile completed round image
-      _ as a delayed job
+  X completion callbacks
+    X compile completed round image
 
-_ private rounds
-  _ invitations
-  _ own feed
-  _ not visible in other feeds
+X private rounds
+  X own feed
+  X not visible in other feeds
+    | .includes(:round).where('rounds.private = ?', true)
+    | add private column to slides
 
-_ push notifications
-  _ fix bens error
-  _ finish dibs
+X filter feeds
+  X filter private out of friends
+  X filter private out of community
+  X filter friends out of community
 
 _ gamification
   _ pick gem and install
   _ define rules
 
+_ push notifications
+  _ fix bens error
+  _ finish dibs
+
 _ invitations
+  _ make sure they work
   _ invite non-users of app to a round
 
 _ facebook ids

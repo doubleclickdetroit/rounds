@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120531082904) do
+ActiveRecord::Schema.define(:version => 20120606082115) do
 
   create_table "authorizations", :force => true do |t|
     t.string   "provider"
@@ -60,6 +60,7 @@ ActiveRecord::Schema.define(:version => 20120531082904) do
     t.boolean  "accepted",        :default => false
     t.datetime "created_at",                         :null => false
     t.datetime "updated_at",                         :null => false
+    t.boolean  "private"
   end
 
   add_index "invitations", ["invited_user_id"], :name => "index_invitations_on_invited_user_id"
@@ -77,8 +78,11 @@ ActiveRecord::Schema.define(:version => 20120531082904) do
 
   create_table "rounds", :force => true do |t|
     t.integer  "user_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.integer  "slide_limit"
+    t.boolean  "complete",    :default => false
+    t.boolean  "private",     :default => false
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
   end
 
   add_index "rounds", ["user_id"], :name => "index_rounds_on_user_id"

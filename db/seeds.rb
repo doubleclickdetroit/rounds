@@ -63,7 +63,6 @@ end
 
 
 
-
 puts "** Begin seeding"
 
 
@@ -82,12 +81,12 @@ FactoryGirl.create(:authorization, :user_id => @ammar.id, :provider => 'facebook
 @users << @ammar
 print '.'
 
-@ben   = FactoryGirl.create(:user, :name => 'Ben Babics')
+@ben   = FactoryGirl.create(:user, :name => 'Ben Babics', :friend_ids_csv => '3')
 FactoryGirl.create(:authorization, :user_id => @ben.id, :provider => 'facebook', :uid => '500032277')
 @users << @ben
 print '.'
 
-@brad  = FactoryGirl.create(:user, :name => 'Brad Chase')
+@brad  = FactoryGirl.create(:user, :name => 'Brad Chase', :friend_ids_csv => '2')
 FactoryGirl.create(:authorization, :user_id => @brad.id, :provider => 'facebook', :uid => '30118972')
 @users << @brad
 print '.'
@@ -108,7 +107,7 @@ end
 ################ Rounds ##################
 ##########################################
 
-print "\n  ** Round "
+print "\n  ** Rounds (public) "
 
 @rounds = []
 
@@ -163,6 +162,36 @@ print "\n      ** Ballots "
     add_arbitrary_ballots_to(slide)
   end
   round.save
+end
+
+
+
+##########################################
+############ Private Rounds ##############
+##########################################
+
+print "\n  ** Rounds (private) "
+
+@users.each do |user|
+  @round = FactoryGirl.create(:round, user_id: user, :private => true)
+
+  # build two slides for round
+  if [true,false].sample
+    make_sentence 
+    make_picture 
+  else
+    make_picture 
+    make_sentence 
+  end
+
+  # invite other users
+  @users.reject{|u|u==user}.each do |u|
+    FactoryGirl.create(:invitation, user_id:user.id, invited_user_id:u.id, round_id:@round.id)
+  end
+
+  @round.save
+
+  print '.'
 end
 
 
