@@ -8,7 +8,7 @@ class Round < ActiveRecord::Base
 
   include Common::Associations::HasCreator
 
-  has_many :slides, :order => 'id DESC'
+  has_many :slides, order: 'id DESC'
   has_many :invitations
   has_one  :round_lock
   has_many :watchings
