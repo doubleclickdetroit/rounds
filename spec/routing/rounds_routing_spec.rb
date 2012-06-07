@@ -27,8 +27,7 @@ describe RoundsController do
       end
 
       it "routes to #create" do
-
-        post("/api/rounds").should route_to("rounds#create")
+        post("/api/rounds/7").should route_to("rounds#create", slide_limit: '7')
       end
 
       it "routes to #destroy" do

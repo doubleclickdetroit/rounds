@@ -21,25 +21,29 @@ describe RoundsController do
     end
   end
 
-  describe 'POST create', :focus do
+  describe 'POST create' do
+    it 'should throw a 406 if there is no slide_limit' do
+      post :create, {}, valid_session 
+      response.status.should== 406
+    end
+
     it 'should create a new Round' do
-      post :create, {}, valid_session
       expect {
-        post :create, {}, valid_session
+        post :create, {slide_limit: 7}, valid_session
       }.to change(Round, :count).by(1)
     end
 
     it 'should create a new RoundLock for current_user and Round' do
       expect {
-        post :create, {}, valid_session
+        post :create, {slide_limit: 7}, valid_session
       }.to change(RoundLock, :count).by(1)
       
-      RoundLock.last.user_id.should   == @user.id
-      RoundLock.last.round.should == Round.last
+      RoundLock.last.user_id.should == @user.id
+      RoundLock.last.round.should   == Round.last
     end
 
     it 'should set Round.created_by to current_user' do
-      post :create, {} , valid_session
+      post :create, {slide_limit: 7} , valid_session
       Round.last.creator.should == @user
     end
   end

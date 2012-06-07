@@ -1,4 +1,6 @@
 class RoundsController < ApplicationController
+  before_filter :check_for_slide_limit, only: [:create]
+
   respond_to :json
 
   def index
@@ -15,7 +17,7 @@ class RoundsController < ApplicationController
 
   # todo refactor
   def create
-    @round = Round.create(user: current_user, slide_limit: 7)
+    @round = Round.create(user: current_user, slide_limit: @slide_limit)
     @round.round_lock = RoundLock.create(:user_id => current_user.id)
     respond_with @round.to_json
   end
@@ -26,4 +28,8 @@ class RoundsController < ApplicationController
     @round.slides.empty? ? respond_with(@round.destroy) : head(401)
   end
 
+private
+  def check_for_slide_limit
+    head :not_acceptable unless @slide_limit = params[:slide_limit]
+  end
 end

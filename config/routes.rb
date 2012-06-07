@@ -51,7 +51,10 @@ Draw::Application.routes.draw do
     match '/providers/:provider/users/:uid/ballots'  => 'ballots#index',  :via => :get
 
 
-    resources :rounds, :except => [:index,:update,:new,:edit] do
+    resources :rounds, :except => [:create,:index,:update,:new,:edit] do
+      collection do
+        post '/:slide_limit' => 'rounds#create'
+      end
       # todo DRY?
       match     'sentences' => 'slides#create', :type => 'Sentence', :via => :post
       match     'pictures'  => 'slides#create', :type => 'Picture',  :via => :post
