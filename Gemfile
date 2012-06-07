@@ -21,6 +21,8 @@ gem 'private_pub'
 
 gem 'coffee-filter'
 
+gem 'pry-rails'
+
 gem 'jquery-rails'
 gem 'haml-rails'
 gem 'html5-rails', :git => 'git://github.com/sporkd/html5-rails.git'

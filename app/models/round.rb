@@ -12,4 +12,6 @@ class Round < ActiveRecord::Base
   has_one  :round_lock
   has_many :watchings
   has_one  :dib
+
+  validates_presence_of :slide_limit
 end

@@ -7,8 +7,13 @@ class Slide < ActiveRecord::Base
 
   include Common::Associations::HasCreator
 
+  before_create :check_slide_limit_for_round
 
-  belongs_to :round
+  def check_slide_limit_for_round
+    round && round.slides.count < round.slide_limit
+  end
+
+  belongs_to :round, :validate => true
 
   has_many :comments
   has_many :ballots
@@ -45,6 +50,28 @@ class Slide < ActiveRecord::Base
   def comment_count
     comments.count
   end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   def self.feed(user)
     priv = []
