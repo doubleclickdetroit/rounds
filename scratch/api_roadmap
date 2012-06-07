@@ -4,15 +4,15 @@ X round completion
   X completion callbacks
     X compile completed round image
 
-\ private rounds
+X private rounds
   X own feed
-  _ not visible in other feeds
+  X not visible in other feeds
     | .includes(:round).where('rounds.private = ?', true)
     | add private column to slides
 
-_ filter feeds
-  _ filter private out of friends
-  _ filter private out of community
+X filter feeds
+  X filter private out of friends
+  X filter private out of community
   X filter friends out of community
 
 _ gamification
