@@ -399,9 +399,11 @@ describe User do
           end
 
           it "should not return #{klass.to_s.pluralize} belonging to @user" do
-            # klass.count.should == 4
-
             @user.community(klass).should_not include(@mine)
+          end
+
+          it "should not return #{klass.to_s.pluralize} belonging to friends" do
+            @user.community(klass).should_not include(@friends)
           end
         end
 

@@ -29,7 +29,8 @@ class User < ActiveRecord::Base
 
   def community(klass)
     # filter_blocked also sorts/limits
-    filter_blocked(klass).where(['user_id NOT IN (?)', [self.id]])
+    slides = filter_blocked(klass)
+    slides = slides.where(['user_id NOT IN (?)', friend_ids | [self.id]])
   end
 
   def friends(klass)
