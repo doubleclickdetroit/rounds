@@ -21,8 +21,6 @@ define [], (require) ->
 	facade.subscribe 'resource', 'subscribe', (conf, callback) ->
 		subscription = conf.subscription
 
-		console.log "subscribing to channel #{subscription.channel}"
-
 		# subscribe to subsequent channel with callback
 		PrivatePub.subscribe subscription.channel, callback
 
