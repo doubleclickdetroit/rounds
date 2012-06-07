@@ -45,21 +45,22 @@ class User < ActiveRecord::Base
 
   def community(klass)
     # remove also sorts/limits
-    slides = remove(:blocked, from: klass)
+    slides = remove([:blocked,:friends], from: klass)
   end
 
   def friends(klass)
     # remove also sorts/limits
-    remove(:blocked, from: klass).where(['user_id IN (?)', friend_ids])
+    remove([:blocked,:private], from: klass).where(['slides.user_id IN (?)', friend_ids])
   end
 
   def private(klass)
     raise ArgumentError unless [Sentence,Picture].include? klass 
-    # remove(:blocked, from: klass).where(['user_id NOT IN (?)', [self.id]])
-    private_round_ids = self.invitations.private.map(&:round_id)
     # remove also sorts/limits
-    slides = remove(:blocked, from: klass).where(['round_id IN (?)', private_round_ids])
-    slides = slides.where(['user_id NOT IN (?)', [self.id]])
+    slides = remove(:blocked, from: klass)
+
+    # select only slides from private rounds
+    private_round_ids = self.invitations.private.map(&:round_id)
+    slides = slides.where(['slides.round_id IN (?)', private_round_ids])
   end
 
   def self.via_auth(auth_hash)

@@ -248,7 +248,7 @@ describe User do
           @uninvited_private = FactoryGirl.create(@klass_sym, :user => @stranger, :round => @uninv_priv_round)
         end
 
-        describe '.remove', :focus do
+        describe '.remove' do
           it "should not return instances of #{klass} for which the user_id is in blocked_user_ids" do
             @user.blocked_user_ids.should == [@blocked.id]
 
@@ -280,16 +280,16 @@ describe User do
           it "should return only instances of the #{klass} for which the has been privately invited to" do
             @user.invitations.should == [@invitation]
             @invitation.private.should be_true
-            @inv_private_round.slides << @friends
-            @user.private(klass).should == [@friends]
+            @inv_private_round.slides.should == [@invited_private] 
+            @user.private(klass).should == [@invited_private]
           end
 
           it "should not return #{klass.to_s.pluralize} for the User" do
             @user.invitations.should == [@invitation]
             @invitation.private.should be_true
-            @inv_private_round.slides << @friends
             @inv_private_round.slides << @mine
-            @user.private(klass).should == [@friends]
+            @inv_private_round.slides.sort.should == [@invited_private,@mine].sort
+            @user.private(klass).should == [@invited_private]
           end
           it "should not return instances of the #{klass} for which the user_id is in blocked_user_ids" 
         end
@@ -302,7 +302,7 @@ describe User do
             @user.friends(klass).should == []
           end
 
-          it "should return only instances of the #{klass} for which the user_id belongs to .friends_ids" do
+          it "should return only instances of the #{klass} for which the user_id belongs to .friends_ids but not private slides" do
             @user.friend_ids.should == [@friend.id.to_s]
 
             @user.friends(klass).should == [@friends]
