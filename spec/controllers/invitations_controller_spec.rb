@@ -7,7 +7,7 @@ describe InvitationsController do
 
   before(:each) { Invitation.any_instance.stub(:content).and_return('') }
 
-  describe 'GET index', :focus do
+  describe 'GET index' do
     it_should_handle_index_by_parent_id(Invitation, Round)
 
     it 'should handle requests with no round_id relative to current_user' do

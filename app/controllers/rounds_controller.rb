@@ -15,7 +15,7 @@ class RoundsController < ApplicationController
 
   # todo refactor
   def create
-    @round = Round.create(:user_id => current_user.id)
+    @round = Round.create(user: current_user, slide_limit: 7)
     @round.round_lock = RoundLock.create(:user_id => current_user.id)
     respond_with @round.to_json
   end

@@ -21,8 +21,9 @@ describe RoundsController do
     end
   end
 
-  describe 'POST create' do
+  describe 'POST create', :focus do
     it 'should create a new Round' do
+      post :create, {}, valid_session
       expect {
         post :create, {}, valid_session
       }.to change(Round, :count).by(1)
