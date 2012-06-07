@@ -78,11 +78,11 @@ ActiveRecord::Schema.define(:version => 20120606082115) do
 
   create_table "rounds", :force => true do |t|
     t.integer  "user_id"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
     t.integer  "slide_limit"
-    t.boolean  "complete"
-    t.boolean  "private"
+    t.boolean  "complete",    :default => false
+    t.boolean  "private",     :default => false
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
   end
 
   add_index "rounds", ["user_id"], :name => "index_rounds_on_user_id"
