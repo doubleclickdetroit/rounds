@@ -369,7 +369,7 @@ describe User do
           end
         end
 
-        describe '.recent' do
+        describe '.community' do
           context "with more than 8 #{klass.to_s.pluralize}" do
             before(:each) do
               8.times { FactoryGirl.create(@klass_sym) }
@@ -387,23 +387,24 @@ describe User do
               @user.blocked_user_ids.should == [@blocked.id]
               klass.count.should > 8
 
-              @user.recent(klass).should_not include(@blocked_users)
+              @user.community(klass).should_not include(@blocked_users)
             end
 
             it "should not return instances of the #{klass} for which the user_id is in blocked_user_ids" do
               @user.blocked_user_ids.should == [@blocked.id]
               klass.count.should > 8
 
-              @user.recent(klass).should_not include(@blocked_users)
+              @user.community(klass).should_not include(@blocked_users)
             end
           end
 
           it "should not return #{klass.to_s.pluralize} belonging to @user" do
             # klass.count.should == 4
 
-            @user.recent(klass).should_not include(@mine)
+            @user.community(klass).should_not include(@mine)
           end
         end
+
       end
     end
   end

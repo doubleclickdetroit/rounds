@@ -27,7 +27,7 @@ class User < ActiveRecord::Base
     ids.empty? ? klass.eight_most_recent : klass.where(['user_id NOT IN (?)', ids]).eight_most_recent 
   end
 
-  def recent(klass)
+  def community(klass)
     # filter_blocked also sorts/limits
     filter_blocked(klass).where(['user_id NOT IN (?)', [self.id]])
   end

@@ -44,7 +44,7 @@ class SlidesController < ApplicationController
     # todo dangerous?
     klass = @type.constantize
 
-    @community_slides = current_user.recent(klass)
+    @community_slides = current_user.community(klass)
     @friends_slides   = current_user.friends(klass)
 
     # respond_with klass.feed(current_user).to_json
@@ -52,7 +52,7 @@ class SlidesController < ApplicationController
   end
 
   def community
-    @slides = current_user.recent(@type.constantize).before_or_after(params)
+    @slides = current_user.community(@type.constantize).before_or_after(params)
 
     respond_with @slides
   end
