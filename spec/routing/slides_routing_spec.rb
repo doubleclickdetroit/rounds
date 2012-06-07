@@ -82,6 +82,10 @@ describe SlidesController do
         get("/api/sentences/friends").should route_to("slides#friends", :type => 'Sentence')
       end
 
+      it "routes to #private" do
+        get("/api/sentences/private").should route_to("slides#private", :type => 'Sentence')
+      end
+
     end
 
     context "Picture" do
@@ -100,6 +104,10 @@ describe SlidesController do
 
       it "routes to #friends" do
         get("/api/pictures/friends").should route_to("slides#friends", :type => 'Picture')
+      end
+
+      it "routes to #private" do
+        get("/api/pictures/private").should route_to("slides#private", :type => 'Picture')
       end
 
     end

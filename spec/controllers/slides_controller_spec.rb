@@ -247,72 +247,74 @@ describe SlidesController do
   describe 'GET private' do
     pending 'unhappy path'
 
-    before(:each) do
-      other_user_id  = 1
-      friend_user_id = 2
+    pending 'spec this like friends i guess'
 
-      User.any_instance.stub(:friends_user_ids).and_return([friend_user_id])
+    # before(:each) do
+    #   other_user_id  = 1
+    #   friend_user_id = 2
 
-      @time = Time.now
+    #   User.any_instance.stub(:friends_user_ids).and_return([friend_user_id])
 
-      params = {}
-      params[:created_at] = @time
-      params[:user_id]    = other_user_id
+    #   @time = Time.now
 
-      # other slides
-      2.times { FactoryGirl.create(:sentence, params) }
-      2.times { FactoryGirl.create(:picture, params) }
+    #   params = {}
+    #   params[:created_at] = @time
+    #   params[:user_id]    = other_user_id
 
-      # friends slides
-      params[:user_id] = friend_user_id
-      5.times { FactoryGirl.create(:sentence, params) }
-      5.times { FactoryGirl.create(:picture, params) }
-      @time += 30 # arbitrary
-      params[:created_at] = @time
-      4.times { FactoryGirl.create(:sentence, params) }
-      4.times { FactoryGirl.create(:picture, params) }
-    end
+    #   # other slides
+    #   2.times { FactoryGirl.create(:sentence, params) }
+    #   2.times { FactoryGirl.create(:picture, params) }
 
-    [Sentence,Picture].each do |klass|
-      it "should return [] if " do
-        pending
-        User.any_instance.stub(:invitations).and_return([])
+    #   # friends slides
+    #   params[:user_id] = friend_user_id
+    #   5.times { FactoryGirl.create(:sentence, params) }
+    #   5.times { FactoryGirl.create(:picture, params) }
+    #   @time += 30 # arbitrary
+    #   params[:created_at] = @time
+    #   4.times { FactoryGirl.create(:sentence, params) }
+    #   4.times { FactoryGirl.create(:picture, params) }
+    # end
 
-        get :private, {:type => klass.to_s}, valid_session
+    # [Sentence,Picture].each do |klass|
+    #   it "should return [] if " do
+    #     pending
+    #     User.any_instance.stub(:invitations).and_return([])
 
-        assigns(:slides).should == []
-      end
-    end
+    #     get :private, {:type => klass.to_s}, valid_session
 
-    context 'without time arg' do
-      [Sentence,Picture].each do |klass|
-        it "should return the most recent slides by friends of the proper type (#{klass.to_s}) with no time arg" do
-          pending 'not converted'
-          pending 'proper auth/friends_ids'
-          get :friends, {:type => klass.to_s}, valid_session
+    #     assigns(:slides).should == []
+    #   end
+    # end
 
-          slides = assigns(:slides)
+    # context 'without time arg' do
+    #   [Sentence,Picture].each do |klass|
+    #     it "should return the most recent slides by friends of the proper type (#{klass.to_s}) with no time arg" do
+    #       pending 'not converted'
+    #       pending 'proper auth/friends_ids'
+    #       get :friends, {:type => klass.to_s}, valid_session
 
-          slides.count.should == 8 # todo spec most recent instead
-          slides.all?{|s|s.instance_of?(klass)}.should be_true
-        end
-      end
-    end
+    #       slides = assigns(:slides)
 
-    context 'with time arg' do
-      [Sentence,Picture].each do |klass|
-        it "should return the slides by friends before the proper time and of the proper type (#{klass.to_s})" do
-          pending 'not converted'
-          pending 'failing on @time'
-          get :friends, {:type => klass.to_s, :time => @time}, valid_session
+    #       slides.count.should == 8 # todo spec most recent instead
+    #       slides.all?{|s|s.instance_of?(klass)}.should be_true
+    #     end
+    #   end
+    # end
 
-          slides = assigns(:slides)
+    # context 'with time arg' do
+    #   [Sentence,Picture].each do |klass|
+    #     it "should return the slides by friends before the proper time and of the proper type (#{klass.to_s})" do
+    #       pending 'not converted'
+    #       pending 'failing on @time'
+    #       get :friends, {:type => klass.to_s, :time => @time}, valid_session
 
-          slides.count.should == 5 
-          slides.all?{|s|s.instance_of?(klass)}.should be_true
-        end
-      end
-    end
+    #       slides = assigns(:slides)
+
+    #       slides.count.should == 5 
+    #       slides.all?{|s|s.instance_of?(klass)}.should be_true
+    #     end
+    #   end
+    # end
 
   end
 

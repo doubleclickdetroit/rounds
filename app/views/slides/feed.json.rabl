@@ -1,6 +1,8 @@
 object @type => 'feed'
 
-node(:private) { [] }
+child @private_slides => 'private' do
+  extends 'slides/private'
+end
 
 child @friends_slides => 'friends' do
   extends 'slides/friends'

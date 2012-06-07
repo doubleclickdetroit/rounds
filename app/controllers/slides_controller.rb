@@ -46,6 +46,7 @@ class SlidesController < ApplicationController
 
     @community_slides = current_user.community(klass)
     @friends_slides   = current_user.friends(klass)
+    @private_slides   = current_user.private(klass)
 
     # respond_with klass.feed(current_user).to_json
     respond_with 'slides/feed'
@@ -64,8 +65,7 @@ class SlidesController < ApplicationController
   end
 
   def private
-    # @slides = current_user.private(@type.constantize).before_or_after(params)
-    @slides = []
+    @slides = current_user.private(@type.constantize).before_or_after(params)
 
     respond_with @slides
   end

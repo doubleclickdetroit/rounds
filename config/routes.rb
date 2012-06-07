@@ -82,12 +82,14 @@ Draw::Application.routes.draw do
     scope 'sentences' do
       match '/community' => 'slides#community', :type => 'Sentence'
       match '/friends'   => 'slides#friends',   :type => 'Sentence'
+      match '/private'   => 'slides#private',   :type => 'Sentence'
     end
 
     # todo cleaner
     scope 'pictures' do
       match '/community' => 'slides#community', :type => 'Picture'
       match '/friends'   => 'slides#friends',   :type => 'Picture'
+      match '/private'   => 'slides#private',   :type => 'Picture'
     end
     ##### END MESS
 
