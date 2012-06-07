@@ -7,6 +7,9 @@ define [], ->
 		ajax:
 			complete: true
 
+		resource:
+			subscribe: true
+
 		streams:
 			show: true
 
