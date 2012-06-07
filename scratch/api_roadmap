@@ -7,10 +7,13 @@ X round completion
 \ private rounds
   X own feed
   _ not visible in other feeds
+    | .includes(:round).where('rounds.private = ?', true)
+    | add private column to slides
 
 _ filter feeds
   _ filter private out of friends
-  _ filter friends out of community
+  _ filter private out of community
+  X filter friends out of community
 
 _ gamification
   _ pick gem and install

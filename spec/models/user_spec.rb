@@ -228,7 +228,9 @@ describe User do
     end
 
     [Picture, Sentence].each do |klass|
+
       describe "for #{klass}" do
+
         before(:each) do
           @klass_sym = klass.to_s.downcase.intern
 
@@ -241,82 +243,6 @@ describe User do
           @blocked_users     = FactoryGirl.create(@klass_sym, :user => @blocked)
           @invited_private   = FactoryGirl.create(@klass_sym, :user => @blocked, :round => @private_round)
           # @uninvited_private = FactoryGirl.create(@klass_sym, :user => @blocked, :round => @private_round)
-        end
-
-        pending 'uninvited private (already specd in model?)'
-
-        describe '#private' do
-          it 'should return [] if the user has no invitations' do
-            @user.invitations.destroy_all
-
-            @user.private(klass).should == []
-          end
-
-          it "should return only instances of the #{klass} for which the has been privately invited to" do
-            @user.invitations.should == [@invitation]
-            @invitation.private.should be_true
-            @private_round.slides << @friends
-            @user.private(klass).should == [@friends]
-          end
-
-          it "should not return #{klass.to_s.pluralize} for the User" do
-            @user.invitations.should == [@invitation]
-            @invitation.private.should be_true
-            @private_round.slides << @friends
-            @private_round.slides << @mine
-            @user.private(klass).should == [@friends]
-          end
-          it "should not return instances of the #{klass} for which the user_id is in blocked_user_ids" 
-        end
-      end
-    end
-
-    klasses = [Round, Slide, Comment]
-
-    klasses.each do |klass|
-      context "for #{klass}" do
-        before(:each) do
-          @klass_sym = klass.to_s.downcase.intern
-
-          @mine          = FactoryGirl.create(@klass_sym, :user => @user)
-          @friends       = FactoryGirl.create(@klass_sym, :user => @friend)
-          @strangers     = FactoryGirl.create(@klass_sym, :user => @stranger)
-          @blocked_users = FactoryGirl.create(@klass_sym, :user => @blocked)
-        end
-
-        describe '.own' do
-          before(:each) do
-            @plural     = klass.to_s.pluralize
-            @plural_sym = @plural.downcase.intern
-
-            8.times { FactoryGirl.create(@klass_sym, :user => @user) }
-
-            # latest created not by @user
-            FactoryGirl.create(@klass_sym, :user => @friend)
-            FactoryGirl.create(@klass_sym, :user => @stranger)
-          end
-
-          it "should return [] if the User has no #{@plural}" do
-            instances = @user.send @plural_sym
-            instances.destroy_all
-            instances.reload.count.should == 0
-
-            @user.own(klass).count.should == 0
-          end
-
-          it 'should only return results for the User' do
-            instances = @user.send @plural_sym
-            instances.all {|i| i.instance_of? klass}.should be_true
-          end
-
-          it 'should sort the results'
-
-          it 'should limit the results to 8' do
-            instances = @user.send @plural_sym
-            instances.count.should == 9
-
-            @user.own(klass).count.should == 8
-          end
         end
 
         describe '.filter_blocked' do
@@ -338,6 +264,31 @@ describe User do
             klass.count.should > 8
             @user.filter_blocked(klass).count == 8
           end
+        end
+
+        pending 'uninvited private (already specd in model?)'
+        describe '.private' do
+          it 'should return [] if the user has no invitations' do
+            @user.invitations.destroy_all
+
+            @user.private(klass).should == []
+          end
+
+          it "should return only instances of the #{klass} for which the has been privately invited to" do
+            @user.invitations.should == [@invitation]
+            @invitation.private.should be_true
+            @private_round.slides << @friends
+            @user.private(klass).should == [@friends]
+          end
+
+          it "should not return #{klass.to_s.pluralize} for the User" do
+            @user.invitations.should == [@invitation]
+            @invitation.private.should be_true
+            @private_round.slides << @friends
+            @private_round.slides << @mine
+            @user.private(klass).should == [@friends]
+          end
+          it "should not return instances of the #{klass} for which the user_id is in blocked_user_ids" 
         end
 
         describe '.friends' do
@@ -408,7 +359,61 @@ describe User do
         end
 
       end
+
     end
+  end
+
+  describe '- User feeds -' do
+
+    [Round, Slide, Comment].each do |klass|
+      context "for #{klass}" do
+        before(:each) do
+          @klass_sym = klass.to_s.downcase.intern
+
+          @mine          = FactoryGirl.create(@klass_sym, :user => @user)
+          @friends       = FactoryGirl.create(@klass_sym, :user => @friend)
+          @strangers     = FactoryGirl.create(@klass_sym, :user => @stranger)
+          @blocked_users = FactoryGirl.create(@klass_sym, :user => @blocked)
+        end
+
+        describe '.own' do
+          before(:each) do
+            @plural     = klass.to_s.pluralize
+            @plural_sym = @plural.downcase.intern
+
+            8.times { FactoryGirl.create(@klass_sym, :user => @user) }
+
+            # latest created not by @user
+            FactoryGirl.create(@klass_sym, :user => @friend)
+            FactoryGirl.create(@klass_sym, :user => @stranger)
+          end
+
+          it "should return [] if the User has no #{@plural}" do
+            instances = @user.send @plural_sym
+            instances.destroy_all
+            instances.reload.count.should == 0
+
+            @user.own(klass).count.should == 0
+          end
+
+          it 'should only return results for the User' do
+            instances = @user.send @plural_sym
+            instances.all {|i| i.instance_of? klass}.should be_true
+          end
+
+          it 'should sort the results'
+
+          it 'should limit the results to 8' do
+            instances = @user.send @plural_sym
+            instances.count.should == 9
+
+            @user.own(klass).count.should == 8
+          end
+        end
+
+      end
+    end
+
   end
 
 end
