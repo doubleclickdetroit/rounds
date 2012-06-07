@@ -81,12 +81,12 @@ FactoryGirl.create(:authorization, :user_id => @ammar.id, :provider => 'facebook
 @users << @ammar
 print '.'
 
-@ben   = FactoryGirl.create(:user, :name => 'Ben Babics')
+@ben   = FactoryGirl.create(:user, :name => 'Ben Babics', :friend_ids_csv => '3')
 FactoryGirl.create(:authorization, :user_id => @ben.id, :provider => 'facebook', :uid => '500032277')
 @users << @ben
 print '.'
 
-@brad  = FactoryGirl.create(:user, :name => 'Brad Chase')
+@brad  = FactoryGirl.create(:user, :name => 'Brad Chase', :friend_ids_csv => '2')
 FactoryGirl.create(:authorization, :user_id => @brad.id, :provider => 'facebook', :uid => '30118972')
 @users << @brad
 print '.'
