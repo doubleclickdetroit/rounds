@@ -39,7 +39,7 @@ IMPLEMENTED
       GET /api/comments
 
   Rounds 
-    C POST    /api/rounds/
+    C POST    /api/rounds/:slide_limit
     R GET     /api/rounds/:id
   # U PUT     /api/rounds/:id
     D DELETE  /api/rounds/:id
