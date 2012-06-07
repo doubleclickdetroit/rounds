@@ -4,8 +4,8 @@ X round completion
   X completion callbacks
     X compile completed round image
 
-_ private rounds
-  _ own feed
+\ private rounds
+  X own feed
   _ not visible in other feeds
 
 _ filter feeds
