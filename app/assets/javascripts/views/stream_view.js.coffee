@@ -3,6 +3,7 @@ define [], (require) ->
 	$ = require "jquery"
 	_ = require "underscore"
 
+	mediator    = require "utils/mediator"
 	Slides      = require "collections/slides"
 	SlidesView  = require "views/slides_view"
 
@@ -17,7 +18,7 @@ define [], (require) ->
 			do @bootstrap
 
 		render: ->
-			$('#main').append @el
+			mediator.publish 'streams', 'render', @
 
 		bootstrap: ->
 			self = @

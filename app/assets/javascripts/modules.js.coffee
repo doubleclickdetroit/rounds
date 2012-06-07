@@ -8,9 +8,12 @@ define [], (require) ->
 	RoundView  = require "views/round_view"
 	StreamView = require "views/stream_view"
 
+	get_main_content = ->
+		$ '#main'
+
 
 	clear_main_content = ->
-		do $('#main').empty
+		do get_main_content().empty
 
 
 	facade.subscribe 'ajax', 'complete', (xhr) ->
@@ -26,6 +29,10 @@ define [], (require) ->
 
 		# authenticate with PrivatePub/Faye server
 		PrivatePub.sign subscription
+
+
+	facade.subscribe 'streams','render', (context) ->
+		get_main_content().append context.el
 
 
 	facade.subscribe 'streams', 'show', (->

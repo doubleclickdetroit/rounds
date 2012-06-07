@@ -11,11 +11,12 @@ define [], ->
 			subscribe: true
 
 		streams:
-			show: true
+			render: true
+			show  : true
 
 		round:
-			show  : true
 			render: true
+			show  : true
 
 		slides:
 			render: true
