@@ -28,7 +28,7 @@ gem 'jquery-rails'
 gem 'haml-rails'
 gem 'html5-rails', :git => 'git://github.com/sporkd/html5-rails.git'
 gem 'rails-backbone'
-gem 'requirejs-rails'
+gem 'requirejs-rails', git: 'git://github.com/jwhitley/requirejs-rails.git'
 
 group :development, :test do
   gem 'webrick'
