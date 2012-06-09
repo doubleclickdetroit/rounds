@@ -1,5 +1,5 @@
 - if current_user
-	= image_tag session[:image]
+	= image_tag current_user.image_path || 'dne.png'
 	= "| Logged in as #{current_user.name} | "
 	= link_to "Sign out", signout_path
 
