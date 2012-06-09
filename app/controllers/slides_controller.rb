@@ -1,7 +1,7 @@
 class SlidesController < ApplicationController
 
   before_filter :check_for_round_id, :only => :create # [:index,:create]
-  before_filter :check_for_type, :only => [:create,:feed,:community,:friends]
+  before_filter :check_for_type, :only => [:create,:feed,:community,:friends,:private]
   before_filter :force_current_user_id, :only => :create
   
   respond_to :json
@@ -39,27 +39,35 @@ class SlidesController < ApplicationController
 
 
   # RESTless
+  # todo not real DRY
   def feed
     # todo dangerous?
     klass = @type.constantize
 
-    @community_slides = current_user.recent(klass)
+    @community_slides = current_user.community(klass)
     @friends_slides   = current_user.friends(klass)
+    @private_slides   = current_user.private(klass)
 
     # respond_with klass.feed(current_user).to_json
     respond_with 'slides/feed'
   end
 
   def community
-    @slides = current_user.recent(@type.constantize).before_or_after(params)
+    @slides = current_user.community(@type.constantize).before_or_after(params)
 
-    respond_with @slides
+    render 'slides/index' 
   end
 
   def friends
     @slides = current_user.friends(@type.constantize).before_or_after(params)
 
-    respond_with @slides
+    render 'slides/index' 
+  end
+
+  def private
+    @slides = current_user.private(@type.constantize).before_or_after(params)
+
+    render 'slides/index' 
   end
 
 

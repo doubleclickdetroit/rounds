@@ -4,11 +4,12 @@ class UserFeedController < ApplicationController
 
   def show
     @user = set_user params, allow_user_id: true
+    is_current_user = @user == current_user
     
-    @rounds   = @user.own(Round)
-    @slides   = @user.own(Slide)
-    @comments = @user.own(Comment)
-    @ballots  = @user.own(Ballot)
+    @invitations = is_current_user ? @user.own(Invitation) : []
+    @slides      = @user.own(Slide)
+    @comments    = @user.own(Comment)
+    @ballots     = @user.own(Ballot)
 
     @skip_user = true
     respond_with 'user_feed/show'

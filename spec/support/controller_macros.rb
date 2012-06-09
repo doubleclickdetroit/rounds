@@ -39,9 +39,12 @@ module ControllerMacros
           @instance = FactoryGirl.create(@sym, attrs)
 
           attrs[@parent_id_sym] = @parent.id + 1
-          if klass == Ballot
+          case @instance
+          when Ballot
             Ballot.any_instance.stub(:increment_slide_votes).and_return(true)
             attrs['user_id'] = attrs['user_id'] + 1
+          when Invitation
+            Invitation.any_instance.stub(:set_privacy).and_return(true)
           end
           FactoryGirl.create(@sym, attrs)
 

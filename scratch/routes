@@ -38,7 +38,8 @@ IMPLEMENTED
       GET /api/comments
 
   Rounds 
-    C POST    /api/rounds/
+    C POST    /api/rounds/:slide_limit         # creates public Round
+    C POST    /api/rounds/:slide_limit/private # creates private Round
     R GET     /api/rounds/:id
   # U PUT     /api/rounds/:id
     D DELETE  /api/rounds/:id
@@ -89,7 +90,7 @@ IMPLEMENTED
         I GET     /api/comments/?slide_id=:slide_id
 
       Ballots, :vote must be an integer between 1 and 5
-        C POST    /api/slides/:slide_id/votes/:vote
+        C POST    /api/slides/:slide_id/vote/:vote
 
   BlacklistEntries (current user is derived from session)
     C POST    /api/providers/:provider/users/:uid/block/

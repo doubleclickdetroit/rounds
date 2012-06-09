@@ -51,7 +51,11 @@ Draw::Application.routes.draw do
     match '/providers/:provider/users/:uid/ballots'  => 'ballots#index',  :via => :get
 
 
-    resources :rounds, :except => [:index,:update,:new,:edit] do
+    resources :rounds, :except => [:create,:index,:update,:new,:edit] do
+      collection do
+        post '/:slide_limit'         => 'rounds#create'
+        post '/:slide_limit/private' => 'rounds#create', :private => true
+      end
       # todo DRY?
       match     'sentences' => 'slides#create', :type => 'Sentence', :via => :post
       match     'pictures'  => 'slides#create', :type => 'Picture',  :via => :post
@@ -70,7 +74,7 @@ Draw::Application.routes.draw do
       resources :comments, :except => [:show,:new,:edit]
 
       resources :ballots, :only => [:index]
-      match     'vote/:vote' => 'ballots#create'
+      match     'vote/:vote' => 'ballots#create', via: :post
     end
 
     ##### BEGIN MESS
@@ -82,12 +86,14 @@ Draw::Application.routes.draw do
     scope 'sentences' do
       match '/community' => 'slides#community', :type => 'Sentence'
       match '/friends'   => 'slides#friends',   :type => 'Sentence'
+      match '/private'   => 'slides#private',   :type => 'Sentence'
     end
 
     # todo cleaner
     scope 'pictures' do
       match '/community' => 'slides#community', :type => 'Picture'
       match '/friends'   => 'slides#friends',   :type => 'Picture'
+      match '/private'   => 'slides#private',   :type => 'Picture'
     end
     ##### END MESS
 

@@ -1,11 +1,13 @@
 object @type => 'feed'
 
-node(:private) { [] }
-
-child @friends_slides => 'friends' do
-  extends 'slides/friends'
+node :private do
+  partial 'slides/index', object: @private_slides
 end
 
-child @community_slides => 'community' do
-  extends 'slides/community'
+node :friends do
+  partial 'slides/index', object: @friends_slides
+end
+
+node :community do
+  partial 'slides/index', object: @community_slides
 end

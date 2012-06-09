@@ -16,10 +16,13 @@ gem 'rabl'
 gem 'factory_girl_rails'
 
 gem "paperclip", "~> 2.7"
+gem 'rmagick'
 
 gem 'private_pub'
 
 gem 'coffee-filter'
+
+gem 'pry-rails'
 
 gem 'jquery-rails'
 gem 'haml-rails'

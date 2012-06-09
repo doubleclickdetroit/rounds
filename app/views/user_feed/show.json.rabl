@@ -2,8 +2,8 @@ object @user
 
 attributes :id, :name, :image_path
 
-node :rounds do
-  partial("rounds/index", :object => @rounds)
+node :invitations do
+  partial("invitations/index", :object => @invitations)
 end
 
 node :slides do

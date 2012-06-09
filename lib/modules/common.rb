@@ -21,7 +21,7 @@ module Common
             where(['user_id NOT IN (?)', user_id_arr])
           }
 
-          scope :eight_most_recent, limit: 8, order: 'id DESC'
+          scope :eight_most_recent, lambda { limit(8).order("#{self.table_name}.id DESC") }
         end
       end
     end

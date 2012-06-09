@@ -32,7 +32,7 @@ X   - POST /api/rounds/:round_id/sentences {:sentence => {...}} # checks for Rou
   the user then clicks '+' to create a new round, chooses to draw a picture, draws, and submits it
     # create round
     # also creates round lock
-X   - POST /api/rounds/ # HOLD ONTO RETURNED ID
+X   - POST /api/rounds/:slide_limit # HOLD ONTO RETURNED ID
     #create picture
 X   - POST /api/rounds/:round_id/pictures {:picture => {...}} # needs to ignore the need for RoundLock for an empty round...
     # destroys round lock

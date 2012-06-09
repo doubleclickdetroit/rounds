@@ -8,24 +8,39 @@ define [], (require) ->
 	RoundView  = require "views/round_view"
 	StreamView = require "views/stream_view"
 
+	get_main_content = ->
+		$ '#main'
 
-	facade.subscribe 'XHRHandleResponse',(xhr) ->
+
+	clear_main_content = ->
+		do get_main_content().empty
+
+
+	facade.subscribe 'ajax', 'complete', (xhr) ->
 		do window.location.reload if xhr.status is 601
 		@
 
 
-	facade.subscribe 'emptyMainContent', ->
-		do $('#main').empty
-		@
+	facade.subscribe 'resource', 'subscribe', (conf, callback) ->
+		subscription = conf.subscription
+
+		# subscribe to subsequent channel with callback
+		PrivatePub.subscribe subscription.channel, callback
+
+		# authenticate with PrivatePub/Faye server
+		PrivatePub.sign subscription
 
 
-	facade.subscribe 'navigateIndex', (->
+	facade.subscribe 'streams','render', (context) ->
+		get_main_content().append context.el
 
+
+	facade.subscribe 'streams', 'show', (->
 		streams      = {}
 		has_rendered = false
 
 		renderDelegation = ->
-			facade.publish 'emptyMainContent'
+			do clear_main_content
 			if has_rendered is on then do reRender else do initRender
 			@
 
@@ -46,24 +61,25 @@ define [], (require) ->
 	)()
 
 
-	facade.subscribe 'navigateRound', (round_id) ->
-		facade.publish 'emptyMainContent'
-
+	facade.subscribe 'round', 'show', (round_id) ->
 		# eventually abstract this layer into a factory
-		new RoundView "round_id": round_id
+		round = new RoundView "round_id": round_id
+		do round.render
 		@
 
 
-	facade.subscribe 'renderRound', (context) ->
+	facade.subscribe 'round', 'render', (context) ->
 		# console.log 'renderRound', context
+		clear_main_content().append context.el
+		do context.collection.fetch
 		@
 
 
-	facade.subscribe 'renderSlides', (context) ->
+	facade.subscribe 'slides', 'render', (context) ->
 		# console.log 'renderSlides', context
 		@
 
 
-	facade.subscribe 'renderSlide', (context, slide) ->
+	facade.subscribe 'slide', 'render', (context, slide) ->
 		# console.log 'renderSlide', context, slide
 		@

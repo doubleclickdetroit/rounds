@@ -17,23 +17,37 @@ define [], (require) ->
 		# cache template fn for single item
 		template: _.template round_tmpl
 
+		events: "click button" : "watchRound"
+
 		initialize: ->
 			_.bindAll @, 'addOne', 'addAll', 'render'
 
-			console.log @options
-			round_id = @options.round.id
-			@collection = new Slides url: "/api/rounds/#{round_id}/slides"
+			@round_id = @options.round_id
+			@collection = new Slides url: "/api/rounds/#{@round_id}/slides"
 
 			@collection.bind 'add',   @addOne
 			@collection.bind 'reset', @addAll
 
-			do @render
-			do @collection.fetch
-
 		render: ->
-			$('#main').html @$el.append round_tmpl
-			mediator.publish 'renderRound', @
+			@$el.append round_tmpl
+			mediator.publish 'round', 'render', @
+			do @setLock
 			@
+
+		watchRound: ->
+			# create a Watching for this round
+			$.post( "/api/rounds/#{@round_id}/watch" ).done (resp) ->
+				mediator.publish 'resource', 'subscribe', resp, (data) ->
+					alert data.message
+
+		setLock: ->
+			$h2  = $('h2', @$el)
+			text = $h2.text().replace "LOCKED", ""
+
+			# I think this will go in the model and we'll hit a getter from the model?
+			$.ajax( "/api/rounds/#{@round_id}/lock" ).done (resp) ->
+				mediator.publish 'resource', 'subscribe', resp, (data) ->
+					$h2.text "#{text} #{data.locked and 'LOCKED' or ''}"
 
 		addOne: (slide) ->
 			view = new SlideView model: slide
@@ -41,6 +55,6 @@ define [], (require) ->
 
 		addAll: ->
 			@collection.each @addOne
-		
+
 
 	RoundView

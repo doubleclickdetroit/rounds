@@ -28,6 +28,36 @@ describe Invitation do
     end
   end
 
+  describe '#private' do
+    before(:each) do
+      round       = FactoryGirl.create(:round, :private => false)
+      @public_inv = FactoryGirl.create(:invitation, round: round)
+
+      round        = FactoryGirl.create(:round, :private => true)
+      @private_inv = FactoryGirl.create(:invitation, round: round)
+    end
+
+    it 'should scope only Invitations that are private' do
+      Invitation.private.should == [@private_inv]
+    end
+  end
+
+  describe '- After Create Callbacks -' do
+    pending 'should probably be done before_create'
+
+    it 'should set private to false if it is not to a private Round' do
+      @round      = FactoryGirl.create(:round, :private => false)
+      @invitation = FactoryGirl.create(:invitation, round: @round)
+      @invitation.private.should be_false
+    end
+
+    it 'should set private to true if it is to a private Round' do
+      @round      = FactoryGirl.create(:round, :private => true)
+      @invitation = FactoryGirl.create(:invitation, round: @round)
+      @invitation.private.should be_true
+    end
+  end
+
   klass = Invitation
 
   it_should_have_a_creator(klass)
