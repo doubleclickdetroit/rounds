@@ -111,7 +111,7 @@ print "\n  ** Rounds (public) "
 
 @rounds = []
 
-20.times do 
+50.times do 
   round = FactoryGirl.create(:round, :user_id => random_user().id)
   print '.'
   @rounds << round
@@ -173,25 +173,27 @@ end
 print "\n  ** Rounds (private) "
 
 @users.each do |user|
-  @round = FactoryGirl.create(:round, user_id: user, :private => true)
+  2.times do
+    @round = FactoryGirl.create(:round, user_id: user, :private => true)
 
-  # build two slides for round
-  if [true,false].sample
-    make_sentence 
-    make_picture 
-  else
-    make_picture 
-    make_sentence 
+    # build two slides for round
+    if [true,false].sample
+      make_sentence 
+      make_picture 
+    else
+      make_picture 
+      make_sentence 
+    end
+
+    # invite other users
+    @users.reject{|u|u==user}.each do |u|
+      FactoryGirl.create(:invitation, user_id:user.id, invited_user_id:u.id, round_id:@round.id)
+    end
+
+    @round.save
+
+    print '.'
   end
-
-  # invite other users
-  @users.reject{|u|u==user}.each do |u|
-    FactoryGirl.create(:invitation, user_id:user.id, invited_user_id:u.id, round_id:@round.id)
-  end
-
-  @round.save
-
-  print '.'
 end
 
 
