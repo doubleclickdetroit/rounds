@@ -99,10 +99,6 @@ IMPLEMENTED
 
   Resources belonging to user identified by user_id, provider/uid, or current user
     NOTE: these return the 8 most recent, client can request older and new by id
-    Rounds 
-      I GET     /api/providers/:provider/users/:uid/rounds/
-      I GET     /api/users/:user_id/rounds/
-      I GET     /api/users/me/rounds/
     Slides
       I GET     /api/providers/:provider/users/:uid/slides/
       I GET     /api/users/:user_id/slides/
