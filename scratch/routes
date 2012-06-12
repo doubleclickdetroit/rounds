@@ -17,6 +17,10 @@ Watching a Round that is locked
   POST /api/rounds/:round_id/lock  # apply for the lock
   POST /api/rounds/:round_id/watch # watch the lock (be notified upon resolution)
 
+Pagination
+  GET /api/sentences/community?before=:id # sentences with id < :id
+  GET /api/sentences/community?after=:id  # sentences with id > :id
+
 
   ***** WHERE DO COMPLETED ROUND FEEDS GO? *****
   ***** WHERE DO INVITATION FEEDS GO? *****
@@ -26,17 +30,19 @@ IMPLEMENTED
 
   (Slide) Feeds, all can be passed ?time=[time] to fetch rows before that time
     GET /api/sentences
-    * GET /api/sentences/private
+      GET /api/sentences/private
       GET /api/sentences/friends
       GET /api/sentences/community
     GET /api/pictures
-    * GET /api/pictures/private
+      GET /api/pictures/private
       GET /api/pictures/friends
       GET /api/pictures/community
-  * GET /api/me
-      GET /api/rounds
-      GET /api/slides
-      GET /api/comments
+    GET /api/me
+      GET /api/users/me/invitations/
+      GET /api/users/me/slides/
+      GET /api/users/me/comments/
+      GET /api/users/me/ballots/
+      GET /api/users/me/watchings/
 
   Rounds 
     C POST    /api/rounds/:slide_limit         # creates public Round
@@ -46,18 +52,25 @@ IMPLEMENTED
     D DELETE  /api/rounds/:id
     I GET     /api/rounds/ # NOTE: this is for rounds for current user
 
+  ? Invitations - THESE ROUTES MAY BE CHANGING
+      C POST    /api/rounds/:round_id/invitations/?provider=...&uid=...
+    # R GET     /api/rounds/:round_id/invitations/
+    # U PUT     /api/rounds/:round_id/invitations/
+      D DELETE  /api/rounds/:round_id/invitations/:id
+      I GET     /api/rounds/:round_id/invitations/
+
     RoundLocks
       C POST    /api/rounds/:round_id/lock/
       R GET     /api/rounds/:round_id/lock/
     # U PUT     /api/rounds/:round_id/lock/
       D DELETE  /api/rounds/:round_id/lock/
 
-      Watchings
-        C POST    /api/rounds/:round_id/watch
-      # R GET     /api/rounds/:round_id/watch
-      # U PUT     /api/rounds/:round_id/watch
-        D DELETE  /api/rounds/:round_id/watch
-        I GET     /api/users/me/watchings
+    Watchings
+      C POST    /api/rounds/:round_id/watch
+    # R GET     /api/rounds/:round_id/watch
+    # U PUT     /api/rounds/:round_id/watch
+      D DELETE  /api/rounds/:round_id/watch
+      I GET     /api/users/me/watchings
     
     Slides, round_id and type ('Sentence' or 'Picture') required for create and index
       Sentences
@@ -119,20 +132,3 @@ IMPLEMENTED
       I GET     /api/providers/:provider/users/:uid/ 
       I GET     /api/users/:user_id/                
       I GET     /api/users/me/                     
-
-
-WORKING ON THE FOLLOWING
-
-  Invitations - THESE ROUTES MAY BE CHANGING
-    C POST    /api/rounds/:round_id/invitations/?provider=...&uid=...
-  # R GET     /api/rounds/:round_id/invitations/
-  # U PUT     /api/rounds/:round_id/invitations/
-    D DELETE  /api/rounds/:round_id/invitations/:id
-    I GET     /api/rounds/:round_id/invitations/
-      
-UNIMPLEMENTED
-
-  Users
-    Feeds - optional param 'time' (otherwise returns most recent)
-      GET   /api/users/activity # only the activity for current_user
-      GET   /api/users/whats_hot
