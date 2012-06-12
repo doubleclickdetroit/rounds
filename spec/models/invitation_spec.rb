@@ -58,6 +58,35 @@ describe Invitation do
     end
   end
 
+  describe 'validation' do
+    before(:each) do
+      @owner      = FactoryGirl.create(:user)
+      @publ_round  = FactoryGirl.create(:round, :private => false, user: @owner)
+      @priv_round = FactoryGirl.create(:round, :private => true,  user: @owner)
+      @other_user = FactoryGirl.create(:user)
+    end
+
+    it 'should allow any user to invite someone to a public round' do
+      expect {
+        FactoryGirl.create :invitation, user: @owner,      round: @publ_round 
+        FactoryGirl.create :invitation, user: @other_user, round: @publ_round 
+      }.should_not raise_error
+    end
+
+    it 'should not allow a user who is not the round creator to invite someone to a private round' do
+      expect {
+        FactoryGirl.create :invitation, user: @other_user, round: @priv_round 
+      }.should raise_error
+      # }.to change(Invitation, :count).by(0)
+    end
+
+    it 'should allow a user who is the round creator to invite someone to a private round' do
+      expect {
+        FactoryGirl.create :invitation, user: @owner,      round: @priv_round 
+      }.should_not raise_error
+    end
+  end
+
   klass = Invitation
 
   it_should_have_a_creator(klass)

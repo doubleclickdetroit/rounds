@@ -99,6 +99,8 @@ IMPLEMENTED
 
   Resources belonging to user identified by user_id, provider/uid, or current user
     NOTE: these return the 8 most recent, client can request older and new by id
+    Invitations
+      I GET     /api/users/me/invitations/
     Slides
       I GET     /api/providers/:provider/users/:uid/slides/
       I GET     /api/users/:user_id/slides/
@@ -113,8 +115,6 @@ IMPLEMENTED
       I GET     /api/users/me/ballots/
     Watchings
       I GET     /api/users/me/watchings/
-    Invitations
-      I GET     /api/users/me/invitations/
     ALL
       I GET     /api/providers/:provider/users/:uid/ 
       I GET     /api/users/:user_id/                
