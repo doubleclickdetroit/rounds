@@ -25,9 +25,11 @@ Pagination
   ***** WHERE DO COMPLETED ROUND FEEDS GO? *****
   ***** WHERE DO INVITATION FEEDS GO? *****
 
+Setting friend ids
+  POST /api/users/me/friends {provider:'facebook', uids:[1,2,3]}
 
 IMPLEMENTED
-
+  
   (Slide) Feeds, all can be passed ?time=[time] to fetch rows before that time
     GET /api/sentences
       GET /api/sentences/private
