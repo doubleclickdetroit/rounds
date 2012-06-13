@@ -13,4 +13,7 @@ describe UserFeedController do
     it 'should be much better specd :D'
   end
 
+  describe 'POST friends' do
+    it 'should update .friends for current_user'
+  end
 end

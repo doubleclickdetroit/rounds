@@ -14,4 +14,8 @@ class UserFeedController < ApplicationController
     @skip_user = true
     respond_with 'user_feed/show'
   end
+
+  def friends
+  end
+
 end

@@ -1,5 +1,6 @@
 class User < ActiveRecord::Base
   # todo left over from devise...
+  # todo friend_ids_csv should not be accessible?
   # attr_accessible :email, :password, :password_confirmation, :remember_me
 
   has_many :authorizations
@@ -48,6 +49,21 @@ class User < ActiveRecord::Base
     slides = remove([:blocked,:friends], from: klass)
   end
 
+  def set_friends(provider, uids)
+    contains_non_int = uids.any? {|uid| uid !~ /\d+/}
+    raise ArgumentError, 'All uids must be integer strings' if contains_non_int
+
+    user_ids = uids.map do |uid|
+      Authorization.find_by_provider_and_uid(provider, uid).try(:user_id)
+    end
+    user_ids.reject!(&:nil?)
+
+    self.friend_ids = user_ids
+    self.save
+
+    user_ids
+  end
+
   def friends(klass)
     # remove also sorts/limits
     remove([:blocked,:private], from: klass).where(['slides.user_id IN (?)', friend_ids])
@@ -91,18 +107,21 @@ class User < ActiveRecord::Base
     if friend_ids_csv.nil?
       return []
     else
-      # todo test this caching...
-      @friend_ids ||= friend_ids_csv.split(',')
+      # todo caching...
+      # @friend_ids ||= friend_ids_csv.split(',')
+      friend_ids_csv.split(',')
     end
-  end
-
-  def friend_ids=(arr)
-    raise ArgumentError unless arr.is_a?(Array)
-    self.friend_ids_csv = arr.join(',')
   end
 
   def blocked_user_ids
     blacklist_entries.map {|ble| ble.blocked_user_id}
   end
 
+# todo
+# private
+  # accessed by .set_friends(provider, uids)
+  def friend_ids=(arr)
+    raise ArgumentError unless arr.is_a?(Array)
+    self.friend_ids_csv = arr.join(',')
+  end
 end
