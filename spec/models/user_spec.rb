@@ -215,7 +215,7 @@ describe User do
     end
   end
 
-  describe '.set_friends', :focus do
+  describe '.set_friends' do
     pending 'may need to be more robust'
     it 'should sanitize input (only accept \d for uids)' do
       expect {
@@ -230,9 +230,10 @@ describe User do
       @user.friend_ids.should == []
 
       friend = FactoryGirl.create(:user)
-      FactoryGirl.create(:authorization, provider: 'facebook', uid: '1', user_id: friend.id)
+      uid    = '525'
+      FactoryGirl.create(:authorization, provider: 'facebook', uid: uid, user_id: friend.id)
 
-      @user.set_friends('facebook', ['1','2','3'])
+      @user.set_friends('facebook', ['1','2','3',uid])
 
       @user.reload
 

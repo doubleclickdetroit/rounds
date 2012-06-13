@@ -1,4 +1,5 @@
 class UserFeedController < ApplicationController
+  before_filter :check_for_provider_and_uids, only: [:friends]
 
   respond_to :json
 
@@ -16,6 +17,13 @@ class UserFeedController < ApplicationController
   end
 
   def friends
+    @user_ids = current_user.set_friends(params[:provider], params[:uids])
+    render json: @user_ids
   end
 
+private
+  def check_for_provider_and_uids
+    @provider, @uids = params[:provider], params[:uids]
+    head :not_acceptable unless @provider && @uids  
+  end
 end
