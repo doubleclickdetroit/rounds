@@ -6,6 +6,11 @@
 # # * points awarded on model layer via after_create callbacks
 # # * rank is calculated and saved within those callbacks if needed
 # # * badges are also calculated and saved within those callbacks if needed
+# # 
+# # points should be persisted three ways:
+# #   total points earned
+# #   total points purchased
+# #   total points possessed
 
 # config/initializers/gamification.rb
 
@@ -40,25 +45,36 @@ class User
   def earned pts
     info = {points: pts}
 
-    self.points += pts
-    info[:total_points] = self.points
+    # update points
+    info.merge! {total_points: (self.points += pts)}
 
+    # update rank
+    info.merge! check_and_update_ranks
+
+    self.save ? info : {error: 'didnt save'}
+  end
+
+  def check_and_update_ranks
+    info        = {}
+
+    # determine earned_rank
     rank_vals   = (RANKS.keys << self.points).sort.reverse
     earned_rank = rank_vals.slice rank_vals.index(self.points), 1
+
+    # update rank if necessary
     if self.rank != earned_rank
       self.rank = earned_rank unless self.rank == earned_rank
       info[:rank] = earned_rank
     end
-    
-    self.save ? info : {error: 'didnt save'}
+
+    info
   end
 
   def check_and_award_badges_for model
     my_badges = self.badges.map &:name
-    unearned_badges = (Set.new(BADGES[model].keys) ^ my_badges).to_a
-    unearned_badges.each do |badge_name|
-      test = BADGES[badge_name]
-      self.badges << Badge.where(name: badge_name) if test.call self
+    BADGES[model].each do |badge_name, badge_test|
+      next if my_badges.include? badge_name
+      self.badges << Badge.where(name: badge_name) if badge_test.call self
     end
   end
 
