@@ -9,6 +9,7 @@
 
 # config/initializers/gamification.rb
 
+# allows POINTS[Model][:action]
 POINTS = {
   Slide => {
     created: 5,
@@ -27,19 +28,53 @@ RANKS = {
 }
 
 BADGES = {
+  Slide => {
+    'Artist' => lambda {|user| user.pictures.count  > 20},
+    'Author' => lambda {|user| user.sentences.count > 20}
+  }
 }
 
 # app/models/user.rb
 
 class User
+  def created model
+    # score the creation
+    info = earned POINTS[model][:created]
+
+    # award badges
+    my_badges = self.badges.map &:name
+    unearned_badges = (Set.new(BADGES[model].keys) ^ my_badges).to_a
+    unearned_badges.each do |badge_name|
+      test = BADGES[badge_name]
+      self.badges << Badge.where(name: badge_name) if test.call self
+    end
+
+    self.save
+    info
+  end
+
+  def had model
+    # go go super monkey patch!
+    self.instance_eval do
+      define_method :model_for_had do
+        model
+      end
+    end
+  end
+
+  def added_to_round
+    # model monkeypatched in from .had
+    POINTS[model][:added_to_round]
+  end
+
   def earned pts
     info = {points: pts}
 
     self.points += pts
     info[:total_points] = self.points
 
-    rank_vals   = RANKS.keys << self.points
-    earned_rank = RANKS.fetch rank_vals.index(self.points)-1 # todo this would wrap... do as a set?
+    rank_vals   = (RANKS.keys << self.points).sort.reverse
+    earned_rank = rank_vals.slice rank_vals.index(self.points), 1
     if self.rank != earned_rank
       self.rank = earned_rank unless self.rank == earned_rank
       info[:rank] = earned_rank
@@ -55,7 +90,63 @@ class Slide
   after_create :distribute_points
 private
   def distribute_points
+    # could also pass self as arg
+    creator.created Slide
+    round.creator.had(Slide).added_to_round unless round.creator == creator
+  end
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# other
+
+class User
+  def earned pts
+    info = {points: pts}
+
+    self.points += pts
+    info[:total_points] = self.points
+
+    rank_vals   = (RANKS.keys << self.points).sort.reverse
+    earned_rank = rank_vals.slice rank_vals.index(self.points), 1
+    if self.rank != earned_rank
+      self.rank = earned_rank unless self.rank == earned_rank
+      info[:rank] = earned_rank
+    end
+    
+    self.save ? info : {error: 'didnt save'}
+  end
+end
+class Slide
+  after_create :distribute_points
+private
+  def distribute_points
+    # could also pass self to first hash
     creator.earned POINTS[Slide][:created]
     round.creator.earned POINTS[Slide][:added_to_round] unless round.creator == creator
   end
 end
+# OR
