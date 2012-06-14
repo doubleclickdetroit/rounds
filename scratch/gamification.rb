@@ -37,17 +37,37 @@ BADGES = {
 # app/models/user.rb
 
 class User
-  def created model
-    # score the creation
-    info = earned POINTS[model][:created]
+  def earned pts
+    info = {points: pts}
 
-    # award badges
+    self.points += pts
+    info[:total_points] = self.points
+
+    rank_vals   = (RANKS.keys << self.points).sort.reverse
+    earned_rank = rank_vals.slice rank_vals.index(self.points), 1
+    if self.rank != earned_rank
+      self.rank = earned_rank unless self.rank == earned_rank
+      info[:rank] = earned_rank
+    end
+    
+    self.save ? info : {error: 'didnt save'}
+  end
+
+  def check_and_award_badges_for model
     my_badges = self.badges.map &:name
     unearned_badges = (Set.new(BADGES[model].keys) ^ my_badges).to_a
     unearned_badges.each do |badge_name|
       test = BADGES[badge_name]
       self.badges << Badge.where(name: badge_name) if test.call self
     end
+  end
+
+  def created model
+    # score the creation
+    info = earned POINTS[model][:created]
+
+    # award badges
+    check_and_award_badges_for model
 
     self.save
     info
@@ -65,22 +85,6 @@ class User
   def added_to_round
     # model monkeypatched in from .had
     POINTS[model][:added_to_round]
-  end
-
-  def earned pts
-    info = {points: pts}
-
-    self.points += pts
-    info[:total_points] = self.points
-
-    rank_vals   = (RANKS.keys << self.points).sort.reverse
-    earned_rank = rank_vals.slice rank_vals.index(self.points), 1
-    if self.rank != earned_rank
-      self.rank = earned_rank unless self.rank == earned_rank
-      info[:rank] = earned_rank
-    end
-    
-    self.save ? info : {error: 'didnt save'}
   end
 end
 
