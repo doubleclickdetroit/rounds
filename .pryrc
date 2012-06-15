@@ -19,6 +19,11 @@ def create_random_round_image
   @round.save
 end
 
+def test_round_lock_timeout(seconds=5)
+  lock = FactoryGirl.create(:round_lock)
+  Resque.enqueue_in(seconds, LockDissolver, lock.id)
+end
+
 def make_sentence
   params = { :round_id => @round.to_param }
   FactoryGirl.create(:sentence, params) 
