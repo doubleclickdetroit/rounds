@@ -1,6 +1,29 @@
-#!/bin/sh
+#!/usr/bin/env ruby
 
-# private_pub
-# redis
-# resque
-# scheduler
+path    = File.dirname(__FILE__)
+
+pids    = []
+scripts = %w(resque).map{|s| "#{path}/#{s}"}
+# scripts = %w(private_pub redis resque scheduler).map{|s| "#{path}/#{s}"}
+
+
+def run script
+  print "starting #{script}"
+  pids << fork { system script }
+  puts pids.last
+end
+
+def kill pid
+  Process.kill 'INT', pid
+end
+
+
+begin
+  scripts.each {|script| run script}
+
+  print 'Press enter to shut everything down'
+  gets
+rescue SystemExit, Interrupt
+  pids.each {|pid| kill pid}
+rescue Exception => e
+end
