@@ -126,7 +126,8 @@ describe Round do
     end
 
     pending 'further testing'
-    pending 'make sure this doesnt get called constantly since its just calling on after_save and checking .complete'
+    pending 'make sure this doesnt get called constantly since its just calling on after_save and checking .complete' 
+    # ^ i think this is fine...
     it 'should fire a callback to build the image' do
       # extra slide to ensure only called once
       slide = FactoryGirl.build(:slide).attributes
