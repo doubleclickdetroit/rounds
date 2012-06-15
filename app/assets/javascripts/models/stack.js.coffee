@@ -12,5 +12,8 @@ define [], (require) ->
 		urlRoot: "/api"
 
 		initialize: ->
+			@collection = new Slides
+				rootNode: @options.stack_name
+				url     : "/#{@urlRoot}/#{@options.stream_name}/#{@options.stack_name}"
 
 	Stack
