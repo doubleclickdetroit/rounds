@@ -10,6 +10,11 @@ describe '/api/users/' do
         get("/api/users/me").should route_to("user_feed#show")
       end
 
+      # todo i hate the controller for this
+      it "routes to #index" do
+        post("/api/users/me/friends").should route_to("user_feed#friends")
+      end
+
       it "routes to #index for provider/uid" do
         get("/api/providers/facebook/users/525/").should route_to("user_feed#show", :provider => 'facebook', :uid => '525')
       end

@@ -55,19 +55,20 @@ class SlidesController < ApplicationController
   def community
     @slides = current_user.community(@type.constantize).before_or_after(params)
 
-    respond_with @slides
+    render 'slides/index' 
   end
 
   def friends
     @slides = current_user.friends(@type.constantize).before_or_after(params)
 
-    respond_with @slides
+    # super explicit to unbreak specs
+    render 'slides/index', collection: @watchings, handlers: [:rabl], formats: [:json]
   end
 
   def private
     @slides = current_user.private(@type.constantize).before_or_after(params)
 
-    respond_with @slides
+    render 'slides/index' 
   end
 
 

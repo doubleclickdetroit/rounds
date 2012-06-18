@@ -45,6 +45,7 @@ module ControllerMacros
             attrs['user_id'] = attrs['user_id'] + 1
           when Invitation
             Invitation.any_instance.stub(:set_privacy).and_return(true)
+            Invitation.any_instance.stub(:round).and_return(FactoryGirl.create(:round))
           end
           FactoryGirl.create(@sym, attrs)
 

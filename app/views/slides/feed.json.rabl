@@ -1,13 +1,13 @@
 object @type => 'feed'
 
-child @private_slides => 'private' do
-  extends 'slides/private'
+node :private do
+  partial 'slides/index', object: @private_slides
 end
 
-child @friends_slides => 'friends' do
-  extends 'slides/friends'
+node :friends do
+  partial 'slides/index', object: @friends_slides
 end
 
-child @community_slides => 'community' do
-  extends 'slides/community'
+node :community do
+  partial 'slides/index', object: @community_slides
 end
