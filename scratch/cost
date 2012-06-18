@@ -4,6 +4,9 @@ heroku
   dynos (720hrs free/month)
     web:    $0.05/hour ~$36/month
     worker: $0.05/hour ~$36/month
+  addons
+    redis: $??? (for resque)
+    stillalive: (maybe)
 
 amazon s3 (free: 5 GB storage, 20,000 Get, 2,000 Put Requests, and 15GB transfer/month)
   storage: First 1 TB / month                  $0.125 per GB ~ $0.093 per GB
@@ -11,11 +14,3 @@ amazon s3 (free: 5 GB storage, 20,000 Get, 2,000 Put Requests, and 15GB transfer
            GET and all other Requests          $0.01 per 10,000 requests
 
 domain: $14/year
-
-
-
-
-
-maybe
-  redis: for resque
-  stillalive: https://addons.heroku.com/stillalive
