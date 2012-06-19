@@ -53,6 +53,10 @@ describe CommentsController do
       put("/api/slides/1/comments/2").should route_to("comments#update", :id => "2", :slide_id => "1")
     end
 
+    it "routes to #update (for flagging)" do
+      put("/api/slides/1/comments/2/flag").should route_to("comments#update", :id => "2", :slide_id => "1", flag: true)
+    end
+
     it "routes to #destroy" do
       delete("/api/slides/1/comments/2").should route_to("comments#destroy", :id => "2", :slide_id => "1")
     end

@@ -73,7 +73,9 @@ Draw::Application.routes.draw do
     end
 
     resources :slides, :except => [:index,:new,:edit] do
-      resources :comments, :except => [:show,:new,:edit]
+      resources :comments, :except => [:show,:new,:edit] do
+        put :flag, action: :update, flag: true, on: :member
+      end
 
       resources :ballots, :only => [:index]
       match     'vote/:vote' => 'ballots#create', via: :post
