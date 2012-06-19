@@ -311,7 +311,7 @@ DEPENDENCIES
   private_pub
   pry-rails
   rabl
-  rails (= 3.2.0)
+  rails (~> 3.2.0)
   rails-backbone
   requirejs-rails
   rmagick
