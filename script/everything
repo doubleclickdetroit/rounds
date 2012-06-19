@@ -2,28 +2,32 @@
 
 path    = File.dirname(__FILE__)
 
-pids    = []
-scripts = %w(resque).map{|s| "#{path}/#{s}"}
-# scripts = %w(private_pub redis resque scheduler).map{|s| "#{path}/#{s}"}
+$pids   = []
+scripts = %w(redis-server private_pub resque scheduler).map{|s| "#{path}/#{s}"}
 
 
 def run script
-  print "starting #{script}"
-  pids << fork { system script }
-  puts pids.last
+  print "starting #{script} pid:"
+  $pids << fork { system script }
+  puts $pids.last
 end
 
 def kill pid
-  Process.kill 'INT', pid
+  Process.kill 'HUP', pid
+end
+
+def kill_all
+  $pids.each {|pid| kill pid}
 end
 
 
 begin
   scripts.each {|script| run script}
 
-  print 'Press enter to shut everything down'
-  gets
+  print '^C to shut down'
+  loop {}
 rescue SystemExit, Interrupt
-  pids.each {|pid| kill pid}
+  kill_all
 rescue Exception => e
+  puts 'error', e.inspect
 end
