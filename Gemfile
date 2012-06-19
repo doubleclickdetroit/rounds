@@ -10,6 +10,9 @@ gem 'omniauth-facebook'
 # fook
 gem 'fb_graph'
 
+gem 'resque', :require => 'resque/server'
+gem 'resque-scheduler', :require => 'resque_scheduler'
+
 gem 'yajl-ruby'
 gem 'rabl'
 
