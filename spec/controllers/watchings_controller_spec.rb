@@ -5,7 +5,7 @@ describe WatchingsController do
 
   login_user()
 
-  describe 'GET index', :focus do
+  describe 'GET index' do
     it 'should use current_user' do
       get :index, {}, valid_session
       assigns(:user).should == @user

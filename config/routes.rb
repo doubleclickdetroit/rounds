@@ -101,7 +101,9 @@ Draw::Application.routes.draw do
 
 
     # todo needed?
-    resources :comments, :except => [:index,:show,:new,:edit]
+    resources :comments, :except => [:index,:show,:new,:edit] do
+      put :flag, action: :update, flag: true, on: :member
+    end
   end
 
   root :to => 'home#index'
