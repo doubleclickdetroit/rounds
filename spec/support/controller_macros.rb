@@ -45,6 +45,7 @@ module ControllerMacros
             attrs['user_id'] = attrs['user_id'] + 1
           when Invitation
             Invitation.any_instance.stub(:set_privacy).and_return(true)
+            Invitation.any_instance.stub(:round).and_return(FactoryGirl.create(:round))
           end
           FactoryGirl.create(@sym, attrs)
 
@@ -119,6 +120,9 @@ module ControllerMacros
     end
   end
 
+  #####################################
+  ### WARNING: THIS IS NAMED POORLY ###
+  #####################################
   def it_should_handle_before_and_after_for_action_and_by_current_user(klass, action)
     context 'before_or_after' do
       before(:each) do

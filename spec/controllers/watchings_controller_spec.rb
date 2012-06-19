@@ -18,6 +18,16 @@ describe WatchingsController do
       FactoryGirl.create :watching, user: @user
       get :index, {}, valid_session
     end
+
+    it 'should assign Dibs if type: dibs' do
+      FactoryGirl.create :watching, user: @user
+      FactoryGirl.create :dib, user: @user
+
+      get :index, {type: 'Dib'}, valid_session
+
+      assigns(:watchings).count.should == 1
+      assigns(:watchings).first.class.should == Dib
+    end
   end
 
   describe 'POST create' do

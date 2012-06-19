@@ -13,4 +13,25 @@ describe UserFeedController do
     it 'should be much better specd :D'
   end
 
+  describe 'POST friends' do
+    it "should return an error if the ids aren't saved"
+
+    it 'should require provider/uids in params' do
+      post :friends, {}, valid_session
+      response.status.should == 406
+
+      post :friends, {provider: 'facebook'}, valid_session
+      response.status.should == 406
+
+      post :friends, {uids: []}, valid_session
+      response.status.should == 406
+    end
+
+    it 'should update .friends for current_user' do
+      uid, user_id = 4, '5'
+      FactoryGirl.create(:authorization, provider: 'facebook', uid: uid, user_id: user_id)
+      post :friends, {provider: 'facebook', uids: [1,2,3,uid]}, valid_session
+      response.body.should == "[#{user_id}]"
+    end
+  end
 end

@@ -21,7 +21,14 @@ class CommentsController < ApplicationController
   end
 
   def update
-    respond_with Comment.update(params[:id],params[:comment]).to_json
+    if params[:flag]
+      comment = Comment.find(params[:id])
+      comment.inappropriate = true
+      comment.save
+      respond_with comment 
+    else
+      respond_with Comment.update(params[:id],params[:comment]).to_json
+    end
   end
 
   def destroy

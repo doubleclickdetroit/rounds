@@ -12,16 +12,18 @@ Draw::Application.routes.draw do
   scope 'api' do
     scope 'users' do
       # own full user feed
-      match '/me'   => 'user_feed#show', :via => :get
+      match '/me' => 'user_feed#show', via: :get
       scope 'me' do
+        # set user's facebook friends
+        match '/friends'     => 'user_feed#friends', via: :post
         # own user activity by resource
-        match '/rounds'      => 'rounds#index',      :via => :get
-        match '/slides'      => 'slides#index',      :via => :get
-        match '/comments'    => 'comments#index',    :via => :get
-        match '/ballots'     => 'ballots#index',     :via => :get
-        match '/invitations' => 'invitations#index', :via => :get
-        match '/watchings'   => 'watchings#index',   :via => :get
-        match '/dibs'        => 'watchings#index',   :via => :get, type: 'Dib'
+        match '/rounds'      => 'rounds#index',      via: :get
+        match '/slides'      => 'slides#index',      via: :get
+        match '/comments'    => 'comments#index',    via: :get
+        match '/ballots'     => 'ballots#index',     via: :get
+        match '/invitations' => 'invitations#index', via: :get
+        match '/watchings'   => 'watchings#index',   via: :get
+        match '/dibs'        => 'watchings#index',   via: :get, type: 'Dib'
       end
 
       # full user feed
@@ -71,7 +73,9 @@ Draw::Application.routes.draw do
     end
 
     resources :slides, :except => [:index,:new,:edit] do
-      resources :comments, :except => [:show,:new,:edit]
+      resources :comments, :except => [:show,:new,:edit] do
+        put :flag, action: :update, flag: true, on: :member
+      end
 
       resources :ballots, :only => [:index]
       match     'vote/:vote' => 'ballots#create', via: :post
@@ -99,9 +103,13 @@ Draw::Application.routes.draw do
 
 
     # todo needed?
-    resources :comments, :except => [:index,:show,:new,:edit]
+    resources :comments, :except => [:index,:show,:new,:edit] do
+      put :flag, action: :update, flag: true, on: :member
+    end
   end
 
   root :to => 'home#index'
+
+  mount Resque::Server, at: '/resque'
 
 end

@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.2.0'
+gem 'rails', '~>3.2.0'
 
 # auth
 gem 'omniauth-facebook'
@@ -10,12 +10,16 @@ gem 'omniauth-facebook'
 # fook
 gem 'fb_graph'
 
+gem 'resque', :require => 'resque/server'
+gem 'resque-scheduler', :require => 'resque_scheduler'
+
 gem 'yajl-ruby'
 gem 'rabl'
 
 gem 'factory_girl_rails'
 
 gem "paperclip", "~> 2.7"
+gem 'aws-s3'
 gem 'rmagick'
 
 gem 'private_pub'
@@ -28,7 +32,7 @@ gem 'jquery-rails'
 gem 'haml-rails'
 gem 'html5-rails', :git => 'git://github.com/sporkd/html5-rails.git'
 gem 'rails-backbone'
-gem 'requirejs-rails', git: 'git://github.com/jwhitley/requirejs-rails.git'
+gem 'requirejs-rails'
 
 group :development, :test do
   gem 'webrick'

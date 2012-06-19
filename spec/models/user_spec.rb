@@ -49,8 +49,18 @@ describe User do
   describe '.watchings' do
     it 'should return an array of Watchings' do
       @watching = FactoryGirl.create(:watching)
+      # @dib      = FactoryGirl.create(:dib)
       @user.watchings << @watching
+      # @user.dibs << @dibs
       @user.watchings.should == [@watching]
+    end
+  end
+
+  describe '.dibs' do
+    it 'should return an array of Dibs' do
+      @dib = FactoryGirl.create(:dib)
+      @user.dibs << @dib
+      @user.dibs.should == [@dib]
     end
   end
 
@@ -213,8 +223,35 @@ describe User do
       @user.friend_ids.should == %w(1 2 3)
       @user.friend_ids_csv.should == '1,2,3'
     end
-
   end
+
+  describe '.set_friends' do
+    pending 'may need to be more robust'
+    it 'should sanitize input (only accept \d for uids)' do
+      expect {
+        @user.set_friends('facebook', ['1','2','3','foo'])
+      }.to raise_error(ArgumentError)
+    end
+
+    it 'should update friend_ids from provider/uids' do
+      @user.friend_ids_csv = ''
+      @user.save
+      @user.reload
+      @user.friend_ids.should == []
+
+      friend = FactoryGirl.create(:user)
+      uid    = '525'
+      FactoryGirl.create(:authorization, provider: 'facebook', uid: uid, user_id: friend.id)
+
+      @user.set_friends('facebook', ['1','2','3',uid])
+
+      @user.reload
+
+      @user.friend_ids.should == [friend.id.to_s]
+      @user.friend_ids_csv.should == friend.id.to_s
+    end
+  end
+
 
   describe '- Slide Feeds -' do
     before(:each) do
@@ -295,6 +332,7 @@ describe User do
         end
 
         describe '.friends' do
+          pending 'send this to common.rb?'
           it 'should return [] if the user has no friends' do
             @user.friend_ids = []
             @user.friend_ids.should == []

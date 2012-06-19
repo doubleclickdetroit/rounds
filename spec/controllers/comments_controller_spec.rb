@@ -59,6 +59,15 @@ describe CommentsController do
       put :update, params, valid_session
       Comment.find(id).text.should == text 
     end
+
+    it 'should set a given Comment as inappropriate with flag: true' do
+      @slide = FactoryGirl.create(:slide)
+      @comment = FactoryGirl.create(:comment)
+      @slide.comments << @comment
+
+      put :update, {id: @comment.to_param, flag: true}, valid_session
+      @comment.reload.inappropriate.should == true 
+    end
   end
 
   describe 'DELETE destroy' do
