@@ -9,7 +9,8 @@ class User < ActiveRecord::Base
   has_many :slides
   has_many :comments
   has_many :ballots
-  has_many :watchings
+  has_many :watchings # , where(['watchings.type = ?', nil])
+  has_many :dibs
   has_many :invitations, :foreign_key => :invited_user_id, :primary_key => :id
 
   has_many :blacklist_entries

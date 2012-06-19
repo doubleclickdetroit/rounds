@@ -49,8 +49,18 @@ describe User do
   describe '.watchings' do
     it 'should return an array of Watchings' do
       @watching = FactoryGirl.create(:watching)
+      # @dib      = FactoryGirl.create(:dib)
       @user.watchings << @watching
+      # @user.dibs << @dibs
       @user.watchings.should == [@watching]
+    end
+  end
+
+  describe '.dibs' do
+    it 'should return an array of Dibs' do
+      @dib = FactoryGirl.create(:dib)
+      @user.dibs << @dib
+      @user.dibs.should == [@dib]
     end
   end
 

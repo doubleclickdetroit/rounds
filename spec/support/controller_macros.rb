@@ -120,6 +120,9 @@ module ControllerMacros
     end
   end
 
+  #####################################
+  ### WARNING: THIS IS NAMED POORLY ###
+  #####################################
   def it_should_handle_before_and_after_for_action_and_by_current_user(klass, action)
     context 'before_or_after' do
       before(:each) do

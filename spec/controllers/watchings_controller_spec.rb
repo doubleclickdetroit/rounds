@@ -5,7 +5,7 @@ describe WatchingsController do
 
   login_user()
 
-  describe 'GET index' do
+  describe 'GET index', :focus do
     it 'should use current_user' do
       get :index, {}, valid_session
       assigns(:user).should == @user
@@ -17,6 +17,16 @@ describe WatchingsController do
       PrivatePub.should_receive(:subscription)
       FactoryGirl.create :watching, user: @user
       get :index, {}, valid_session
+    end
+
+    it 'should assign Dibs if type: dibs' do
+      FactoryGirl.create :watching, user: @user
+      FactoryGirl.create :dib, user: @user
+
+      get :index, {type: 'Dib'}, valid_session
+
+      assigns(:watchings).count.should == 1
+      assigns(:watchings).first.class.should == Dib
     end
   end
 

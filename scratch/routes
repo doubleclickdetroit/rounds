@@ -45,6 +45,7 @@ IMPLEMENTED
       GET /api/users/me/comments/
       GET /api/users/me/ballots/
       GET /api/users/me/watchings/
+      GET /api/users/me/dibs/
 
   Rounds 
     C POST    /api/rounds/:slide_limit         # creates public Round
@@ -73,6 +74,13 @@ IMPLEMENTED
     # U PUT     /api/rounds/:round_id/watch
       D DELETE  /api/rounds/:round_id/watch
       I GET     /api/users/me/watchings
+
+    dibs
+      C POST    /api/rounds/:round_id/dib
+    # R GET     /api/rounds/:round_id/dib
+    # U PUT     /api/rounds/:round_id/dib
+      D DELETE  /api/rounds/:round_id/dib
+      I GET     /api/users/me/dibs
     
     Slides, round_id and type ('Sentence' or 'Picture') required for create and index
       Sentences
@@ -130,6 +138,8 @@ IMPLEMENTED
       I GET     /api/users/me/ballots/
     Watchings
       I GET     /api/users/me/watchings/
+    Dibs
+      I GET     /api/users/me/dibs/
     ALL
       I GET     /api/providers/:provider/users/:uid/ 
       I GET     /api/users/:user_id/                
