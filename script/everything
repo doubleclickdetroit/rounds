@@ -1,15 +1,14 @@
 #!/usr/bin/env ruby
 
-path    = File.dirname(__FILE__)
-
 $pids   = []
+path    = File.dirname(__FILE__)
 scripts = %w(redis-server private_pub resque scheduler).map{|s| "#{path}/#{s}"}
 
 
 def run script
-  print "starting #{script} pid:"
+  print "starting #{script} "
   $pids << fork { system script }
-  puts $pids.last
+  puts "pid: #{$pids.last}" 
 end
 
 def kill pid
@@ -24,10 +23,11 @@ end
 begin
   scripts.each {|script| run script}
 
-  print '^C to shut down'
+  puts '*** *** *** ^C to shut down *** *** ***'
   loop {}
 rescue SystemExit, Interrupt
   kill_all
-rescue Exception => e
-  puts 'error', e.inspect
+rescue Exception => error
+  kill_all
+  puts "Something went wrong: #{error}"
 end
