@@ -16,6 +16,7 @@ gem 'rabl'
 gem 'factory_girl_rails'
 
 gem "paperclip", "~> 2.7"
+gem 'aws-s3'
 gem 'rmagick'
 
 gem 'private_pub'
