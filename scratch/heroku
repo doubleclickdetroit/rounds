@@ -1,4 +1,9 @@
 http://blooming-sky-6039.herokuapp.com/
 
+Branches pushed to Heroku other than master will be ignored by this command. If you’re working out of another branch locally, you can either merge to master before pushing, or specify that you want to push your local branch to a remote master. To push a branch other than master, use this syntax:
+
+$ git push heroku yourbranch:master
+$ git push heroku heroku:master
+
 user rounds_dev_server
 pass YE%:Py+,oT\]dPWD
