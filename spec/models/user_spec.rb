@@ -78,6 +78,31 @@ describe User do
     end
   end
 
+  describe '.invite' do
+    it "should create Invitations given a Round's id an a hash of invitees" do
+      round     = FactoryGirl.create(:round)
+      invited   = FactoryGirl.create(:user)
+
+      user_by_provider = FactoryGirl.build(:authorization)
+      provider, uid = user_by_provider.provider, user_by_provider.uid
+
+      invitees  = {
+        'user_ids' => [invited.id],
+         provider  => [uid]
+      }
+
+      User.count.should == 2
+      Invitation.count.should == 0
+
+      @user.invite invitees, to: round
+
+      Invitation.count.should == 2
+
+      invited.invitations.count.should == 1
+      puts Invitation.where(invited_provider:provider, invited_uid:uid).count.should == 1
+    end
+  end
+
   describe 'blocking functionality' do
     pending 'blocked ids filter'
 
