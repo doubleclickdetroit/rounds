@@ -1,0 +1,1 @@
+((function(){define([],function(a){var b,c,d;return b=a("jquery"),d=a("utils/mediator"),c=a("./router"),{initialize:function(){return new c,this.setupAjaxHandling()},setupAjaxHandling:function(){return b(document).ajaxComplete(function(a,b){return d.publish("ajax","complete",b)})}}})})).call(this);
