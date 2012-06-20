@@ -57,6 +57,6 @@ module Draw
     config.assets.version = '1.0'
 
     # Heroku
-    config.assets.initialize_on_precompile = true
+    config.assets.initialize_on_precompile = false
   end
 end
