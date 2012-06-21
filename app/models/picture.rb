@@ -1,5 +1,12 @@
 class Picture < Slide 
-  has_attached_file :file, :styles => { :medium => "300x300>", :thumb => "100x100>" }
+  if Rails.env.production?
+    has_attached_file :file,
+      path: ':attachment/:id/:style.:extension',
+      storage: :s3,
+      s3_credentials: Rails.root.join('config','s3.yml')
+  else
+    has_attached_file :file, path: './public/system/:attachment/:id/:style.:extension'
+  end
 
   def content
     file.url

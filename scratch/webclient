@@ -1,0 +1,28 @@
+facebook:
+
+  after login:
+    [X] the facebook auth token can be found at cookies[:facebook_token]
+    [ ] the client should POST /api/users/me/friends {provider:'facebook', uids:[1,2,3]}
+    [ ] and store the return (which is json representing the user_ids) to persist who is in the system
+
+  invitations:
+    of members:
+      [ ] simply create a new Invitation via POST
+    of non members
+      [X] Invitations should support provider/uid
+      [ ] create a new Invitation via POST including provider/uid
+      [ ] post invitation to the invitee's facebook wall
+
+appendix:
+  invitation creation route:
+  POST /api/rounds/:id/invitations
+  {
+    'users': {
+    # [user_id,user_id]
+      [1,2,3]
+    },
+    'non-users': {
+    # 'provider': ['uid', 'uid']
+      'facebook': ['1234','5678']
+    }
+  }  

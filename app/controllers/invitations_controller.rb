@@ -1,9 +1,8 @@
 class InvitationsController < ApplicationController
 
   before_filter :setup_invitation, :only => [:index,:create]
-  before_filter :check_for_round_id, :only => :create # [:index,:create]
-  before_filter :check_for_invited_user_id, :only => :create
-  before_filter :force_current_user_id, :only => :create
+  before_filter :check_for_round, :only => :create
+  before_filter :check_for_invitees, :only => :create
   
   respond_to :json
 
@@ -21,7 +20,8 @@ class InvitationsController < ApplicationController
   end
 
   def create
-    respond_with Invitation.create(@invitation).to_json
+    current_user.invite params[:invitees], to: @round
+    respond_with :created
   end
 
   def destroy
@@ -34,25 +34,19 @@ private
     @invitation = {}
   end
 
-  def check_for_round_id
+  def check_for_round
     # todo ?
-    if not @round_id = params[:round_id]
-      head :not_acceptable
+    if round_id = params[:round_id] 
+      @round = Round.find(params[:round_id])
     else
-      @invitation[:round_id] ||= @round_id 
+      head :not_acceptable
     end
   end
 
-  def check_for_invited_user_id
+  def check_for_invitees
     # todo ?
-    if not @invited_user_id = params[:invited_user_id]
+    if not @invitees = params[:invitees]
       head :not_acceptable
-    else
-      @invitation[:invited_user_id] ||= @invited_user_id
     end
-  end
-
-  def force_current_user_id
-    @invitation[:user_id] = current_user.id
   end
 end

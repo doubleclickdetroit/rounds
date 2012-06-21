@@ -110,4 +110,6 @@ Draw::Application.routes.draw do
 
   root :to => 'home#index'
 
+  mount Resque::Server, at: '/resque'
+
 end

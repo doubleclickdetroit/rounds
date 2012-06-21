@@ -118,6 +118,26 @@ class User < ActiveRecord::Base
     blacklist_entries.map {|ble| ble.blocked_user_id}
   end
 
+  def invite(*args)
+    invitees = args.shift
+    round    = args.extract_options![:to]
+    raise ArgumentError, 'Must include to: round' unless round.is_a?(Round)
+
+    invitees.each do |provider, array|
+      array.each do |uid|
+        invitation = { user_id: self.id, round_id: round.id }
+
+        if provider == 'user_ids'
+          invitation[:invited_user_id] = uid
+        else
+          invitation.merge!({invited_provider:provider, invited_uid:uid})
+        end
+
+        Invitation.create invitation
+      end
+    end
+  end
+
 # todo
 # private
   # accessed by .set_friends(provider, uids)

@@ -1,0 +1,7 @@
+#!/bin/sh
+
+# i realize this is super pointless, but figured we still
+# might forget the name of the command, in which case it
+# will always be located conveniently under script/
+
+redis-server
