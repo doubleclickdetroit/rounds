@@ -5,6 +5,7 @@ heroku
     web:    $0.05/hour ~$36/month
     worker: $0.05/hour ~$36/month
   addons
+    hirefire: ~$10/month
     redis: $??? (for resque)
     stillalive: (maybe)
 

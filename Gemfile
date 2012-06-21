@@ -23,6 +23,8 @@ gem 'aws-s3'
 gem 'aws-sdk'
 gem 'rmagick'
 
+gem 'foreman'
+
 gem 'private_pub'
 
 gem 'coffee-filter'
