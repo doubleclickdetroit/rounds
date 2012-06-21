@@ -67,7 +67,7 @@ Draw::Application.routes.draw do
       match     'invitations/:invited_user_id' => 'invitations#create', :via => :post
       resources :invitations, :only => [:index,:destroy]
 
-      resource  :lock,  :controller => :round_locks, only: [:show,:create,:destroy] 
+      resource  :lock,  :controller => :round_locks, only: [:show,:create,:destroy]
       resource  :watch, :controller => :watchings,   only: [:create,:destroy]
       resource  :dib,   :controller => :watchings,   only: [:create,:destroy], type: 'Dib'
     end
@@ -83,8 +83,8 @@ Draw::Application.routes.draw do
 
     ##### BEGIN MESS
     # todo cleaner
-    match 'sentences' => 'slides#feed', :type => 'Sentence' 
-    match 'pictures'  => 'slides#feed', :type => 'Picture' 
+    match 'sentences' => 'slides#feed', :type => 'Sentence'
+    match 'pictures'  => 'slides#feed', :type => 'Picture'
 
     # todo cleaner
     scope 'sentences' do
