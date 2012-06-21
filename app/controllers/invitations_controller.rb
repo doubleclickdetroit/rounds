@@ -26,6 +26,10 @@ class InvitationsController < ApplicationController
   end
 
   def update
+    @invitation = Invitation.find(params[:id])
+    @invitation.read = true
+    @invitation.save
+    respond_with :accepted
   end
 
   def destroy
