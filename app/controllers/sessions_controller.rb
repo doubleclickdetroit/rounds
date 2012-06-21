@@ -16,7 +16,7 @@ class SessionsController < ApplicationController
       @user.friend_ids_csv = ids.reject(&:nil?).join(',')
       @user.save
 
-      cookies[:facebook_token]   = token
+      cookies[:facebook_token] = token
     end
 
     redirect_to root_url, :notice => "User '#{@user.name}' signed in through Facebook!"

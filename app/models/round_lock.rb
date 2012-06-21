@@ -4,7 +4,7 @@ class RoundLock < ActiveRecord::Base
   # todo spec
   include Common::Associations::HasCreator
 
-  after_create :notify_locked
+  after_create :notify_locked, :set_timeout_for_destroy
   before_destroy :notify_unlocked, :destroy_all_watchings
 
   belongs_to :round
@@ -19,6 +19,11 @@ private
 
   def notify_locked
     notify(true)
+  end
+
+  def set_timeout_for_destroy
+    return if Rails.env.test?
+    Resque.enqueue_in(15.minutes, LockDissolver, id)
   end
 
   def notify_unlocked

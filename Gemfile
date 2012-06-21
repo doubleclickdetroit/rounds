@@ -10,12 +10,16 @@ gem 'omniauth-facebook'
 # fook
 gem 'fb_graph'
 
+gem 'resque', :require => 'resque/server'
+gem 'resque-scheduler', :require => 'resque_scheduler'
+
 gem 'yajl-ruby'
 gem 'rabl'
 
 gem 'factory_girl_rails'
 
 gem "paperclip", "~> 2.7"
+gem 'aws-s3'
 gem 'rmagick'
 
 gem 'private_pub'

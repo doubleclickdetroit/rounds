@@ -28,6 +28,19 @@ Pagination
 Setting friend ids
   POST /api/users/me/friends {provider:'facebook', uids:[1,2,3]}
 
+Invitation creation
+  POST /api/rounds/:id/invitations
+  {
+    'users': {
+    # [user_id,user_id]
+      [1,2,3]
+    },
+    'non-users': {
+    # 'provider': ['uid', 'uid']
+      'facebook': ['1234','5678']
+    }
+  }  
+
 IMPLEMENTED
   
   (Slide) Feeds, all can be passed ?time=[time] to fetch rows before that time
@@ -55,12 +68,12 @@ IMPLEMENTED
     D DELETE  /api/rounds/:id
     I GET     /api/rounds/ # NOTE: this is for rounds for current user
 
-  ? Invitations - THESE ROUTES MAY BE CHANGING
-      C POST    /api/rounds/:round_id/invitations/?provider=...&uid=...
+    Invitations - see above, /api/users/me
+      C POST    /api/rounds/:round_id/invitations/ {'user_ids'[1],'provider':['uid']}
     # R GET     /api/rounds/:round_id/invitations/
     # U PUT     /api/rounds/:round_id/invitations/
       D DELETE  /api/rounds/:round_id/invitations/:id
-      I GET     /api/rounds/:round_id/invitations/
+      I GET     /api/users/me/invitations
 
     RoundLocks
       C POST    /api/rounds/:round_id/lock/

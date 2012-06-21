@@ -33,5 +33,17 @@ describe UserFeedController do
       post :friends, {provider: 'facebook', uids: [1,2,3,uid]}, valid_session
       response.body.should == "[#{user_id}]"
     end
+
+    it 'should assign @user_ids with all ids of friends in the system' do
+      @friend_user = FactoryGirl.create(:user)
+      @other_user  = FactoryGirl.create(:user)
+      FactoryGirl.create(:authorization, provider: 'facebook', user: @friend_user)
+      FactoryGirl.create(:authorization, provider: 'facebook', user: @friend_user)
+      friend_facebook_uid = @friend_user.authorizations.first.uid
+
+      post :friends, {provider: 'facebook', uids: [friend_facebook_uid]}, valid_session
+
+      assigns(:user_ids).should == [@friend_user.id]
+    end
   end
 end
