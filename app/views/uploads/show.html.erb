@@ -1,5 +1,13 @@
 <p id="notice"><%= notice %></p>
 
+<%= link_to 'Upload another', new_upload_path %>
+<br />
+<%= link_to 'View all uploaded pictures', uploads_path %>
+<br />
+
 <%= image_tag @picture.content %>
 
-<%= link_to 'Back', new_upload_path %>
+<%= link_to 'Upload another', new_upload_path %>
+<br />
+<%= link_to 'View all uploaded pictures', uploads_path %>
+<br />

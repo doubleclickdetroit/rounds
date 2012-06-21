@@ -1,19 +1,24 @@
+<%= link_to 'View all uploaded pictures', uploads_path %>
+<br />
+
 <%= form_for @picture, :url => '/uploads/', :html => { :multipart => true } do |f| %>
-    <%= f.file_field :file %>
+  <%= f.file_field :file %>
 
-    <% if @picture.errors.any? %>
-      <div id="error_explanation">
-        <h2><%= pluralize(@picture.errors.count, "error") %> prohibited this picture from being saved:</h2>
-
-        <ul>
-          <% @picture.errors.full_messages.each do |msg| %>
-            <li><%= msg %></li>
-          <% end %>
-        </ul>
-      </div>
-    <% end %>
-
-    <div class="actions">
-      <%= f.submit %>
+  <% if @picture.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@picture.errors.count, "error") %> prohibited this picture from being saved:</h2>
+      <ul>
+        <% @picture.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
     </div>
   <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
+
+<br />
+<%= link_to 'View all uploaded pictures', uploads_path %>
