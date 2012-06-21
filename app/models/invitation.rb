@@ -6,7 +6,6 @@ private
     def validate(record)
       # only private round owner can invite users
       if record.private && (record.round.creator != record.creator)
-        puts "FAILED"
         record.errors.add :base, 'Must be round creator to invite users to a private round' 
         raise ActiveRecord::RecordInvalid, record
       end

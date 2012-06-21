@@ -173,7 +173,7 @@ end
 print "\n  ** Rounds (private) "
 
 @users.each do |user|
-  @round = FactoryGirl.create(:round, user_id: user, :private => true)
+  @round = FactoryGirl.create(:round, user_id: user.id, :private => true)
 
   # build two slides for round
   if [true,false].sample
@@ -185,7 +185,9 @@ print "\n  ** Rounds (private) "
   end
 
   # invite other users
-  @users.reject{|u|u==user}.each do |u|
+  users = @users.clone
+  users.delete(user)
+  users.each do |u|
     FactoryGirl.create(:invitation, user_id:user.id, invited_user_id:u.id, round_id:@round.id)
   end
 
