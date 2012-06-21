@@ -17,12 +17,6 @@ appendix:
   invitation creation route:
   POST /api/rounds/:id/invitations
   {
-    'users': {
-    # [user_id,user_id]
-      [1,2,3]
-    },
-    'non-users': {
-    # 'provider': ['uid', 'uid']
-      'facebook': ['1234','5678']
-    }
+    'user_ids': [ 1,2,3 ],
+    'facebook': ['1234','5678']
   }  

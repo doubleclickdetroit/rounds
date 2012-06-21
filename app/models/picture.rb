@@ -5,7 +5,7 @@ class Picture < Slide
       storage: :s3,
       s3_credentials: Rails.root.join('config','s3.yml')
   else
-    has_attached_file :file, path: './public/system/:attachment/:id/:style.:extension'
+    has_attached_file :file
   end
 
   def content

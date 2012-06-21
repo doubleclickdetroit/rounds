@@ -21,3 +21,6 @@
 
 # paperclip images for dev
 /public/system
+
+# ignore public/assets locally
+/public/assets

@@ -12,7 +12,7 @@ FactoryGirl.define do
     factory :picture, :class => ::Picture do
       type 'Picture'
       trait :with_file do
-        file fixture_file_upload(Rails.root.join('test','fixtures','images','image.png'), 'image/png')
+        file { fixture_file_upload(Rails.root.join('test','fixtures','images','image.png'), 'image/png') }
       end
     end
   end
