@@ -15,7 +15,7 @@ facebook:
 
 appendix:
   invitation creation route:
-  POST /api/rounds/:id/invite
+  POST /api/rounds/:id/invitations
   {
     'users': {
     # [user_id,user_id]

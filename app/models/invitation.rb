@@ -3,12 +3,12 @@ require Rails.root.join('lib','modules','common.rb')
 class Invitation < ActiveRecord::Base
 private
   class CreatorValidator < ActiveModel::Validator
-    def validate(inv)
-      if inv.round.private 
-        raise ActiveRecord::RecordInvalid, 'Must be round creator to invite users to a private round' if inv.round.creator != inv.creator
+    def validate(record)
+      # only private round owner can invite users
+      if record.private && (record.round.creator != record.creator)
+        record.errors.add :base, 'Must be round creator to invite users to a private round' 
+        raise ActiveRecord::RecordInvalid, record
       end
-
-      true
     end
   end
 

@@ -1,2 +1,2 @@
-paths:
-  "tmpl": "jquery.tmpl.min"
+modules:
+  - name: 'application'

@@ -1,43 +1,27 @@
 define [], (require) ->
 
-	$ = require "jquery"
-	_ = require "underscore"
+	$ = require 'jquery'
+	_ = require 'underscore'
+	Backbone = require 'backbone'
 
-	mediator    = require "utils/mediator"
-	Slides      = require "collections/slides"
-	SlidesView  = require "views/slides_view"
 
 	class StreamView extends Backbone.View
 
-		tagName  : "section"
-		className: "ui-stream"
-
-		initialize: ->
-			_.bindAll @, "create"
-			do @render
-			do @bootstrap
+		tagName: 'section'
 
 		render: ->
-			mediator.publish 'streams', 'render', @
-
-		bootstrap: ->
-			self = @
-			$.getJSON("/api/#{@options.stream_name}").done (slides) ->
-				$.each slides, self.create
+			console.log 'stream_view # render'
 			@
 
-		create: (stack_name, stack) ->
-			slides = new Slides
-				rootNode: stack_name
-				url     : "/api/#{@options.stream_name}/#{stack_name}"
+		onOpen: ->
+			console.log 'stream_view # onShow'
+			@$el.show()
+			@
 
-			view = new SlidesView
-				title     : stack_name
-				collection: slides
+		onClose: ->
+			console.log 'stream_view # onClose'
+			@$el.hide()
+			@
 
-			@$el.append view.render().el
-
-			# seed initial data
-			slides.reset stack
 
 	StreamView

@@ -11,4 +11,4 @@
 			= yield if request.path.match(%r{^/uploads})
 
 		- if current_user
-			= requirejs_include_tag "main"
+			= requirejs_include_tag "application"

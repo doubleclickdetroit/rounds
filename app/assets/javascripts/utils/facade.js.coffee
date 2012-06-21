@@ -5,7 +5,7 @@ define ['./mediator', 'permissions'], (mediator, permissions) ->
 	facade.subscribe = (channel, subscriber, callback) ->
 		mediator.subscribe channel, subscriber, callback if permissions.validate( channel, subscriber )
 
-	facade.publish = (channel, subscriber) ->
-		mediator.publish channel, subscriber
+	facade.publish = (channel, subscriber, args...) ->
+		mediator.publish channel, subscriber, args...
 
 	facade
