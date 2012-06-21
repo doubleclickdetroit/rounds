@@ -128,6 +128,9 @@ IMPLEMENTED
       Ballots, :vote must be an integer between 1 and 5
         C POST    /api/slides/:slide_id/vote/:vote
 
+  Invitations 
+    U PUT     /api/invitations/:id/read/
+
   BlacklistEntries (current user is derived from session)
     C POST    /api/providers/:provider/users/:uid/block/
     D DELETE  /api/providers/:provider/users/:uid/block/

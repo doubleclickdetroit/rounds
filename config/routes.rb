@@ -64,8 +64,7 @@ Draw::Application.routes.draw do
 
       resources :slides, :except => [:new,:edit]
 
-      match     'invitations/:invited_user_id' => 'invitations#create', :via => :post
-      resources :invitations, :only => [:index,:destroy]
+      resources :invitations, :only => [:create,:index,:destroy]
 
       resource  :lock,  :controller => :round_locks, only: [:show,:create,:destroy]
       resource  :watch, :controller => :watchings,   only: [:create,:destroy]
@@ -101,8 +100,10 @@ Draw::Application.routes.draw do
     end
     ##### END MESS
 
+    resources :invitations, :only => [:update] do
+      put :read, on: :member, action: :update, read: true
+    end
 
-    # todo needed?
     resources :comments, :except => [:index,:show,:new,:edit] do
       put :flag, action: :update, flag: true, on: :member
     end
