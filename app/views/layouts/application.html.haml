@@ -10,5 +10,5 @@
 		#main{ :role => "main" }
 			= yield if request.path.match(%r{^/uploads})
 
-		- if current_user
-			= requirejs_include_tag "main"
+		-# - if current_user
+		-# 	= requirejs_include_tag "application"
