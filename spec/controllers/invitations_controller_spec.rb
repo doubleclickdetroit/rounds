@@ -58,6 +58,19 @@ describe InvitationsController do
     end
   end
 
+  describe 'PUT update' do
+    it 'should throw a 406 if there is no read param' do
+      put :update, {id: 1}, valid_session 
+      response.status.should == 406
+    end
+
+    it 'should mark the invitation as read with read:true' do
+      invitation = FactoryGirl.create(:invitation)
+      put :update, {id: invitation.to_param, read: true}, valid_session 
+      response.status.should == 406
+    end
+  end
+
   describe 'DELETE destroy' do
     it 'should not throw a 406 if there is no invitation_id' do
       pending 'no idea, try after you have more implemented'
