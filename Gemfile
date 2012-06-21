@@ -22,6 +22,8 @@ gem "paperclip", "~> 2.7"
 gem 'aws-s3'
 gem 'rmagick'
 
+gem 'foreman'
+
 gem 'private_pub'
 
 gem 'coffee-filter'
