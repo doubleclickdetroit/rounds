@@ -99,7 +99,6 @@ describe User do
       Invitation.count.should == 2
 
       invited.invitations.count.should == 1
-      puts Invitation.where(invited_provider:provider, invited_uid:uid).count.should == 1
     end
   end
 
