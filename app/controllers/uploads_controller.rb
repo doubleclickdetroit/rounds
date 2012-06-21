@@ -41,16 +41,16 @@ class UploadsController < ApplicationController
 
 
 
-  # # GET /uploads
-  # # GET /uploads.json
-  # def index
-  #   @uploads = Upload.all
+  # GET /uploads
+  # GET /uploads.json
+  def index
+    @uploads = Picture.where round_id: nil
 
-  #   respond_to do |format|
-  #     format.html # index.html.erb
-  #     format.json { render json: @uploads }
-  #   end
-  # end
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @uploads }
+    end
+  end
 
   # # GET /uploads/1/edit
   # def edit
