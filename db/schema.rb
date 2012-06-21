@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120620073204) do
+ActiveRecord::Schema.define(:version => 20120621103542) do
 
   create_table "authorizations", :force => true do |t|
     t.string   "provider"
@@ -57,7 +57,7 @@ ActiveRecord::Schema.define(:version => 20120620073204) do
     t.integer  "user_id"
     t.integer  "invited_user_id"
     t.integer  "round_id"
-    t.boolean  "accepted",         :default => false
+    t.boolean  "read",             :default => false
     t.datetime "created_at",                          :null => false
     t.datetime "updated_at",                          :null => false
     t.boolean  "private"

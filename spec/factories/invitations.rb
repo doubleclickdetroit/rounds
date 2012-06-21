@@ -3,6 +3,6 @@ FactoryGirl.define do
     user_id 0
     invited_user_id 0 
     round { FactoryGirl.create(:round) }
-    accepted false
+    read false
   end
 end

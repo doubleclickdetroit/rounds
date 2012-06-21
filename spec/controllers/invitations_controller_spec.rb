@@ -66,8 +66,9 @@ describe InvitationsController do
 
     it 'should mark the invitation as read with read:true' do
       invitation = FactoryGirl.create(:invitation)
+      Invitation.last.read.should be_false
       put :update, {id: invitation.to_param, read: true}, valid_session 
-      response.status.should == 406
+      Invitation.last.read.should be_true
     end
   end
 
