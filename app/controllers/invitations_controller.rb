@@ -2,6 +2,7 @@ class InvitationsController < ApplicationController
 
   before_filter :setup_invitation, :only => [:index,:create]
   before_filter :check_for_round, :only => :create
+  before_filter :check_for_read, :only => :update
   before_filter :check_for_invitees, :only => :create
   
   respond_to :json
@@ -24,6 +25,13 @@ class InvitationsController < ApplicationController
     respond_with :created
   end
 
+  def update
+    @invitation = Invitation.find(params[:id])
+    @invitation.read = true
+    @invitation.save
+    respond_with :accepted
+  end
+
   def destroy
     respond_with Invitation.destroy(params[:id]).to_json
   end
@@ -35,10 +43,15 @@ private
   end
 
   def check_for_round
-    # todo ?
     if round_id = params[:round_id] 
       @round = Round.find(params[:round_id])
     else
+      head :not_acceptable
+    end
+  end
+
+  def check_for_read
+    unless params[:read] 
       head :not_acceptable
     end
   end

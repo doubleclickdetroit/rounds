@@ -18,7 +18,11 @@ describe InvitationsController do
     end
 
     it "routes to #create" do
-      post("/api/rounds/1/invitations/2").should route_to("invitations#create", :round_id => "1", :invited_user_id => "2")
+      post("/api/rounds/1/invitations").should route_to("invitations#create", :round_id => "1")
+    end
+
+    it "routes to #update" do
+      put("/api/invitations/2/read").should route_to("invitations#update", id: '2', read:true)
     end
 
     it "routes to #destroy" do
