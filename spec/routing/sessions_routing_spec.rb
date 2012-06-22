@@ -8,11 +8,12 @@ describe SessionsController do
   
     # todo scope to api
     it "routes to #create" do
-      post("/auth/facebook/callback/").should route_to("sessions#create")
+      get("/auth/facebook/callback/").should route_to("sessions#create")
     end
 
     # todo scope to api
     # todo delete
+    pending 'delete'
     it "routes to #destroy" do
       get("/signout/").should route_to("sessions#destroy")
     end

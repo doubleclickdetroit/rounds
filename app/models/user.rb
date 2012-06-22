@@ -81,12 +81,20 @@ class User < ActiveRecord::Base
   end
 
   def self.via_auth(auth_hash)
-    auth = Authorization.find_or_initialize_by_provider_and_uid(auth_hash['provider'], auth_hash['uid'])
+    provider, uid = auth_hash['provider'], auth_hash['uid']
+    auth = Authorization.find_or_initialize_by_provider_and_uid(provider, uid)
 
     # todo this is flawed if we use anything other than facebook
     if auth.new_record?
       info = auth_hash['info']
       user = User.create(name: info['name'], image_path: info['image'])
+
+      # todo move this
+      # check for Invitations for provider/uid
+      Invitation.where(invited_provider: provider, invited_uid: uid).each do |inv|
+        inv.invited_user_id = user.id
+        inv.save
+      end
 
       # todo this sucks, fix it
       auth.user = user

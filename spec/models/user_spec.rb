@@ -191,12 +191,24 @@ describe User do
     context 'where no user exists' do
       pending "not sure if this is it, but theres another case im not spec'ing..."
 
-      it 'should persist the auth token in the DB'
-      
       pending 'for facebook only?'
       it 'should save the image to User.image_path' do
         user = User.via_auth(@auth_hash)
         user.image_path.should == @auth_hash['info']['image']
+      end
+
+      it 'should check for Invitations by provider/uid and add user_ids' do
+        provider, uid = @auth_hash['provider'], @auth_hash['uid']
+        inv1 = FactoryGirl.create :invitation, invited_provider: provider, invited_uid: uid
+        inv2 = FactoryGirl.create :invitation, invited_provider: provider, invited_uid: uid
+
+        inv1.invited_user_id.should == 0
+        inv2.invited_user_id.should == 0
+
+        user = User.via_auth(@auth_hash)
+
+        inv1.reload.invited_user_id.should == user.id
+        inv2.reload.invited_user_id.should == user.id
       end
     end
   end
