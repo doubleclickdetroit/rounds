@@ -9,6 +9,11 @@ class SessionsController < ApplicationController
     session[:user_id] = @user.id
     session[:image]   = auth_hash['info']['image']
 
+    @watchings_count          = @user.own(Watching).count
+    # @unread_invitations_count = Invitation.where(invited_user_id:@user.id, read:false).count
+    @unread_invitations_count = @user.own(Invitation).where(read:false).count
+
+
     # todo trys?
     if token = auth_hash.try('credentials').try('token')
       uids = FbGraph::User.me(token).friends.map {|f| f.raw_attributes['id']}
