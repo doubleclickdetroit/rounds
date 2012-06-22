@@ -49,7 +49,7 @@ Draw::Application.routes.draw do
     get    'providers/:provider/users/:uid/ballots'  => 'ballots#index'
 
 
-    resources :rounds, :except => [:create,:index,:update,:new,:edit] do
+    resources :rounds, only: [:show,:destroy] do
       collection do
         post ':slide_limit'         => 'rounds#create'
         post ':slide_limit/private' => 'rounds#create', :private => true
@@ -58,7 +58,7 @@ Draw::Application.routes.draw do
       post     'sentences' => 'slides#create', type: 'Sentence'
       post     'pictures'  => 'slides#create', type: 'Picture'
 
-      resources :slides, :except => [:new,:edit]
+      resources :slides, except: [:new,:edit]
 
       resources :invitations, :only => [:create,:index,:destroy]
 
@@ -94,7 +94,7 @@ Draw::Application.routes.draw do
       put :read, on: :member, action: :update, read: true
     end
 
-    resources :comments, :except => [:index,:show,:new,:edit] do
+    resources :comments, only: [:create,:destroy,:update] do
       put :flag, action: :update, flag: true, on: :member
     end
   end
