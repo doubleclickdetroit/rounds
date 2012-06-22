@@ -19,7 +19,7 @@ class SessionsController < ApplicationController
       cookies[:facebook_token] = token
     end
 
-    redirect_to root_url, :notice => "User '#{@user.name}' signed in through Facebook!"
+    redirect_to root_url, :notice => "User '#{@user.name}' signed in through #{auth_hash[:provider].capitalize}!"
   end
 
   def destroy
