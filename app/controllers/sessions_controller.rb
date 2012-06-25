@@ -10,9 +10,7 @@ class SessionsController < ApplicationController
     session[:image]   = auth_hash['info']['image']
 
     @watchings_count          = @user.own(Watching).count
-    # @unread_invitations_count = Invitation.where(invited_user_id:@user.id, read:false).count
     @unread_invitations_count = @user.own(Invitation).where(read:false).count
-
 
     # todo trys?
     if token = auth_hash.try('credentials').try('token')
@@ -24,6 +22,7 @@ class SessionsController < ApplicationController
       cookies[:facebook_token] = token
     end
 
+    # @notice = "User '#{@user.name}' signed in through #{auth_hash[:provider].capitalize}!"
     redirect_to root_url, :notice => "User '#{@user.name}' signed in through #{auth_hash[:provider].capitalize}!"
   end
 
