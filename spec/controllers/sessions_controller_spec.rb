@@ -72,6 +72,7 @@ describe SessionsController do
         end
 
         it 'should assign count of user Watchings to @watchings_count' do
+          pending 'in rabl'
           request.env["omniauth.auth"] = OmniAuth.config.mock_auth[:facebook]
           get :create, {}, {}
 
@@ -79,6 +80,7 @@ describe SessionsController do
         end
 
         it 'should assign count of unread user Invitation to @unread_invitations_count' do
+          pending 'in rabl'
           request.env["omniauth.auth"] = OmniAuth.config.mock_auth[:facebook]
           get :create, {}, {}
 

@@ -9,8 +9,9 @@ class SessionsController < ApplicationController
     session[:user_id] = @user.id
     session[:image]   = auth_hash['info']['image']
 
-    @watchings_count          = @user.own(Watching).count
-    @unread_invitations_count = @user.own(Invitation).where(read:false).count
+    # # todo in template now
+    # @watchings_count          = @user.own(Watching).count
+    # @unread_invitations_count = @user.own(Invitation).where(read:false).count
 
     # todo trys?
     if token = auth_hash.try('credentials').try('token')
@@ -20,10 +21,26 @@ class SessionsController < ApplicationController
       @user.save
 
       cookies[:facebook_token] = token
+
+      # todo cleanup
+      @notice = "User '#{@user.name}' signed in through #{auth_hash[:provider].capitalize}!"
+      @messages = {
+        notice: @notice,
+        system: 'Message of the day!'
+      }
+      class << @user
+        attr_accessor :messages
+      end
+      @user.messages = @messages
+
+      respond_to do |format|
+        format.html { render 'sessions/create' }
+        format.json
+      end
     end
 
     # @notice = "User '#{@user.name}' signed in through #{auth_hash[:provider].capitalize}!"
-    redirect_to root_url, :notice => "User '#{@user.name}' signed in through #{auth_hash[:provider].capitalize}!"
+    # redirect_to root_url, :notice => "User '#{@user.name}' signed in through #{auth_hash[:provider].capitalize}!"
   end
 
   def destroy
