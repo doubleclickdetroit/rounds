@@ -144,12 +144,14 @@ describe SlidesController do
 
     it 'should update the Slide whose id was passed in' do
       slide = FactoryGirl.create(:picture)
+      slide.ready = false
+      slide.save
 
-      Picture.last.uploaded.should be_false
+      Picture.last.ready.should be_false
 
       put :update, { type: 'Picture', id: slide.to_param, uploaded: true }, valid_session 
 
-      Picture.last.uploaded.should be_true
+      Picture.last.ready.should be_true
     end
   end
 

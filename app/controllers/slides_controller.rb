@@ -32,7 +32,7 @@ class SlidesController < ApplicationController
   def update
     if params[:type] == 'Picture' && params[:uploaded] == true
       pic = Slide.find(params[:id])
-      pic.uploaded = true
+      pic.ready = true
       pic.save
       head :accepted
     else
