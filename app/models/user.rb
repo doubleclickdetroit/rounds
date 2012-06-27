@@ -38,16 +38,15 @@ class User < ActiveRecord::Base
     ignored_ids |= friend_ids       if arr.include? :friends
     results = results.where(['slides.user_id NOT IN (?)', ignored_ids]) 
 
-    if arr.include? :private
-      results = results.includes(:round).where(['rounds.private = ?', false])
-    end
+    results = results.includes(:round).where(['rounds.private = ?', false]) if arr.include? :private
+    results = results.where(['slides.ready = ?', true]) if arr.include? :not_ready
 
     results
   end
 
   def community(klass)
     # remove also sorts/limits
-    slides = remove([:blocked,:friends], from: klass)
+    slides = remove([:blocked,:friends,:not_ready], from: klass)
   end
 
   def set_friends(provider, uids)
@@ -67,13 +66,13 @@ class User < ActiveRecord::Base
 
   def friends(klass)
     # remove also sorts/limits
-    remove([:blocked,:private], from: klass).where(['slides.user_id IN (?)', friend_ids])
+    remove([:blocked,:private,:not_ready], from: klass).where(['slides.user_id IN (?)', friend_ids])
   end
 
   def private(klass)
     raise ArgumentError unless [Sentence,Picture].include? klass 
     # remove also sorts/limits
-    slides = remove(:blocked, from: klass)
+    slides = remove([:blocked,:not_ready], from: klass)
 
     # select only slides from private rounds
     private_round_ids = self.invitations.private.map(&:round_id)

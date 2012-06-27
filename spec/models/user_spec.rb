@@ -319,6 +319,7 @@ describe User do
 
           @invited_private   = FactoryGirl.create(@klass_sym, :user => @friend,   :round => @inv_private_round)
           @uninvited_private = FactoryGirl.create(@klass_sym, :user => @stranger, :round => @uninv_priv_round)
+
         end
 
         describe '.remove' do
@@ -331,6 +332,11 @@ describe User do
           it "should not return instances of #{klass} that belong to private Rounds" do
             @user.remove(:private, from: klass).should_not include(@invited_private)
             @user.remove(:private, from: klass).should_not include(@uninvited_private)
+          end
+
+          it "should not return instances of #{klass} that belong to private Rounds" do
+            @not_ready = FactoryGirl.create(@klass_sym, round: @round, :user => @friend, ready: false)
+            @user.remove(:not_ready, from: klass).should_not include(@not_ready)
           end
 
           it 'should sort the results'
@@ -365,6 +371,11 @@ describe User do
             @user.private(klass).should == [@invited_private]
           end
           it "should not return instances of the #{klass} for which the user_id is in blocked_user_ids" 
+          it "should not return records that are not .ready" do
+
+            @invited_private_not_ready = FactoryGirl.create(@klass_sym, round: @inv_private_round, user: @friend, ready: false)
+            @user.private(klass).should_not include(@invited_private_not_ready)
+          end
         end
 
         describe '.friends' do
@@ -394,6 +405,11 @@ describe User do
             klass.count.should > 8
 
             @user.friends(klass).should_not include(@blocked_users)
+          end
+
+          it "should not return records that are not .ready" do
+            @friends_not_ready = FactoryGirl.create(@klass_sym, round: @round, user: @friend, ready: false)
+            @user.friends(klass).should_not include(@friends_not_ready)
           end
         end
 
@@ -432,6 +448,11 @@ describe User do
 
           it "should not return #{klass.to_s.pluralize} belonging to friends" do
             @user.community(klass).should_not include(@friends)
+          end
+
+          it "should not return #{klass.to_s.pluralize} that are not .ready" do
+            @strangers_not_ready = FactoryGirl.create(@klass_sym, round: @round, user: @stranger, ready: false)
+            @user.community(klass).should_not include(@strangers_not_ready)
           end
         end
 

@@ -137,7 +137,9 @@ describe Slide do
       }.to change(RoundLock, :count).by(-1)
     end
 
+    it 'should set slide.ready to false upon successful Picture creation'
     it 'should not destroy the lock upon successful Picture creation' do
+      pending 'only for production...'
       FactoryGirl.create(:sentence, :round_id => @round.id)
       slide = FactoryGirl.build(:picture, :round_id => @round.id, :user_id => @user.id).attributes
 
