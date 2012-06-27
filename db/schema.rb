@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120621103542) do
+ActiveRecord::Schema.define(:version => 20120627044314) do
 
   create_table "authorizations", :force => true do |t|
     t.string   "provider"
@@ -92,8 +92,8 @@ ActiveRecord::Schema.define(:version => 20120621103542) do
   create_table "slides", :force => true do |t|
     t.integer  "user_id"
     t.integer  "round_id"
-    t.datetime "created_at",                       :null => false
-    t.datetime "updated_at",                       :null => false
+    t.datetime "created_at",                           :null => false
+    t.datetime "updated_at",                           :null => false
     t.text     "text"
     t.string   "file_file_name"
     t.string   "file_content_type"
@@ -101,6 +101,7 @@ ActiveRecord::Schema.define(:version => 20120621103542) do
     t.datetime "file_updated_at"
     t.string   "type"
     t.integer  "votes",             :default => 0
+    t.boolean  "uploaded",          :default => false
   end
 
   add_index "slides", ["round_id"], :name => "index_slides_on_round_id"

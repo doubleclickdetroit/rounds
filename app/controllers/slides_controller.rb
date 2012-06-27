@@ -29,9 +29,16 @@ class SlidesController < ApplicationController
     respond_with Slide.create_next(params[:slide])
   end
 
-  # def update
-  #   respond_with Slide.update(params[:id],params[:slide]).to_json
-  # end
+  def update
+    if params[:type] == 'Picture' && params[:uploaded] == true
+      pic = Slide.find(params[:id])
+      pic.uploaded = true
+      pic.save
+      head :accepted
+    else
+      head :not_acceptable 
+    end
+  end
 
   def destroy
     respond_with Slide.destroy(params[:id]).to_json

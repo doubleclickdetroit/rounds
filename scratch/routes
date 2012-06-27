@@ -6,11 +6,21 @@ A couple caveats:
   3 - not sure how images (SVG files) are uploaded (multi-part POST to SlidesController?)
 
 
-Adding a Slide to a Round (first requires RoundLock)
-  POST /api/rounds/:round_id/lock # user derived from session
-  POST /api/rounds/:round_id/sentences {:sentence => {...}} 
-    OR
-  POST /api/rounds/:round_id/picuturs  {:picture => {...}} 
+Adding a Sentence to a Round
+  1 aquire a lock on the round
+    POST /api/rounds/:round_id/lock # user derived from session
+  2 create the sentence itself 
+    POST /api/rounds/:round_id/sentences {sentence: {text: 'Sentence text'}} 
+
+Adding a Picture to a Round
+  1 aquire a lock on the round
+    POST /api/rounds/:round_id/lock # user derived from session
+  2 create the picture record
+    POST /api/rounds/:round_id/pictures
+  3 take response json and use json.aws.credentials to upload image to S3
+    ???
+  4 upon successful upload to S3, inform rails that the image have been uploaded
+    PUT /api/pictures/:id/uploaded
 
 Watching a Round that is locked
   GET  /api/rounds/:round_id/lock  # check for lock/get PrivatePub subscribtion obj
