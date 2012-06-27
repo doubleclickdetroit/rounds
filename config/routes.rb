@@ -54,9 +54,8 @@ Draw::Application.routes.draw do
         post ':slide_limit'         => 'rounds#create'
         post ':slide_limit/private' => 'rounds#create', :private => true
       end
-      # todo DRY?
-      post     'sentences' => 'slides#create', type: 'Sentence'
-      post     'pictures'  => 'slides#create', type: 'Picture'
+      post     'sentences'          => 'slides#create', type: 'Sentence'
+      post     'pictures'           => 'slides#create', type: 'Picture'
 
       resources :slides, except: [:new,:edit]
 
@@ -89,6 +88,9 @@ Draw::Application.routes.draw do
       get 'friends'   => 'slides#friends'
       get 'private'   => 'slides#private'
     end
+
+    # todo
+    put 'pictures/:id/uploaded' => 'slides#update', type: 'Picture', uploaded: true
 
     resources :invitations, :only => [:update] do
       put :read, on: :member, action: :update, read: true

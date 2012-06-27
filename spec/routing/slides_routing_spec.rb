@@ -94,6 +94,10 @@ describe SlidesController do
         post("/api/rounds/1/pictures").should route_to("slides#create", :type => 'Picture', :round_id => '1')
       end
 
+      it "routes to #update" do
+        put("/api/pictures/1/uploaded").should route_to("slides#update", :type => 'Picture', :id => '1', uploaded: true)
+      end
+
       it "routes to #feed" do
         get("/api/pictures").should route_to("slides#feed", :type => 'Picture')
       end
