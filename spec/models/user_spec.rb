@@ -269,22 +269,35 @@ describe User do
       }.to raise_error(ArgumentError)
     end
 
-    it 'should update friend_ids from provider/uids' do
+    before(:each) do
       @user.friend_ids_csv = ''
       @user.save
       @user.reload
+
+      @friend      = FactoryGirl.create(:user)
+      uid          = '525'
+      @friend_auth = FactoryGirl.create(:authorization, provider: 'facebook', uid: uid, user_id: @friend.id)
+    end
+
+    it 'should update friend_ids from provider/uids' do
       @user.friend_ids.should == []
 
-      friend = FactoryGirl.create(:user)
-      uid    = '525'
-      FactoryGirl.create(:authorization, provider: 'facebook', uid: uid, user_id: friend.id)
-
-      @user.set_friends('facebook', ['1','2','3',uid])
+      @user.set_friends('facebook', ['1','2','3',@friend_auth.uid])
 
       @user.reload
 
-      @user.friend_ids.should == [friend.id.to_s]
-      @user.friend_ids_csv.should == friend.id.to_s
+      @user.friend_ids.should == [@friend.id.to_s]
+      @user.friend_ids_csv.should == @friend.id.to_s
+    end
+
+    it 'should return a proper hash showing user_ids linked with provider/uid' do
+      hash = {
+        'facebook' => {
+          @friend_auth.uid => @friend.id
+        }
+      }
+      friends_hash = @user.set_friends('facebook', ['1','2','3',@friend_auth.uid])
+      friends_hash.should == hash
     end
   end
 

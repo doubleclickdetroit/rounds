@@ -52,16 +52,24 @@ class User < ActiveRecord::Base
   def set_friends(provider, uids)
     contains_non_int = uids.any? {|uid| uid !~ /\d+/}
     raise ArgumentError, 'All uids must be integer strings' if contains_non_int
+    
+    hash     = { provider => {} }
+    user_ids = []
 
-    user_ids = uids.map do |uid|
-      Authorization.find_by_provider_and_uid(provider, uid).try(:user_id)
+    uids.each do |uid|
+      user_id = Authorization.find_by_provider_and_uid(provider, uid).try(:user_id)
+      unless user_id.nil?
+        user_ids << user_id
+        hash[provider][uid] = user_id
+      end
     end
-    user_ids.reject!(&:nil?)
 
+    puts "#### friend ids #{user_ids}"
     self.friend_ids = user_ids
     self.save
+    puts "#### friend ids #{self.reload.friend_ids}"
 
-    user_ids
+    hash
   end
 
   def friends(klass)
