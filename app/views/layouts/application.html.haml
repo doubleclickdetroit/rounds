@@ -8,7 +8,7 @@
 		= render "header"
 
 		#main{ :role => "main" }
-			= yield if request.path.match(%r{^/uploads})
+			= yield if request.path.match(%r{^/uploads}) || request.path.match(%r{/auth/.+/callback})
 
 		-# - if current_user
 		-# 	= requirejs_include_tag "application"

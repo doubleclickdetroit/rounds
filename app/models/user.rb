@@ -38,42 +38,49 @@ class User < ActiveRecord::Base
     ignored_ids |= friend_ids       if arr.include? :friends
     results = results.where(['slides.user_id NOT IN (?)', ignored_ids]) 
 
-    if arr.include? :private
-      results = results.includes(:round).where(['rounds.private = ?', false])
-    end
+    results = results.includes(:round).where(['rounds.private = ?', false]) if arr.include? :private
+    results = results.where(['slides.ready = ?', true]) if arr.include? :not_ready
 
     results
   end
 
   def community(klass)
     # remove also sorts/limits
-    slides = remove([:blocked,:friends], from: klass)
+    slides = remove([:blocked,:friends,:not_ready], from: klass)
   end
 
   def set_friends(provider, uids)
     contains_non_int = uids.any? {|uid| uid !~ /\d+/}
     raise ArgumentError, 'All uids must be integer strings' if contains_non_int
+    
+    hash     = { provider => {} }
+    user_ids = []
 
-    user_ids = uids.map do |uid|
-      Authorization.find_by_provider_and_uid(provider, uid).try(:user_id)
+    uids.each do |uid|
+      user_id = Authorization.find_by_provider_and_uid(provider, uid).try(:user_id)
+      unless user_id.nil?
+        user_ids << user_id
+        hash[provider][uid] = user_id
+      end
     end
-    user_ids.reject!(&:nil?)
 
+    puts "#### friend ids #{user_ids}"
     self.friend_ids = user_ids
     self.save
+    puts "#### friend ids #{self.reload.friend_ids}"
 
-    user_ids
+    hash
   end
 
   def friends(klass)
     # remove also sorts/limits
-    remove([:blocked,:private], from: klass).where(['slides.user_id IN (?)', friend_ids])
+    remove([:blocked,:private,:not_ready], from: klass).where(['slides.user_id IN (?)', friend_ids])
   end
 
   def private(klass)
     raise ArgumentError unless [Sentence,Picture].include? klass 
     # remove also sorts/limits
-    slides = remove(:blocked, from: klass)
+    slides = remove([:blocked,:not_ready], from: klass)
 
     # select only slides from private rounds
     private_round_ids = self.invitations.private.map(&:round_id)
@@ -81,12 +88,20 @@ class User < ActiveRecord::Base
   end
 
   def self.via_auth(auth_hash)
-    auth = Authorization.find_or_initialize_by_provider_and_uid(auth_hash['provider'], auth_hash['uid'])
+    provider, uid = auth_hash['provider'], auth_hash['uid']
+    auth = Authorization.find_or_initialize_by_provider_and_uid(provider, uid)
 
     # todo this is flawed if we use anything other than facebook
     if auth.new_record?
       info = auth_hash['info']
       user = User.create(name: info['name'], image_path: info['image'])
+
+      # todo move this
+      # check for Invitations for provider/uid
+      Invitation.where(invited_provider: provider, invited_uid: uid).each do |inv|
+        inv.invited_user_id = user.id
+        inv.save
+      end
 
       # todo this sucks, fix it
       auth.user = user

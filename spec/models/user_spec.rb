@@ -191,12 +191,24 @@ describe User do
     context 'where no user exists' do
       pending "not sure if this is it, but theres another case im not spec'ing..."
 
-      it 'should persist the auth token in the DB'
-      
       pending 'for facebook only?'
       it 'should save the image to User.image_path' do
         user = User.via_auth(@auth_hash)
         user.image_path.should == @auth_hash['info']['image']
+      end
+
+      it 'should check for Invitations by provider/uid and add user_ids' do
+        provider, uid = @auth_hash['provider'], @auth_hash['uid']
+        inv1 = FactoryGirl.create :invitation, invited_provider: provider, invited_uid: uid
+        inv2 = FactoryGirl.create :invitation, invited_provider: provider, invited_uid: uid
+
+        inv1.invited_user_id.should == 0
+        inv2.invited_user_id.should == 0
+
+        user = User.via_auth(@auth_hash)
+
+        inv1.reload.invited_user_id.should == user.id
+        inv2.reload.invited_user_id.should == user.id
       end
     end
   end
@@ -257,22 +269,35 @@ describe User do
       }.to raise_error(ArgumentError)
     end
 
-    it 'should update friend_ids from provider/uids' do
+    before(:each) do
       @user.friend_ids_csv = ''
       @user.save
       @user.reload
+
+      @friend      = FactoryGirl.create(:user)
+      uid          = '525'
+      @friend_auth = FactoryGirl.create(:authorization, provider: 'facebook', uid: uid, user_id: @friend.id)
+    end
+
+    it 'should update friend_ids from provider/uids' do
       @user.friend_ids.should == []
 
-      friend = FactoryGirl.create(:user)
-      uid    = '525'
-      FactoryGirl.create(:authorization, provider: 'facebook', uid: uid, user_id: friend.id)
-
-      @user.set_friends('facebook', ['1','2','3',uid])
+      @user.set_friends('facebook', ['1','2','3',@friend_auth.uid])
 
       @user.reload
 
-      @user.friend_ids.should == [friend.id.to_s]
-      @user.friend_ids_csv.should == friend.id.to_s
+      @user.friend_ids.should == [@friend.id.to_s]
+      @user.friend_ids_csv.should == @friend.id.to_s
+    end
+
+    it 'should return a proper hash showing user_ids linked with provider/uid' do
+      hash = {
+        'facebook' => {
+          @friend_auth.uid => @friend.id
+        }
+      }
+      friends_hash = @user.set_friends('facebook', ['1','2','3',@friend_auth.uid])
+      friends_hash.should == hash
     end
   end
 
@@ -307,6 +332,7 @@ describe User do
 
           @invited_private   = FactoryGirl.create(@klass_sym, :user => @friend,   :round => @inv_private_round)
           @uninvited_private = FactoryGirl.create(@klass_sym, :user => @stranger, :round => @uninv_priv_round)
+
         end
 
         describe '.remove' do
@@ -319,6 +345,11 @@ describe User do
           it "should not return instances of #{klass} that belong to private Rounds" do
             @user.remove(:private, from: klass).should_not include(@invited_private)
             @user.remove(:private, from: klass).should_not include(@uninvited_private)
+          end
+
+          it "should not return instances of #{klass} that belong to private Rounds" do
+            @not_ready = FactoryGirl.create(@klass_sym, round: @round, :user => @friend, ready: false)
+            @user.remove(:not_ready, from: klass).should_not include(@not_ready)
           end
 
           it 'should sort the results'
@@ -353,6 +384,11 @@ describe User do
             @user.private(klass).should == [@invited_private]
           end
           it "should not return instances of the #{klass} for which the user_id is in blocked_user_ids" 
+          it "should not return records that are not .ready" do
+
+            @invited_private_not_ready = FactoryGirl.create(@klass_sym, round: @inv_private_round, user: @friend, ready: false)
+            @user.private(klass).should_not include(@invited_private_not_ready)
+          end
         end
 
         describe '.friends' do
@@ -382,6 +418,11 @@ describe User do
             klass.count.should > 8
 
             @user.friends(klass).should_not include(@blocked_users)
+          end
+
+          it "should not return records that are not .ready" do
+            @friends_not_ready = FactoryGirl.create(@klass_sym, round: @round, user: @friend, ready: false)
+            @user.friends(klass).should_not include(@friends_not_ready)
           end
         end
 
@@ -420,6 +461,11 @@ describe User do
 
           it "should not return #{klass.to_s.pluralize} belonging to friends" do
             @user.community(klass).should_not include(@friends)
+          end
+
+          it "should not return #{klass.to_s.pluralize} that are not .ready" do
+            @strangers_not_ready = FactoryGirl.create(@klass_sym, round: @round, user: @stranger, ready: false)
+            @user.community(klass).should_not include(@strangers_not_ready)
           end
         end
 

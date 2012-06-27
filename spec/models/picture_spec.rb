@@ -14,4 +14,8 @@ describe Picture do
       @pic.content.should == @url
     end
   end
+
+  describe '#get_aws_credentials' do
+    it 'should return valid AWS credentials for upload'
+  end
 end

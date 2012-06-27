@@ -27,23 +27,13 @@ describe UserFeedController do
       response.status.should == 406
     end
 
-    it 'should update .friends for current_user' do
-      uid, user_id = 4, '5'
-      FactoryGirl.create(:authorization, provider: 'facebook', uid: uid, user_id: user_id)
-      post :friends, {provider: 'facebook', uids: [1,2,3,uid]}, valid_session
-      response.body.should == "[#{user_id}]"
+    it 'should update .friend_ids for current_user', :focus do
+      @friend      = FactoryGirl.create(:user)
+      @friend_auth = FactoryGirl.create(:authorization, user_id: @friend.id)
+      post :friends, {provider: @friend_auth.provider, uids: [@friend_auth.uid]}, valid_session
+      @user.reload.friend_ids.should == [@friend.to_param]
     end
 
-    it 'should assign @user_ids with all ids of friends in the system' do
-      @friend_user = FactoryGirl.create(:user)
-      @other_user  = FactoryGirl.create(:user)
-      FactoryGirl.create(:authorization, provider: 'facebook', user: @friend_user)
-      FactoryGirl.create(:authorization, provider: 'facebook', user: @friend_user)
-      friend_facebook_uid = @friend_user.authorizations.first.uid
-
-      post :friends, {provider: 'facebook', uids: [friend_facebook_uid]}, valid_session
-
-      assigns(:user_ids).should == [@friend_user.id]
-    end
+    it 'should return a proper hash' # handled by @user.set_friends
   end
 end

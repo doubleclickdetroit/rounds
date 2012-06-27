@@ -125,7 +125,6 @@ describe Round do
       @round.reload.complete.should be_true
     end
 
-    pending 'further testing'
     pending 'make sure this doesnt get called constantly since its just calling on after_save and checking .complete' 
     # ^ i think this is fine...
     it 'should fire a callback to build the image' do
@@ -140,6 +139,21 @@ describe Round do
       @round.should_receive :check_for_round_completion
       @round.save
     end
+
+    it 'should fire a callback to build the image' do
+      # extra slide to ensure only called once
+      slide = FactoryGirl.build(:slide).attributes
+      slide.delete 'id'
+      slide.delete 'type'
+      @round.slides.build slide
+
+      @round.stub(:build_complete_round_image).and_return(true)
+
+      @round.should_receive :check_for_round_completion
+      @round.save
+    end
+
+    pending 'further testing'
   end
 
   klass = Round
