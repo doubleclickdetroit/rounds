@@ -3,14 +3,14 @@ class Picture < Slide
     has_attached_file :file,
       path: ':attachment/:id/:style.:extension',
       storage: :s3,
-      s3_credentials: Rails.root.join('config','aws.yml')
+      s3_credentials: Rails.root.join('config','aws_s3.yml')
   else
     has_attached_file :file, path: './public/system/:attachment/:id/:style.:extension'
   end
 
   def self.get_aws_credentials
-    api_key = YAML.load_file(Rails.root.join('config','aws_s3.yml'))
-    sts     = AWS::STS.new(api_key) # security token service
+    # security token service
+    sts = AWS::STS.new(AWS::CREDENTIALS) 
     sts.new_session()
   end
 
