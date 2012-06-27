@@ -129,27 +129,31 @@ describe SlidesController do
     end
   end
 
-  # describe 'PUT update' do
-  #   it 'should not throw a 406 if there is no slide_id' do
-  #     pending 'no idea, try after you have more implemented'
-  #     put :update, { :slide => FactoryGirl.build(:slide) }, valid_session 
-  #     response.status.should_not == 406
-  #   end
+  describe 'PUT update' do
+    it 'should not throw a 406 if type is not Picture' do
+      slide = FactoryGirl.create(:sentence)
+      put :update, { type: 'Sentence', id: slide.to_param, uploaded: true }, valid_session 
+      response.status.should == 406
+    end
 
-  #   it 'should update the Slide whose id was passed in' do
-  #     @slide = FactoryGirl.create(:slide)
+    it 'should not throw a 406 unless uploaded: true' do
+      slide = FactoryGirl.create(:picture)
+      put :update, { type: 'Picture', id: slide.to_param }, valid_session 
+      response.status.should == 406
+    end
 
-  #     id = @slide.to_param
-  #     round_id = 1 
-  #     params = { 
-  #       :id => id,
-  #       :slide  => {:round_id => round_id} 
-  #     }
+    it 'should update the Slide whose id was passed in' do
+      slide = FactoryGirl.create(:picture)
+      slide.ready = false
+      slide.save
 
-  #     put :update, params, valid_session
-  #     Slide.find(id).round_id.should == round_id 
-  #   end
-  # end
+      Picture.last.ready.should be_false
+
+      put :update, { type: 'Picture', id: slide.to_param, uploaded: true }, valid_session 
+
+      Picture.last.ready.should be_true
+    end
+  end
 
   describe 'DELETE destroy' do
     it 'should not throw a 406 if there is no slide_id' do

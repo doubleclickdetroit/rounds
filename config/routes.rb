@@ -1,68 +1,63 @@
 Draw::Application.routes.draw do
 
-  # todo use :via for all matches
-
   # todo remove after dev
   resources :uploads
 
   # session
-  match '/auth/facebook/callback' => 'sessions#create'
+  get   '/auth/facebook/callback' => 'sessions#create'
   match '/signout' => 'sessions#destroy', :as => :signout #, :via => :delete
 
   scope 'api' do
     scope 'users' do
       # own full user feed
-      match '/me' => 'user_feed#show', via: :get
+      get 'me' => 'user_feed#show'
       scope 'me' do
         # set user's facebook friends
-        match '/friends'     => 'user_feed#friends', via: :post
+        post 'friends'     => 'user_feed#friends'
         # own user activity by resource
-        match '/rounds'      => 'rounds#index',      via: :get
-        match '/slides'      => 'slides#index',      via: :get
-        match '/comments'    => 'comments#index',    via: :get
-        match '/ballots'     => 'ballots#index',     via: :get
-        match '/invitations' => 'invitations#index', via: :get
-        match '/watchings'   => 'watchings#index',   via: :get
-        match '/dibs'        => 'watchings#index',   via: :get, type: 'Dib'
+        get  'rounds'      => 'rounds#index'
+        get  'slides'      => 'slides#index'
+        get  'comments'    => 'comments#index'
+        get  'ballots'     => 'ballots#index'
+        get  'invitations' => 'invitations#index'
+        get  'watchings'   => 'watchings#index'
+        get  'dibs'        => 'watchings#index',   type: 'Dib'
       end
 
       # full user feed
-      match '/:user_id'   => 'user_feed#show',        :via => :get
+      get ':user_id'          => 'user_feed#show'
       # user activity by resource
-      match '/:user_id/rounds'   => 'rounds#index',   :via => :get
-      match '/:user_id/slides'   => 'slides#index',   :via => :get
-      match '/:user_id/comments' => 'comments#index', :via => :get
-      match '/:user_id/ballots'  => 'ballots#index',  :via => :get
+      get ':user_id/rounds'   => 'rounds#index'
+      get ':user_id/slides'   => 'slides#index'
+      get ':user_id/comments' => 'comments#index'
+      get ':user_id/ballots'  => 'ballots#index'
 
       # blocking by User.id
-      match '/block/:blocked_user_id'  => "blacklist_entries#create",  :via => :post
-      match '/block/:blocked_user_id'  => "blacklist_entries#destroy", :via => :delete
+      post   'block/:blocked_user_id' => "blacklist_entries#create"
+      delete 'block/:blocked_user_id' => "blacklist_entries#destroy"
     end
 
     # blocking by provider
-    # todo clean up the match's
-    match '/providers/:provider/users/:uid/block' => 'blacklist_entries#create', :via => :post
-    match '/providers/:provider/users/:uid/block' => 'blacklist_entries#destroy', :via => :delete
-    # todo clean up the match's
+    post   'providers/:provider/users/:uid/block'    => 'blacklist_entries#create'
+    delete 'providers/:provider/users/:uid/block'    => 'blacklist_entries#destroy'
     # full user feed
-    match '/providers/:provider/users/:uid/'         => 'user_feed#show', :via => :get
+    get    'providers/:provider/users/:uid/'         => 'user_feed#show'
     # user activity / feeds by provider / uid
-    match '/providers/:provider/users/:uid/rounds'   => 'rounds#index',   :via => :get
-    match '/providers/:provider/users/:uid/slides'   => 'slides#index',   :via => :get
-    match '/providers/:provider/users/:uid/comments' => 'comments#index', :via => :get
-    match '/providers/:provider/users/:uid/ballots'  => 'ballots#index',  :via => :get
+    get    'providers/:provider/users/:uid/rounds'   => 'rounds#index'
+    get    'providers/:provider/users/:uid/slides'   => 'slides#index'
+    get    'providers/:provider/users/:uid/comments' => 'comments#index'
+    get    'providers/:provider/users/:uid/ballots'  => 'ballots#index'
 
 
-    resources :rounds, :except => [:create,:index,:update,:new,:edit] do
+    resources :rounds, only: [:show,:destroy] do
       collection do
-        post '/:slide_limit'         => 'rounds#create'
-        post '/:slide_limit/private' => 'rounds#create', :private => true
+        post ':slide_limit'         => 'rounds#create'
+        post ':slide_limit/private' => 'rounds#create', :private => true
       end
-      # todo DRY?
-      match     'sentences' => 'slides#create', :type => 'Sentence', :via => :post
-      match     'pictures'  => 'slides#create', :type => 'Picture',  :via => :post
+      post     'sentences'          => 'slides#create', type: 'Sentence'
+      post     'pictures'           => 'slides#create', type: 'Picture'
 
-      resources :slides, :except => [:new,:edit]
+      resources :slides, except: [:new,:edit]
 
       resources :invitations, :only => [:create,:index,:destroy]
 
@@ -77,34 +72,31 @@ Draw::Application.routes.draw do
       end
 
       resources :ballots, :only => [:index]
-      match     'vote/:vote' => 'ballots#create', via: :post
+      post      'vote/:vote' => 'ballots#create'
     end
 
-    ##### BEGIN MESS
-    # todo cleaner
-    match 'sentences' => 'slides#feed', :type => 'Sentence'
-    match 'pictures'  => 'slides#feed', :type => 'Picture'
-
-    # todo cleaner
-    scope 'sentences' do
-      match '/community' => 'slides#community', :type => 'Sentence'
-      match '/friends'   => 'slides#friends',   :type => 'Sentence'
-      match '/private'   => 'slides#private',   :type => 'Sentence'
+    scope 'sentences', type: 'Sentence' do
+      get ''          => 'slides#feed'
+      get 'community' => 'slides#community'
+      get 'friends'   => 'slides#friends'
+      get 'private'   => 'slides#private'
     end
 
-    # todo cleaner
-    scope 'pictures' do
-      match '/community' => 'slides#community', :type => 'Picture'
-      match '/friends'   => 'slides#friends',   :type => 'Picture'
-      match '/private'   => 'slides#private',   :type => 'Picture'
+    scope 'pictures', type: 'Picture' do
+      get ''          => 'slides#feed'
+      get 'community' => 'slides#community'
+      get 'friends'   => 'slides#friends'
+      get 'private'   => 'slides#private'
     end
-    ##### END MESS
+
+    # todo
+    put 'pictures/:id/uploaded' => 'slides#update', type: 'Picture', uploaded: true
 
     resources :invitations, :only => [:update] do
       put :read, on: :member, action: :update, read: true
     end
 
-    resources :comments, :except => [:index,:show,:new,:edit] do
+    resources :comments, only: [:create,:destroy,:update] do
       put :flag, action: :update, flag: true, on: :member
     end
   end
