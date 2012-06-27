@@ -36,7 +36,11 @@ end
 
 def make_picture
   user_id = random_user().id
-  pic = FactoryGirl.create(:picture, :with_file) 
+  if Rails.env.production?
+    pic = FactoryGirl.create(:picture) # prevent dumping images to s3
+  else
+    pic = FactoryGirl.create(:picture, :with_file) 
+  end
   pic.round_id = @round.to_param
   pic.user_id = user_id
   pic.save
