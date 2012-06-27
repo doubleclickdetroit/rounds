@@ -83,6 +83,13 @@ describe Slide do
           Slide.create_next(@sentence)
         }.to raise_error('Cannot create a sentence after a sentence')
       end
+
+      it 'should return AWS credentials for upload to S3' do
+      end
+
+      it 'should mark the record as not complete' 
+      # it 'the round lock should be destroyed after the upload'
+      # it 'background processing should take place after the upload'
     end
 
     it 'should raise without a proper slide[:type]' do
@@ -120,14 +127,24 @@ describe Slide do
     # todo instead, create lock upon round creation
     it "shouldn't require a lock for the first slide..." 
 
-    it 'should destroy the lock upon successful slide creation' do
+    it 'should destroy the lock upon successful Sentence creation' do
+      FactoryGirl.create(:picture, :round_id => @round.id)
+      slide = FactoryGirl.build(:sentence, :round_id => @round.id, :user_id => @user.id).attributes
+
+      RoundLock.count.should == 1
+      expect {
+        Slide.create_next(slide)
+      }.to change(RoundLock, :count).by(-1)
+    end
+
+    it 'should not destroy the lock upon successful Picture creation' do
       FactoryGirl.create(:sentence, :round_id => @round.id)
       slide = FactoryGirl.build(:picture, :round_id => @round.id, :user_id => @user.id).attributes
 
       RoundLock.count.should == 1
       expect {
         Slide.create_next(slide)
-      }.to change(RoundLock, :count).by(-1)
+      }.to change(RoundLock, :count).by(0)
     end
   end
 

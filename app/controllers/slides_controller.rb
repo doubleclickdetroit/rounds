@@ -26,7 +26,7 @@ class SlidesController < ApplicationController
 
   def create
     params[:slide][:user_id] = current_user.id
-    respond_with Slide.create_next(params[:slide]).to_json
+    respond_with Slide.create_next(params[:slide])
   end
 
   # def update

@@ -20,6 +20,7 @@ gem 'factory_girl_rails'
 
 gem "paperclip", "~> 2.7"
 gem 'aws-s3'
+gem 'aws-sdk'
 gem 'rmagick'
 
 gem 'foreman'

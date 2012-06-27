@@ -50,10 +50,24 @@ class Slide < ActiveRecord::Base
     last_type  = slide.round.slides.last.type
     raise "Cannot create a #{slide_type.downcase} after a #{slide_type.downcase}" if slide_type == last_type
 
-    # todo
-    saved = slide.save
-    lock.destroy if saved
-    saved
+    if slide.save
+      case slide
+      when Sentence
+        lock.destroy
+        slide.attributes
+      when Picture
+        hash = slide.attributes
+
+        if Rails.env.production?
+          aws  = {aws: Picture.get_aws_credentials}
+          hash.merge(aws)
+        else
+          hash
+        end
+      end
+    else
+      # todo
+    end
   end
 
   def comment_count
