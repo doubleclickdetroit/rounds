@@ -20,8 +20,12 @@ node(:abilities) do
 end
 
 node(:messages) do
-  {
-    notice: @user.messages[:notice],
-    system: @user.messages[:system]
-  }
+  if @user.respond_to? :messages
+    {
+      notice: @user.messages[:notice],
+      system: @user.messages[:system]
+    }
+  else 
+    {}
+  end
 end

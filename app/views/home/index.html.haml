@@ -1,0 +1,11 @@
+<h1>Rounds API</h1>
+
+<!--<p>User auth has been disabled and you are free to hit against /api</p>-->
+
+-# - @json = Rabl.render(@user, 'sessions/create', view_path: 'app/views', format: :json)
+
+-# %span#user{data: {auth: @json}}
+
+-# :coffeescript
+  window.onload = ->
+    window.tainted_global_scope = $('#user').data('auth')

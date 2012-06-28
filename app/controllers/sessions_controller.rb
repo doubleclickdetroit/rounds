@@ -22,20 +22,25 @@ class SessionsController < ApplicationController
 
       cookies[:facebook_token] = token
 
-      # todo cleanup
-      @notice = "User '#{@user.name}' signed in through #{auth_hash[:provider].capitalize}!"
-      @messages = {
-        notice: @notice,
-        system: 'Message of the day!'
-      }
-      class << @user
-        attr_accessor :messages
-      end
-      @user.messages = @messages
-
       respond_to do |format|
-        format.html { render 'sessions/create' }
-        format.json
+        format.html do
+          redirect_to root_url, notice: "User '#{@user.name}' signed in through #{auth_hash[:provider].capitalize}!"
+        end
+        format.json do
+          # todo spec
+          # todo cleanup
+          @notice = "User '#{@user.name}' signed in through #{auth_hash[:provider].capitalize}!"
+          @messages = {
+            notice: @notice,
+            system: 'Message of the day!'
+          }
+          class << @user
+            attr_accessor :messages
+          end
+          @user.messages = @messages
+
+          render 'users/bootstrap'
+        end
       end
     end
 

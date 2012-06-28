@@ -1,7 +1,0 @@
-- @json = Rabl.render(@user, 'sessions/create', view_path: 'app/views', format: :json)
-
-%span#user{data: {auth: @json}}
-
-:coffeescript
-  window.onload = ->
-    window.tainted_global_scope = $('#user').data('auth')

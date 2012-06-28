@@ -8,7 +8,10 @@
 		= render "header"
 
 		#main{ :role => "main" }
-			= yield if request.path.match(%r{/auth/.+/callback})
 
 		- if current_user
+			- @json = Rabl.render(current_user, 'users/bootstrap', view_path: 'app/views', format: :json)
 			= requirejs_include_tag "application"
+			:coffeescript
+				-# console.log #{@json}
+				define 'bootstrap', -> return #{@json}

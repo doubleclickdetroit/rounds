@@ -27,7 +27,7 @@ describe UserFeedController do
       response.status.should == 406
     end
 
-    it 'should update .friend_ids for current_user', :focus do
+    it 'should update .friend_ids for current_user' do
       @friend      = FactoryGirl.create(:user)
       @friend_auth = FactoryGirl.create(:authorization, user_id: @friend.id)
       post :friends, {provider: @friend_auth.provider, uids: [@friend_auth.uid]}, valid_session
