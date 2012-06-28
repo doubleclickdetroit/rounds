@@ -13,5 +13,4 @@
 			- @json = Rabl.render(current_user, 'users/bootstrap', view_path: 'app/views', format: :json)
 			= requirejs_include_tag "application"
 			:coffeescript
-				-# console.log #{@json}
 				define 'bootstrap', -> return #{@json}
