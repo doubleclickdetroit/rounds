@@ -25,11 +25,17 @@ public
 
   scope :private, where(:private => true)
 
-  after_create :set_privacy
+  after_create :set_privacy, :notify
 
 private
   def set_privacy
     self.private = !!round.private
     self.save
+  end
+
+  def notify
+    channel = "/api/users/#{invited_user_id}/invitations"
+    message = 'New invitation received.'
+    PrivatePub.publish_to(channel, message: message)
   end
 end

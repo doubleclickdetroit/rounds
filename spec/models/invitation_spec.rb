@@ -57,6 +57,14 @@ describe Invitation do
         @invitation = FactoryGirl.create(:invitation, round: @round)
         @invitation.private.should be_true
       end
+
+      it 'should send a push notification to invited user' do
+        pending 'not receiving message. also, not really finished.'
+        @user       = FactoryGirl.create(:user)
+        @round      = FactoryGirl.create(:round)
+        @invitation = FactoryGirl.create(:invitation, invited_user_id: @user, round: @round)
+        PrivatePub.should_receive(:publish_to) # .with("/api/users/#{@user.id}/invitations", {message: 'New invitation received.'})
+      end
     end
 
     klass = Invitation
