@@ -1,17 +1,3 @@
-define [], (require) ->
+require ['jquery', 'backbone', 'application', 'jquery_ujs', 'private_pub', 'modules/main'], ($, Backbone, App) ->
 
-	$ = require 'jquery'
-
-	mediator  = require 'utils/mediator'
-	AppRouter = require './router'
-
-
-	initialize: ->
-		window.Router = new AppRouter
-		do @setupAjaxHandling
-
-
-	setupAjaxHandling: ->
-		$(document)
-			.ajaxComplete (evt, xhr) ->
-				mediator.publish 'ajax', 'complete', xhr
+	do App.initialize
