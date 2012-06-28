@@ -1,8 +1,18 @@
 object @user
 attributes :id
 
-node(:unread_invitations_count) { @user.own(Invitation).where(read:false).count }
-node(:watchings_count)          { @user.own(Watching).count }
+node(:invitations) do
+  channel = "/api/users/#{@user.id}/invitations" 
+
+  {
+    count:        @user.own(Invitation).where(read:false).count,
+    subscription: PrivatePub.subscription(channel: channel)
+  }
+end
+
+node(:watchings) do
+  { count: @user.own(Watching).count }
+end
 
 node(:gamification) do
   {
