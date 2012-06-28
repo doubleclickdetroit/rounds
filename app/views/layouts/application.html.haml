@@ -14,4 +14,4 @@
 
 			- @json = Rabl.render(current_user, 'users/bootstrap', view_path: 'app/views', format: :json)
 			:coffeescript
-				define 'config', -> return #{@json}
+				define 'bootstrap', -> return #{@json}

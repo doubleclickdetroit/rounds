@@ -4,7 +4,7 @@ define [], (require) ->
 
 	mediator  = require 'utils/mediator'
 	AppRouter = require './router'
-	config    = require './config'
+	config    = require './bootstrap'
 
 
 	initialize: ->
