@@ -12,12 +12,13 @@ describe RoundsController do
   end
 
   describe 'GET show' do
-    it 'should return a given Round' do
+    it 'should assign the proper Round to @round' do
       @round = FactoryGirl.create(:round)
       params = { :id => @round.to_param }
 
-      Round.should_receive(:find).with(@round.to_param)
       get :show, params, valid_session
+
+      assigns(:round).should == @round
     end
   end
 
