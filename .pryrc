@@ -59,6 +59,10 @@ def unwatch_round round_id=1
   Watching.where(round_id: round_id).first.destroy
 end
 
+def invite_user_to_round round_id=1, user_id=2
+  Invitation.create invited_user_id: user_id, round: round_id
+end
+
 alias :l :lock_round
 alias :u :unlock_round
 alias :t :toggle_round_lock
