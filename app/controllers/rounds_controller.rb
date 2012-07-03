@@ -13,7 +13,8 @@ class RoundsController < ApplicationController
   end
 
   def show
-    respond_with Round.find(params[:id]).to_json
+    @round = Round.find(params[:id])
+    respond_with @round
   end
 
   # todo refactor
