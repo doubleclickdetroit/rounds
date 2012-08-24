@@ -12,6 +12,7 @@ define [], (require) ->
 		Backbone.View.prototype.onClose   = ->
 		Backbone.View.prototype.onDestroy = ->
 		Backbone.View.prototype.doDestroy = ->
+			console.log 'doDestroy', @
 			@remove()
 			@unbind()
 			@onDestroy()
@@ -53,6 +54,10 @@ define [], (require) ->
 
 
 		# CRUD
+		addTo: (parent) ->
+			parent.add(@) if parent instanceof Region
+			@
+
 		add: (child) ->
 			@children.push child
 			@$el.append child.$el
