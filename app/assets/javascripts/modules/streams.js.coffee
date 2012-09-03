@@ -13,6 +13,7 @@ define [], (require) ->
 	subscribe 'navigate', (stream_id = 'sentences') ->
 
 		# get maanger to manage stream regions
+		header  = factory.request('manager').get 'header'
 		footer  = factory.request('manager').get 'footer'
 		content = factory.request('manager').get 'content'
 

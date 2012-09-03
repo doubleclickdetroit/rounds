@@ -32,7 +32,7 @@ define [], (require) ->
 		create: (id, slides) =>
 			# create collection
 			stack = new @collection slides, silent:true
-			stack.url = "#{@url()}/#{id}"
+			stack.url  = "#{@url()}/#{id}"
 
 			# setter for collection
 			@set id, stack

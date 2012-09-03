@@ -7,14 +7,13 @@
 
 		= render "header"
 
-		#main{ :role => "main" }
+		#main{:role => "main"}
 
-		- if current_user
-			= requirejs_include_tag "main"
+			- if current_user
+				= requirejs_include_tag "main"
 
-			- @json = Rabl.render(current_user, 'users/bootstrap', view_path: 'app/views', format: :json)
-			:coffeescript
-				define 'bootstrap', -> return #{@json}
+				- @json = Rabl.render(current_user, 'users/bootstrap', view_path: 'app/views', format: :json)
+				:coffeescript
+					define 'bootstrap_app', -> return #{@json}
 
 		%footer
-			%hr

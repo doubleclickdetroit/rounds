@@ -10,14 +10,14 @@ define [], (require) ->
 	class StreamView extends Backbone.View
 
 		tagName   : 'section'
-		className : 'ui-round'
+		className : 'container ui-round'
 		stack_tmpl: _.template stack_view_tmpl
 
 		events:
-			'click header nav a' : 'handleStackChange'
+			'click header nav button' : 'handleStackChange'
 
 		handleStackChange: (evt) ->
-			evt.preventDefault()
+			$(evt.target).tab 'show'
 			@options.model.request evt.target.id
 			@
 

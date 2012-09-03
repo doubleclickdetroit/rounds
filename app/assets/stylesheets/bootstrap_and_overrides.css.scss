@@ -1,0 +1,211 @@
+@import "bootstrap";
+@import "bootstrap-responsive";
+
+
+/***************************************************************************
+**** Helpers
+***************************************************************************/
+.margin-top    { margin-top   : $gridGutterWidth !important;    }
+.margin-right  { margin-right : $gridGutterWidth !important;    }
+.margin-bottom { margin-bottom: $gridGutterWidth !important;    }
+.margin-left   { margin-left  : $gridGutterWidth !important;    }
+.margin-sides  { @extend .margin-right; @extend .margin-left;   }
+.margin-tops   { @extend .margin-top; @extend   .margin-bottom; }
+.margin-all    { @extend .margin-sides; @extend .margin-tops;   }
+.margin-auto   { margin-left: auto; margin-right: auto;         }
+
+.margin-no-top    { margin-top   : 0 !important; }
+.margin-no-right  { margin-right : 0 !important; }
+.margin-no-bottom { margin-bottom: 0 !important; }
+.margin-no-left   { margin-left  : 0 !important; }
+.margin-no-sides  { @extend .margin-no-right; @extend .margin-no-left;   }
+.margin-no-tops   { @extend .margin-no-top;   @extend .margin-no-bottom; }
+.margin-none      { @extend .margin-no-sides; @extend .margin-no-tops;   }
+
+.padding-top    { padding-top   : $gridGutterWidth !important; }
+.padding-right  { padding-right : $gridGutterWidth !important; }
+.padding-bottom { padding-bottom: $gridGutterWidth !important; }
+.padding-left   { padding-left  : $gridGutterWidth !important; }
+.padding-sides  { @extend .padding-right; @extend .padding-left; }
+.padding-tops   { @extend .padding-top;   @extend .padding-bottom; }
+.padding-all    { @extend .padding-sides; @extend .padding-tops; }
+
+.padding-no-top    { padding-top   : 0 !important; }
+.padding-no-right  { padding-right : 0 !important; }
+.padding-no-bottom { padding-bottom: 0 !important; }
+.padding-no-left   { padding-left  : 0 !important; }
+.padding-no-sides  { @extend .padding-no-right; @extend .padding-no-left; }
+.padding-no-tops   { @extend .padding-no-top;   @extend .padding-no-bottom; }
+.padding-none      { @extend .padding-no-sides; @extend .padding-no-tops; }
+
+.text-red, .text-error     { color: $errorText !important;   }
+.text-green, .text-success { color: $successText !important; }
+
+.text-gray         { color: $gray !important;        }
+.text-gray_light   { color: $grayLight !important;   }
+.text-gray_lighter { color: $grayLighter !important; }
+.text-gray_dark    { color: $grayDark !important;    }
+.text-gray_darker  { color: $grayDarker !important;  }
+
+.text-uppercase { text-transform: uppercase; }
+.text-normal    { font-weight: normal; }
+
+.text-left   { text-align: left;   }
+.text-center { text-align: center; }
+.text-right  { text-align: right;  }
+
+.layout-block       { display: block; }
+.layout-inline      { display: inline; }
+.layout-inlineblock { display: inline-block; @extend .ie7-inline-block; }
+.layout-clear       {
+	&:not(.layout-clear-fallback) { clear: both; }
+
+	&.layout-clear-fallback {
+		@media (max-width: 767px) {
+			clear: both;
+		}
+	}
+}
+
+// Mobile portrait & landscape
+.pull-left.pull-fallback {
+	@media (max-width: 767px) {
+		float: none;
+		clear: left;
+	}
+}
+.pull-right.pull-fallback {
+	@media (max-width: 767px) {
+		float: left;
+		clear: left;
+	}
+}
+
+
+// Horizontal List
+.list-horizontal {
+	@extend .clearfix;
+	margin: 0;
+
+	list-style: none;
+
+	@media (min-width: 768px) {
+
+		li { float: left; }
+
+		&.list-delimit li {
+			&:before { content: "|"; }
+			&:first-child:before { content: ""; }
+			a { padding: 0 5px; }
+		}
+	}
+}
+
+// Image Styling
+.mask-rounded { @include border-radius(6px);   }
+.mask-circle  { @include border-radius(500px); }
+.mask-polaroid {
+	padding: 4px;
+	background-color: #fff;
+	border: 1px solid rgba(0, 0, 0, 0.2);
+	@include box-shadow( 0 1px 3px rgba(0, 0, 0, 0.1) );
+}
+
+
+
+/***************************************************************************
+**** Base
+***************************************************************************/
+body { padding-top: 60px; }
+
+#header {
+	a.brand { color: #fff; }
+
+	.user-menu {
+		padding-top: 5px;
+
+		img {
+			margin-right: 10px;
+			max-width: 30px;
+		}
+	}
+}
+
+footer {
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+
+	.navbar { @extend .margin-no-bottom; }
+}
+
+
+
+/***************************************************************************
+**** Components
+***************************************************************************/
+.ui-stream {
+	@extend .margin-auto-center;
+	@extend .padding-none;
+
+	list-style: none;
+
+	li {
+		@extend .margin-tops;
+		@extend .mask-polaroid;
+
+		.ui-slide {
+			@extend .layout-block;
+			@extend .margin-no-bottom;
+			@extend .lead;
+
+			text-decoration: none;
+
+			img { min-width: 100%; }
+			p   {
+				@extend .margin-no-bottom;
+				@extend .padding-all;
+			}
+		}
+
+		.ui-details {
+			@extend .clearfix;
+
+			padding: 5px;
+			background-color: $grayLighter;
+
+			.user {
+				@extend .pull-left;
+
+				img {
+					max-width : $gridGutterWidth * 2;
+					max-height: $gridGutterWidth * 2;
+					vertical-align: middle;
+				}
+
+				span {
+					@extend .layout-inlineblock;
+					line-height: $gridGutterWidth * 2;
+				}
+			}
+
+			.comments {
+				@extend .text-right;
+				line-height: $gridGutterWidth * 2;
+			}
+		}
+	}
+}
+
+.ui-round {
+	header {
+		@extend .text-center;
+
+		// h1 { @extend .margin-no-bottom }
+	}
+
+	article.content {
+		@extend .margin-auto;
+		width: 50%;
+	}
+}

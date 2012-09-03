@@ -36,6 +36,7 @@ gem 'haml-rails'
 gem 'html5-rails', :git => 'git://github.com/sporkd/html5-rails.git'
 gem 'rails-backbone'
 gem 'requirejs-rails'
+gem 'bootstrap-sass'
 
 group :development, :test do
   gem 'webrick'

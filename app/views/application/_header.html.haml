@@ -1,6 +1,8 @@
-%header#header
+%header#header.navbar.navbar-fixed-top
+	%nav.navbar-inner
+		.container
 
-	%h1= Draw::NAME
+			%a.brand{ href:"#" }= Draw::NAME
 
-	%div.user-menu
-		= render "sessions/login_items"
+			%div.user-menu.pull-right
+				= render "sessions/login_items"

@@ -4,7 +4,7 @@ define [], (require) ->
 
 	AppRouter = require './router'
 	facade    = require 'utils/facade'
-	bootstrap = require 'bootstrap'
+	bootstrap = require 'bootstrap_app'
 
 
 	setupAjaxHandling = ->
