@@ -14,5 +14,7 @@
 
 			- @json = Rabl.render(current_user, 'users/bootstrap', view_path: 'app/views', format: :json)
 			:coffeescript
-				console.log #{@json}
 				define 'bootstrap', -> return #{@json}
+
+		%footer
+			%hr

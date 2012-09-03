@@ -1,12 +1,4 @@
-define [], (require) ->
-
-	$ = require 'jquery'
-	_ = require 'underscore'
-
-	regions = {}
-	facade  = require 'utils/facade'
-	factory = require 'factories/window'
-
+define ['utils/facade','factories/window'], (facade, factory) ->
 
 	subscribe = (id, fn) ->
 		facade.subscribe 'window', id, fn
@@ -17,3 +9,7 @@ define [], (require) ->
 
 		# draw regions
 		facade.publish 'regions', 'init'
+
+
+	subscribe 'reload', ->
+		do window.location.reload

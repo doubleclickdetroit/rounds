@@ -1,22 +1,32 @@
 define [], (require) ->
 
-	Region = require 'regions'
+	RegionalMgr = require 'regional_manager'
 
 	StreamCollection = require 'collections/streams'
 	StreamModel      = require 'models/stream'
 	StreamView       = require 'views/stream_view'
+	StreamNavView    = require 'views/stream-nav_view'
 
 
-	request: (id) ->
-		switch id
+	request: (stream_id) ->
 
-			when 'pictures','sentences'
+		# find/create request stream region
+		switch stream_id
+
+			when 'manager'
+				return RegionalMgr
+
+			when 'nav'
+				nav_view = new StreamNavView
+				RegionalMgr.create 'nav', nav_view
+
+			when 'pictures', 'sentences'
 				stream_model = new StreamModel
-					stream_name: id
-					collection : StreamCollection
+					id        : stream_id
+					collection: StreamCollection
 
 				stream_view  = new StreamView
-					stream_name: id
-					model      : stream_model
+					id   : stream_id
+					model: stream_model
 
-				return new Region id, stream_view
+				RegionalMgr.create stream_id, stream_view

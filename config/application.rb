@@ -10,7 +10,7 @@ if defined?(Bundler)
 end
 
 module Draw
-  NAME = 'Rounds'
+  NAME = 'What The?'
 
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.

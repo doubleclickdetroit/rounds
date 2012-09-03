@@ -26,9 +26,7 @@ define [], (require) ->
 					return item[prop] == props[prop]
 
 		open = (id) ->
-			if @view?
-				@view.render()
-				@view.onOpen()
+			@view.onOpen() if @view?
 
 			children = if id? then [ @find id ] else @children
 			_.each children, (child) -> child.open()

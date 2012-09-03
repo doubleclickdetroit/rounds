@@ -1,0 +1,29 @@
+<article>
+	<ul class="ui-stream">
+		<% for (var i = 0; i < slides.length; i++) { %>
+			<% var slide = slides[i]; %>
+
+			<li>
+				<div class="ui-details">
+					<div class="user">
+						<img src="<%= slide.user.image_path %>">
+						<span><%= slide.user.name %></span>
+					</div>
+					<div class="comments">
+						<i class="icon-comment"></i>
+						<%= slide.comment_count %>
+					</div>
+				</div>
+
+				<a class="ui-slide" href="/rounds/<%= slide.round.id %>" data-pushstate>
+					<% if (slide.type == "Sentence") { %>
+						<p><%= slide.content %></p>
+					<% } else { %>
+						<img src="<%= slide.content %>">
+					<% } %>
+				</a>
+
+			</li>
+		<% } %>
+	</ul>
+</article>

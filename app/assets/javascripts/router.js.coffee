@@ -2,7 +2,7 @@ define [], (require) ->
 
 	Backbone = require "backbone"
 
-	mediator  = require "utils/mediator"
+	facade    = require "utils/facade"
 	PushState = require 'utils/pushstate'
 
 	class AppRouter extends Backbone.Router
@@ -11,14 +11,9 @@ define [], (require) ->
 			"_=_": "redirect_home"
 
 			""           : "render_stream"
-			"streams/:id": "render_stream"
 
-			"rounds/:id": "render_round"
-
-		render_stream: (stream_id = 'sentences') ->
-			mediator.publish 'streams', 'navigate', stream_id
-
-		render_round: (round_id) ->
+		render_stream: ->
+			facade.publish 'streams', 'navigate'
 
 		redirect_home: ->
 			@navigate '', true
@@ -27,7 +22,7 @@ define [], (require) ->
 			@navigate uri, true
 
 		initialize: ->
-			mediator.publish 'window', 'init'
+			facade.publish 'window', 'init'
 
 			Backbone.history.start
 				pushState: true

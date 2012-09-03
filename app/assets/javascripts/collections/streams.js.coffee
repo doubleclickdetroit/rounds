@@ -6,5 +6,4 @@ define [], (require) ->
 
 	class Slides extends Backbone.Collection
 
-
 	Slides

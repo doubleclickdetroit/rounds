@@ -1,11 +1,7 @@
 define [], (require) ->
 
-	$ = require 'jquery'
-	_ = require 'underscore'
-
-	facade    = require 'utils/facade'
-	factory   = require 'factories/streams'
-	Singleton = require 'utils/singleton'
+	facade  = require 'utils/facade'
+	factory = require 'factories/streams'
 
 
 	# helper method
@@ -13,25 +9,26 @@ define [], (require) ->
 		facade.subscribe 'streams', id, fn
 
 
-	# streams manager
-	class StreamsMgr extends Singleton
-
-		streams = {}
-
-		initialize: ->
-			streams.pictures  = factory.request 'pictures'
-			streams.sentences = factory.request 'sentences'
-
-
-		render: (id) ->
-			facade.publish 'streams', 'render', streams[id]
-
-
 	# Subscriptions
-	subscribe 'navigate', (stream_id) ->
-		console.log "streams.navigate #{stream_id}"
-		StreamsMgr.getInstance().render stream_id
+	subscribe 'navigate', (stream_id = 'sentences') ->
+
+		# get maanger to manage stream regions
+		footer  = factory.request('manager').get 'footer'
+		content = factory.request('manager').get 'content'
+
+		# create nav and add to manager if it doesn't already exist
+		if footer.find('nav')? is false
+			factory.request('nav').addTo(footer).open()
+
+		# creaete stream and add to manager if it doesn't already exist
+		if content.find(stream_id)? is false
+			factory.request(stream_id).addTo content
+
+		# close all other streams
+		content.all().except(stream_id).close()
+
+		# open request stream
+		content.find(stream_id).open()
 
 
-	subscribe 'render', (stream) ->
-		facade.publish 'regions', 'add_to_content', stream
+	@

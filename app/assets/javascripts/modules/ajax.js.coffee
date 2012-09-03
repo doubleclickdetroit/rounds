@@ -10,5 +10,5 @@ define [], (require) ->
 
 	# subscriptions
 	subscribe 'complete', (xhr) ->
-		do window.location.reload if xhr.status is 601
+		facade.publish('window', 'reload') if xhr.status is 401
 		@

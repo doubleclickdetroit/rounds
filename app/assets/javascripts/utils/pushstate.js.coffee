@@ -19,11 +19,11 @@ define [], (require) ->
 			uri = location.pathname.substr 1
 			notifyRouter uri, router for router in __routers
 
+		subscribe: (router) ->
+			__routers.push router
+
 		initialize: ->
 			$(window).bind 'popstate', handlePopStateEvent
 			$(document).delegate 'a[data-pushstate]', 'click', handleHyperlinkPushState
-
-		subscribe: (router) ->
-			__routers.push router
 
 	PushState
