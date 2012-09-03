@@ -10,14 +10,14 @@ define [], (require) ->
 	class StreamView extends Backbone.View
 
 		tagName   : 'section'
-		className : 'ui-round'
+		className : 'container ui-round'
 		stack_tmpl: _.template stack_view_tmpl
 
 		events:
-			'click header nav a' : 'handleStackChange'
+			'click header nav button' : 'handleStackChange'
 
 		handleStackChange: (evt) ->
-			evt.preventDefault()
+			$(evt.target).tab 'show'
 			@options.model.request evt.target.id
 			@
 
@@ -25,7 +25,7 @@ define [], (require) ->
 			super args...
 
 			@options.model.on 'change:stacks', (model, stacks, data) =>
-				@$el.html _.template nav_tmpl, 'id':@id, 'stacks':stacks
+				@$el.html _.template nav_tmpl, 'stacks':stacks
 
 			@options.model.on 'change:selected', (model, stack, data) =>
 				@render stack.toJSON()

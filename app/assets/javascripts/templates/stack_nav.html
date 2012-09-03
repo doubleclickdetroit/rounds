@@ -1,13 +1,11 @@
 <header>
-	<h1><%= id %> stream</h1>
-	<nav>
-		<ul class="list-horizontal list-delimit padding-no-sides layout-inlineblock">
-			<% for (var i = 0; i < stacks.length; i++) { %>
-				<% var stack = stacks[i]; %>
-				<li>
-					<a href="#" id="<%= stack %>"><%= stack %></a>
-				</li>
-			<% } %>
-		</ul>
+	<nav class="layout-inlineblock btn-group" data-toggle="buttons-radio">
+		<% for (var i = 0; i < stacks.length; i++) { %>
+			<%
+				var stack = stacks[i];
+				var cname = i == 0 ? 'active' : '';
+			%>
+			<button id="<%= stack %>" class="btn <%= cname %>"><%= stack %></button>
+		<% } %>
 	</nav>
 </header>

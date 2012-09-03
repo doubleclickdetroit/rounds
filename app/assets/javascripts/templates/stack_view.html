@@ -1,19 +1,19 @@
-<article>
+<article class="content">
 	<ul class="ui-stream">
 		<% for (var i = 0; i < slides.length; i++) { %>
 			<% var slide = slides[i]; %>
 
 			<li>
-				<div class="ui-details">
-					<div class="user">
-						<img src="<%= slide.user.image_path %>">
+				<a class="ui-details" href="/rounds/<%= slide.round.id %>" data-pushstate>
+					<span class="user">
+						<img class="mask-circle" src="<%= slide.user.image_path %>">
 						<span><%= slide.user.name %></span>
-					</div>
-					<div class="comments">
+					</span>
+					<span class="comments">
 						<i class="icon-comment"></i>
 						<%= slide.comment_count %>
-					</div>
-				</div>
+					</span>
+				</a>
 
 				<a class="ui-slide" href="/rounds/<%= slide.round.id %>" data-pushstate>
 					<% if (slide.type == "Sentence") { %>

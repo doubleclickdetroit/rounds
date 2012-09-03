@@ -1,0 +1,26 @@
+.container
+	.content.padding-sides
+
+		%header.margin-bottom
+			%h1.text-center.text-fallback= "#{Draw::NAME} (logo)"
+
+		.row
+			.span12
+				.well
+					.pull-left
+						= image_tag 'http://placehold.it/200x150', { class: 'mask-polaroid margin-right'}
+
+					%p.lead
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi aliquam nisi mattis purus blandit quis ullamcorper risus laoreet.
+					%hr
+					%p
+						Ut arcu lectus, condimentum sit amet bibendum sit amet, pharetra et turpis. Nunc vel nunc in tortor luctus gravida non non tellus. Suspendisse auctor, erat eget pellentesque condimentum, mauris nisi dapibus nulla, eget suscipit elit quam ac erat.
+					%p
+						Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam iaculis placerat tincidunt. Cras porttitor, enim id eleifend gravida.
+
+		.row
+			.span12
+				%p.text-center
+					%span.lead
+						Want to join in on the fun?
+					= link_to 'Login with Facebook', '/auth/facebook/', { class: 'margin-left btn btn-primary btn-large' }
