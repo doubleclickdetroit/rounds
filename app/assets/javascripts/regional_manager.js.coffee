@@ -5,10 +5,11 @@ define ['utils/regions'], (Region) ->
 	all: ->
 		regions
 
-	get: (id) ->
+	find: (id) ->
 		@all()[id]
 
-	create: (id, view) ->
-		if (regions[id] or null) is null
-			regions[id] = new Region id, view
-		@get id
+	create: (id, view, save = false) ->
+		region = new Region id, view
+		if (save and ((regions[id] or null) is null))
+			regions[id] = region
+		region

@@ -14,6 +14,5 @@ define [], (require) ->
 
 
 	initialize: ->
-		# console.log 'bootstrap data:', bootstrap
 		new AppRouter
 		do setupAjaxHandling

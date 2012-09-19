@@ -57,6 +57,8 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
   gem 'compass', '0.12.alpha.2'
   gem 'compass-h5bp'
+  gem 'haml_coffee_assets'
+  gem 'execjs'
 end
 
 group :development, :test do

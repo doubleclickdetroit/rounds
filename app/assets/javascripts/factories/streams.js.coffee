@@ -5,7 +5,8 @@ define [], (require) ->
 	StreamCollection = require 'collections/streams'
 	StreamModel      = require 'models/stream'
 	StreamView       = require 'views/stream_view'
-	StreamNavView    = require 'views/stream-nav_view'
+	StreamHeader     = require 'views/stream-header'
+	StreamFooter     = require 'views/stream-footer'
 
 
 	request: (stream_id) ->
@@ -16,9 +17,13 @@ define [], (require) ->
 			when 'manager'
 				return RegionalMgr
 
-			when 'nav'
-				nav_view = new StreamNavView
-				RegionalMgr.create 'nav', nav_view
+			when 'header'
+				header = new StreamHeader
+				RegionalMgr.create 'stream', header
+
+			when 'footer'
+				footer = new StreamFooter
+				RegionalMgr.create 'stream', footer
 
 			when 'pictures', 'sentences'
 				stream_model = new StreamModel

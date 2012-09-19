@@ -2,23 +2,19 @@ define [], (require) ->
 
 	RegionalMgr = require 'regional_manager'
 
+	window.mgr = RegionalMgr
+
 	request: (id) ->
 		switch id
 
-			when 'chrome'
-				RegionalMgr.create 'chrome', $ 'body'
+			when 'regional_manager'
+				RegionalMgr
 
 			when 'header'
-				region = RegionalMgr.create 'header',  $ 'header'
+				region = RegionalMgr.create 'header',  $('#header'), true
 
 			when 'content'
-				region = RegionalMgr.create 'content',  $ '#main'
+				region = RegionalMgr.create 'content',  $('#main'), true
 
 			when 'footer'
-				region = RegionalMgr.create 'footer',  $ 'footer'
-
-
-		# add region as child of the "chrome" region
-		if region?
-			RegionalMgr.get('chrome').add region
-			region
+				region = RegionalMgr.create 'footer',  $('footer'), true

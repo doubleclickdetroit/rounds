@@ -1,4 +1,4 @@
-define ['utils/facade','factories/regions','regional_manager'], (facade, factory, RegionalMgr) ->
+define ['utils/facade','factories/regions'], (facade, factory) ->
 
 	# helper method
 	subscribe = (id, fn) ->
@@ -9,10 +9,9 @@ define ['utils/facade','factories/regions','regional_manager'], (facade, factory
 	subscribe 'init', ->
 
 		# create regions
-		factory.request 'chrome'
 		factory.request 'header'
 		factory.request 'content'
 		factory.request 'footer'
 
 		# temporary region access
-		window.chrome = RegionalMgr.get 'chrome'
+		window.regional_manager = factory.request 'regional_manager'

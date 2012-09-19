@@ -125,13 +125,10 @@
 ***************************************************************************/
 html, body { height: 100%; }
 body {
-	overflow: visible;
-	padding: 60px 0;
-}
-
-body {
 	$bg: #c3ddeb;
 	@include gradient-directional(#fff 30%, $bg, 90deg);
+
+	padding-top: 60px;
 	background-attachment: fixed !important;
 }
 
@@ -149,7 +146,20 @@ body {
 }
 
 #header {
-	a.brand { color: #fff; }
+	#section-left  {
+		@extend .text-left;
+	}
+	#section-title {
+		@extend .margin-no-bottom;
+		@extend .lead;
+		@extend .text-center;
+
+
+		color: #fff;
+	}
+	#section-right {
+		@extend .text-right;
+	}
 
 	.user-menu {
 		padding-top: 3px;
@@ -246,6 +256,8 @@ footer {
 
 	article.content {
 		@extend .margin-auto;
+
+		margin-bottom: 60px;
 
 		// DESKTOP
 		@media (min-width: 768px) {

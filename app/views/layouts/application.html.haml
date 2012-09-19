@@ -9,14 +9,14 @@
 
 		#main{:role => "main"}
 
-			- if current_user
-				= requirejs_include_tag "main"
-
-				- @json = Rabl.render(current_user, 'users/bootstrap', view_path: 'app/views', format: :json)
-				:coffeescript
-					define 'bootstrap_app', -> return #{@json}
-
-			- else
+			- if not current_user
 				= render 'sessions/login_prompt'
 
 		%footer
+
+		- if current_user
+			= requirejs_include_tag "main"
+
+			- @json = Rabl.render(current_user, 'users/bootstrap', view_path: 'app/views', format: :json)
+			:coffeescript
+				define 'bootstrap_app', -> return #{@json}
