@@ -1,0 +1,12 @@
+<span class="comments">
+	<i class="icon-comment"></i>
+	<%= comment_count %>
+</span>
+
+<div class="ui-slide">
+	<% if (type == "Sentence") { %>
+		<p><%= content %></p>
+	<% } else { %>
+		<img src="<%= content %>">
+	<% } %>
+</div>

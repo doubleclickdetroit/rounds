@@ -47,6 +47,14 @@
 .text-gray_dark    { color: $grayDark !important;    }
 .text-gray_darker  { color: $grayDarker !important;  }
 
+.text-xxsmall { font-size: $baseFontSize / 1.3; }
+.text-xsmall  { font-size: $baseFontSize / 1.2; }
+.text-small   { font-size: $baseFontSize / 1.1; }
+.text-medium  { font-size: $baseFontSize;       }
+.text-large   { font-size: $baseFontSize * 1.1; }
+.text-xlarge  { font-size: $baseFontSize * 1.2; }
+.text-xxlarge { font-size: $baseFontSize * 1.3; }
+
 .text-uppercase { text-transform: uppercase; }
 .text-normal    { font-weight: normal; }
 
@@ -197,8 +205,12 @@ footer {
 /***************************************************************************
 **** Components
 ***************************************************************************/
-.ui-stream {
-	@extend .margin-no-left;
+.ui-stream,
+.ui-slides {
+
+	&.ui-stream { @extend .margin-no-left; }
+	&.ui-slides { @extend .margin-sides; }
+
 	@extend .padding-none;
 
 	list-style: none;

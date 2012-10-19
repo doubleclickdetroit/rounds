@@ -1,0 +1,33 @@
+<article class="content">
+	<ul class="ui-stream">
+		<% for (var i = 0; i < slides.length; i++) { %>
+			<% var slide = slides[i]; %>
+
+			<li>
+				<a class="ui-details" href="/rounds/<%= slide.round.id %>" data-pushstate>
+					<span class="user">
+						<img class="mask-circle" src="<%= slide.user.image_path %>">
+						<span><%= slide.user.name %></span>
+					</span>
+					<span class="comments">
+						<i class="icon-comment"></i>
+						<%= slide.comment_count %>
+					</span>
+				</a>
+
+				<a class="ui-slide" href="/rounds/<%= slide.round.id %>" data-pushstate>
+					<% if (slide.type == "Sentence") { %>
+						<p><%= slide.content %></p>
+					<% } else { %>
+						<img src="<%= slide.content %>">
+					<% } %>
+				</a>
+
+			</li>
+		<% } %>
+
+		<% if (slides.length == 0) { %>
+			<p class="margin-top lead text-center">There aren't any slides. Sad Pants. :`(</p>
+		<% } %>
+	</ul>
+</article>

@@ -1,13 +1,11 @@
-define ['utils/facade','factories/regions'], (facade, factory) ->
+define [], (require) ->
 
-	# helper method
-	subscribe = (id, fn) ->
-		facade.subscribe 'regions', id, fn
+	facade  = require 'utils/facade'
+	factory = require 'factories/regions'
 
 
 	# Subscriptions
-	subscribe 'init', ->
-
+	facade.subscribe 'regions', 'init', ->
 		# create regions
 		factory.request 'header'
 		factory.request 'content'

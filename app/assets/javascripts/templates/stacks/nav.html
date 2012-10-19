@@ -1,0 +1,11 @@
+<header>
+	<nav class="layout-inlineblock btn-group" data-toggle="buttons-radio">
+		<% for (var i = 0; i < stacks.length; i++) { %>
+			<%
+				var stack = stacks[i];
+				var cname = i == 0 ? 'active' : '';
+			%>
+			<button id="<%= stack %>" class="btn <%= cname %>"><%= stack %></button>
+		<% } %>
+	</nav>
+</header>

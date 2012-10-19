@@ -1,15 +1,14 @@
-define ['utils/facade','factories/window'], (facade, factory) ->
+define [], (require) ->
 
-	subscribe = (id, fn) ->
-		facade.subscribe 'window', id, fn
+	facade  = require 'utils/facade'
+	factory = require 'factories/window'
 
 
 	# Subscriptions
-	subscribe 'init', ->
-
+	facade.subscribe 'window', 'init', ->
 		# draw regions
 		facade.publish 'regions', 'init'
 
 
-	subscribe 'reload', ->
+	facade.subscribe 'window', 'reload', ->
 		do window.location.reload

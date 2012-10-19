@@ -1,6 +1,7 @@
-define ['utils/facade','models/facebook'], (facade, Facebook) ->
+define [], (require) ->
 
-	subscribe = (id, fn) -> facade.subscribe 'facebook', id, fn
+	facade   = require 'utils/facade'
+	Facebook = require 'models/facebook'
 
 
 	# init

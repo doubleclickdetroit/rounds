@@ -1,25 +1,36 @@
 define [], (require) ->
 
-	Backbone = require "backbone"
+	Backbone = require 'backbone'
 
-	facade    = require "utils/facade"
+	facade    = require 'utils/facade'
 	PushState = require 'utils/pushstate'
 
 	class AppRouter extends Backbone.Router
 
 		routes:
-			"_=_": "redirect_home"
+			'_=_' : 'redirect_home'
+			''    : 'render_stream'
 
-			""           : "render_stream"
+			'rounds/:id' : 'render_round'
 
-		render_stream: ->
-			facade.publish 'streams', 'navigate'
+
+		navigatePushState: (uri) ->
+			@navigate uri, true
+
 
 		redirect_home: ->
 			@navigate '', true
 
-		navigatePushState: (uri) ->
-			@navigate uri, true
+
+		render_stream: ->
+			facade.publish 'router', 'navigate', 'streams'
+			facade.publish 'streams', 'navigate'
+
+
+		render_round: (id) ->
+			facade.publish 'router', 'navigate', 'rounds'
+			facade.publish 'rounds', 'navigate', id
+
 
 		initialize: ->
 			facade.publish 'window', 'init'
@@ -28,5 +39,6 @@ define [], (require) ->
 				pushState: true
 
 			PushState.getInstance().subscribe @
+
 
 	AppRouter

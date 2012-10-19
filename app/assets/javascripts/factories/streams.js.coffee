@@ -2,28 +2,32 @@ define [], (require) ->
 
 	RegionalMgr = require 'regional_manager'
 
-	StreamCollection = require 'collections/streams'
 	StreamModel      = require 'models/stream'
-	StreamView       = require 'views/stream_view'
-	StreamHeader     = require 'views/stream-header'
-	StreamFooter     = require 'views/stream-footer'
+	StreamCollection = require 'collections/streams'
+
+	StreamView    = require 'views/streams/view'
+	StreamHeader  = require 'views/streams/header'
+	StreamFooter  = require 'views/streams/footer'
+	StreamContent = require 'views/streams/content'
 
 
 	request: (stream_id) ->
+		window.RegionalMgr = RegionalMgr
 
-		# find/create request stream region
+		# find/create request streams region
 		switch stream_id
 
 			when 'manager'
 				return RegionalMgr
 
 			when 'header'
-				header = new StreamHeader
-				RegionalMgr.create 'stream', header
+				RegionalMgr.create 'stream', new StreamHeader
 
 			when 'footer'
-				footer = new StreamFooter
-				RegionalMgr.create 'stream', footer
+				RegionalMgr.create 'stream', new StreamFooter
+
+			when 'content'
+				RegionalMgr.create 'stream', new StreamContent
 
 			when 'pictures', 'sentences'
 				stream_model = new StreamModel

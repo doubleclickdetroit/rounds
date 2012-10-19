@@ -8,11 +8,10 @@ define [], (require) ->
 	class Region
 
 		# Backbone defaults for Region
-		Backbone.View.prototype.onOpen    = ->
-		Backbone.View.prototype.onClose   = ->
-		Backbone.View.prototype.onDestroy = ->
+		Backbone.View.prototype.onOpen    = -> @$el.show()
+		Backbone.View.prototype.onClose   = -> @$el.hide()
+		Backbone.View.prototype.onDestroy = -> @onClose()
 		Backbone.View.prototype.doDestroy = ->
-			console.log 'doDestroy', @
 			@remove()
 			@unbind()
 			@onDestroy()
@@ -107,6 +106,14 @@ define [], (require) ->
 			selection = if $.isArray(@) then @ else [@]
 			_.each selection, (region) => close.call region, id
 			@
+
+		toggle: (id) ->
+			selection = if $.isArray(@) then @ else [@]
+			_.each selection, (region) => close.call region, id
+			@
+
+		visible: ->
+			@$el.is ':visible'
 
 
 	Region
